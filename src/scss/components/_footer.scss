@@ -1,0 +1,25 @@
+.footer-login{
+  background-color: #f3f3f3;
+  text-align: center;
+  font-size: 12px;
+  padding: 30px;
+  position: fixed;
+  bottom: 0;
+
+  p{
+    -webkit-margin-before: 0.5em;
+    -webkit-margin-after: 0.5em;
+  }
+}
+
+.footer{
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 15vh;
+  z-index: 100;
+  font-size: 12px;
+  background-color: #f3f3f3;
+  text-align: center;
+}

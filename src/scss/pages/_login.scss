@@ -1,0 +1,28 @@
+.content-wrapper{
+  display: table;
+  height: 80%;
+  margin: 0 auto;
+
+  .login-wrapper {
+    display: table-cell;
+    vertical-align: middle;
+
+    .failbox {
+      width: 100%;
+      padding: 15px 20px;
+      border: 1px solid #333;
+      border-radius: 10px;
+      background-color: indianred;
+      margin-top: 2vw;
+    }
+
+    .success-box{
+      width: 100%;
+      padding: 15px 20px;
+      border: 1px solid #333;
+      border-radius: 10px;
+      background-color: forestgreen;
+      margin-top: 2vw;
+    }
+  }
+}

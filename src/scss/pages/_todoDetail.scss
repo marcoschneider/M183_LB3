@@ -1,0 +1,77 @@
+.tododetails-wrapper{
+  .detail-title{
+    margin-bottom: 15px;
+    font-size: 1.75em;
+  }
+
+  .detail-output-wrapper{
+    margin-bottom: 30px;
+
+    .detail-fixed-date{
+      font-size: 15px;
+      font-weight: bold;
+    }
+  }
+
+  //CKEDITOR output style
+  .todoproblem-wrapper {
+    border: 1px solid #333;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 30px;
+    font-size: 14px;
+
+    h2, h3, h4, h5, h6{
+      margin-bottom: 10px;
+    }
+
+    p{
+      margin: 0.5vh 0;
+
+      s{
+        text-decoration: line-through;
+      }
+    }
+    > ul{
+      margin-left: 30px;
+      margin-bottom: 20px;
+      li {
+        margin: 2px 0;
+        list-style-type: disc;
+        ul {
+          margin-left: 30px;
+          li {
+            list-style-type: circle;
+          }
+        }
+      }
+    }
+
+    blockquote{
+      border-left: 5px solid $primary-color;
+      margin-left: 15px;
+      padding: 15px;
+      font-style: italic;
+    }
+
+    table{
+      border-collapse: collapse;
+
+      td{
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
+
+      tr:nth-child(even){
+        background-color: #f2f2f2;
+      }
+
+      tr:hover {
+        background-color: #ddd;
+      }
+
+    }
+  }
+
+
+}

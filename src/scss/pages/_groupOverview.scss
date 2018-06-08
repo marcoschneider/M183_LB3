@@ -1,0 +1,18 @@
+.team-text{
+  span{
+    color: #ff5252;
+  }
+}
+
+.todo-wrapper{
+  .group-informations{
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+
+    &:last-of-type{
+      left: initial;
+      right: 15px;
+    }
+  }
+}

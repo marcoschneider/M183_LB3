@@ -1,0 +1,44 @@
+.container-wrapper{
+  position: relative;
+  min-height: 100vh;
+  margin: 1vh 0 20vh;
+  z-index: 200;
+  overflow-x: hidden;
+  background-color: white;
+
+  .container{
+    width: 80%;
+    margin: 0 auto;
+    max-width: initial !important;
+
+    @include breakpoint(mobile){
+      width: 100%;
+    }
+
+    .failbox {
+      width: 100%;
+      padding: 15px 20px;
+      border: 1px solid #333;
+      border-radius: 10px;
+      background-color: #C02F1D;
+      margin-top: 2vw;
+
+      p{
+        margin-bottom: 5px;
+        color: white;
+
+        &:last-of-type{
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .page-title {
+      padding-bottom: 2vw;
+    }
+
+    .team-text{
+      float: right;
+    }
+  }
+}

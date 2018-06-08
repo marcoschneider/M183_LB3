@@ -1,0 +1,4 @@
+.idea
+/node_modules/
+/bower_components/
+/php/functions/dbcon.php

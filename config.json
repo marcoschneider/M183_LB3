@@ -1,0 +1,12 @@
+{
+  "name": "vfei",
+  "description": "A theme based on Viaduct-Base.",
+  "bowerDir": "./bower_components",
+  "css": {
+    "file": "sco.styles.scss",
+    "src": [
+      "src/scss/**/*.scss"
+    ],
+    "dest": "assets/css"
+  }
+}
