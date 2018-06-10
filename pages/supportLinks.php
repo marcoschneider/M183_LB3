@@ -35,6 +35,11 @@ if(isset($_POST['delete-link-submit'])){
 }
 
 
+if (isset($_POST['update-link'])) {
+  if (isset($_POST['link_id'])) {
+
+  }
+}
 ?>
 <div class="container">
   <div class="row">
@@ -65,21 +70,21 @@ if(isset($_POST['delete-link-submit'])){
           if($insertResult === true) {
             redirect('?pages=support-links');
           }else{
-            $errors['message'] = 'Ups da ist etwas schief gelaufen';
+            $errors['message'] = $insertResult;
           }
         }else{
-          echo '<div class="failbox">';
-          foreach ($errors as $error) {
-            echo '<p>' . $error . '</p>';
-          }
-          echo "</div>";
+          errorMessage($errors);
+        }
+      }elseif (isset($_POST['update-link'])) {
+        if (count($errors) === 0) {
+          $updateResult = updateLink($conn, $values, $linkID, $uid);
         }
       }
       ?>
       <form class="form" method="POST" action="">
         <label>
           Name des Links*:
-          <input type="text" name="link_name" class="form_control" value="<?php
+          <input id="name-link" type="text" name="link_name" class="form_control" value="<?php
           if(!empty($_POST['link_name'])){
             echo $_POST['link_name'];
           }
@@ -89,18 +94,18 @@ if(isset($_POST['delete-link-submit'])){
         <label>
           URL hinzufügen*
           <br>
-          <input placeholder="https://www.viaduct.ch" type="url" name="link" class="form_control" value="<?php
+          <input id="link-url" placeholder="https://www.example.ch" type="url" name="link" class="form_control" value="<?php
           if(!empty($_POST['link'])){
             echo $_POST['link'];
           }
           ?>">
         </label>
         <div class="space"></div>
-        <input type="submit" name="submit" class="button-default" value="Link speichern">
+        <input id="update-link-trigger" type="submit" name="submit" class="button-default" value="Link speichern">
       </form>
     </div>
     <div class="col-3">
-      <h2 class="space">Link löschen</h2>
+      <h2 class="space">Link löschen/bearbeiten</h2>
         <?php
         if (isset($_POST['delete-link-submit'])){
           if (count($errors) === 0){
@@ -108,29 +113,29 @@ if(isset($_POST['delete-link-submit'])){
               if($values['link-to-delete'] === $link['id']){
                 $link_id = $values['link-to-delete'];
                 $resultDelete = deleteLink($conn, $uid, $link_id);
-                if($resultDelete === true){
+                if ($resultDelete === true) {
                   redirect("?pages=support-links");
+                }else{
+                  $errors['delete-link-query'] = $resultDelete;
                 }
               }else{
-                $error['link-to-delete'] = "Link mit der ID: " . $link_id . " existiert nicht";
+                $errors['link-to-delete'] = "Link mit der ID: " . $link_id . " existiert nicht";
               }
             }
-            echo '<div class="space"><div class="failbox">';
-            echo '<p>' . $error['link-to-delete'] . '</p>';
-            echo " </div></div>";
+            echo '<div class="space">';
+              errorMessage($errors['link-to-delete']);
+            echo '</div>';
           }else{
-            echo '<div class="space"><div class="failbox">';
-            foreach ($errors as $error) {
-              echo '<p>' . $error . '</p>';
-            }
-            echo " </div></div>";
+            echo '<div class="space">';
+              errorMessage($errors);
+            echo '</div>';
           }
         }
         ?>
       <form class="form" method="POST" action="">
         <label>
           ID des Links*:
-          <input type="text" name="link_id" class="form_control" value="<?php
+          <input id="link-to-update" type="text" name="link_id" class="form_control" value="<?php
           if(!empty($_POST['link_name'])){
             echo $_POST['link_name'];
           }
@@ -138,12 +143,9 @@ if(isset($_POST['delete-link-submit'])){
         </label>
         <div class="space"></div>
         <input type="submit" name="delete-link-submit" class="button-default" value="Link löschen">
+        <div class="space"></div>
+        <button id="update-link-submit" type="button" class="button-default">Link bearbeiten</button>
       </form>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
-      Thas some sheit
     </div>
   </div>
 </div>

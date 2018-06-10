@@ -33,13 +33,17 @@
             <p>
               <?php
                 foreach ($projects as $project){
-                  if ($_POST['project'] === $project['id']) {
+                  if (isset($_POST['project']) && $_POST['project'] === $project['id']) {
                     echo $project['projectName'];
+                  }else{
+                    echo '--Bitte wählen--';
+                    break;
                   }
                 }
               ?>
             </p>
             <ul data-name="project" class="dropdown-list">
+              <li data-list-value="'.$project['id'].'">'.$project['projectName'].'</li>
               <?php
                 foreach ($projects as $project) {
                   echo '<li data-list-value="'.$project['id'].'">'.$project['projectName'].'</li>';
@@ -107,7 +111,7 @@
             <?php
               if(isset($_POST['todo-type']) && $_POST['todo-type'] === "self-todo"){
                 echo 'In Selbsttodo eintragen';
-              }elseif(isset($_POST['todo-type']) && $_POST['todo-type'] === strtolower($_SESSION['groupename'])){
+              }elseif(isset($_POST['todo-type']) && $_POST['todo-type'] === strtolower($groupname)){
                 echo 'In Gruppentodo eintragen';
               }else{
                 echo '--Bitte wählen--';
@@ -115,7 +119,7 @@
             </p>
             <ul data-name="todo-type" class="dropdown-list">
               <li data-list-value="self-todo">In Selbsttodo eintragen</li>
-              <li data-list-value="<?= strtolower($_SESSION['groupename']) ?>">In Gruppentodo eintragen</li>
+              <li data-list-value="<?= strtolower($groupname) ?>">In Gruppentodo eintragen</li>
             </ul>
           </div>
         </label>
@@ -153,7 +157,7 @@
   <div class="clearer"></div>
   <script type="text/javascript">
     CKEDITOR.replace('edit', {
-      customConfig: '/p/php/sopd-web-support/assets/js/ckeditor/config.js'
+      customConfig: '/assets/js/ckeditor/config.js'
     });
   </script>
 <?php

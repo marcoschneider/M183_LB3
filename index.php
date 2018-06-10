@@ -1,6 +1,6 @@
 <?php
 
-  error_reporting(E_ALL & ~E_NOTICE);
+  //error_reporting(E_ALL & ~E_NOTICE);
 
 //starts Session
   session_start();
@@ -10,7 +10,7 @@
   require('php/functions/functions.php');
 
   //Manages redirect to login page if not logged in
-  if(!isset($_SESSION['loggedin'])) {
+  if(!$_SESSION['loggedin']) {
     header("Location: pages/login.php");
     die();
   }
@@ -22,15 +22,9 @@
     redirect("pages/login.php");
   }
 
-  $username = $_SESSION["loggedin"];
-  //Gets user ID
-  $userData = getUid($conn, $username);
-
-  $_SESSION["uid"] = (int)$userData['id'];
-  $uid = $_SESSION["uid"];
-
-  $_SESSION['groupename'] = $userData['groupename'];
-  $groupename = $_SESSION["groupename"];
+  $uid = $_SESSION['kernel']['userdata']["id"];
+  $groupname = $_SESSION['kernel']['userdata']['groupname'];
+  $username = $_SESSION['kernel']['userdata']['username'];
 
 ?>
 
@@ -40,8 +34,8 @@
   <head>
     <?php header('Content-type: text/html; charset=utf-8'); ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="../../../bower_components/bootstrap/dist/css/bootstrap-grid.min.css" />
-    <link rel="stylesheet" href="../../../node_modules/normalize.css/normalize.css" />
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-grid.min.css" />
+    <link rel="stylesheet" href="bower_components/normalize.css/normalize.css" />
     <link rel="stylesheet" href="assets/css/sco.styles.css"/>
     <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png">
@@ -50,8 +44,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="Content-Type" content="text/html" lang="de"/>
-    <script type="text/javascript" src="../../../bower_components/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="../../../node_modules/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="node_modules/ckeditor/ckeditor.js"></script>
     <title>SOPD Support Web App</title>
   </head>
 	<body>

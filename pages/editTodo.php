@@ -19,12 +19,6 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
   $result = $todo;
 }
 
-
-//Set correct time format
-
-$result['datum'] = (int)$result['datum'];
-$result['datum'] = date("Y-m-d", $result['datum']);
-
 ?>
 
 <div class="container">
@@ -135,32 +129,32 @@ $result['datum'] = date("Y-m-d", $result['datum']);
           <div class="dropdown-trigger">
             <p>
               <?php
-              if(isset($result['groupename']) && $result['groupename'] === "self-todo"){
+              if(isset($result['groupname']) && $result['groupname'] === "self-todo"){
                 echo 'In Selbsttodo eintragen';
-              }elseif(isset($result['groupename']) && $result['groupename'] === strtolower($_SESSION['groupename'])){
+              }elseif(isset($result['groupname']) && $result['groupname'] === strtolower($_SESSION['groupname'])){
                 echo 'In Gruppentodo eintragen';
               }else{
                 echo '--Bitte wählen--';
               }
 
-              echo (isset($result['groupename']))
-                ? '<input type="hidden" name="todo-type" value="'.$result['groupename'].'" />'
+              echo (isset($result['groupname']))
+                ? '<input type="hidden" name="todo-type" value="'.$result['groupname'].'" />'
                 : '';
               ?>
             </p>
             <ul data-name="todo-type" class="dropdown-list">
               <li data-list-value="self-todo">In Selbsttodo eintragen</li>
-              <li data-list-value="<?= strtolower($_SESSION['groupename']) ?>">In Gruppentodo eintragen</li>
+              <li data-list-value="<?= strtolower($_SESSION['groupname']) ?>">In Gruppentodo eintragen</li>
             </ul>
           </div>
         </label>
         <div class="space-with-border"></div>
         <p>
           <label>
-            <legend class="legend">Wann muss das Problem erledigt sein? (Optional)</legend>
+            <a class="legend">Wann muss das Problem erledigt sein? (Optional)</a>
             <br>
             <input class="form_control" type="date" name="date" value="<?php
-              echo (!empty($_POST['datum'])) ? $_POST['datum'] : '';
+              echo (!empty($result['datum'])) ? $result['datum'] : '';
             ?>">
           </label>
         </p>
@@ -170,7 +164,7 @@ $result['datum'] = date("Y-m-d", $result['datum']);
             Webseite: (Optional)
             <br>
             <input placeholder="http(s)://www.example.com" type="text" name="url" class="form_control" value="<?php
-              echo (!empty($_POST['url'])) ? $_POST['url'] : '';
+              echo (!empty($result['url'])) ? $result['url'] : '';
             ?>">
           </label>
         </p>
@@ -190,7 +184,7 @@ $result['datum'] = date("Y-m-d", $result['datum']);
 </div>
 <script type="text/javascript">
   CKEDITOR.replace('edit', {
-    customConfig: '/p/php/sopd-web-support/assets/js/ckeditor/config.js'
+    customConfig: '/assets/js/ckeditor/config.js'
   });
 </script>
 <?php

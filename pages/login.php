@@ -7,6 +7,7 @@
  */
 
   session_start();
+
   require('../php/functions/dbcon.php');
   require('../php/functions/functions.php');
 
@@ -26,9 +27,10 @@
 
       $login = auth_user($conn, $username,$password);
 
-      var_dump($login);
       if ($login === true) {
-        $_SESSION['loggedin'] = $username;
+        $_SESSION['loggedin'] = true;
+        $user = getUid($conn, $username);
+        $_SESSION['kernel']['userdata'] = $user;
         redirect('?pages=support-links');
       } else {
         $errors['usernameAndPassword'] = 'Benutzername oder Passwort falsch!';

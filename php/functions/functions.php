@@ -88,7 +88,7 @@ function insertRegister($name, $surname, $team, $conn, $username_reg, $password_
 
   $sql = "
   INSERT INTO `benutzer` 
-    (`name`, `surname`, `password`, `username` , `groupename`) 
+    (`name`, `surname`, `password`, `username` , `groupname`) 
   VALUES  (
     '" . $name . "',
     '" . $surname . "',
@@ -181,17 +181,26 @@ function updateUserdata($conn, $uid, $values)
 function getUid($conn, $username)
 {
 
-  $result = '';
+  $sql = "
+    SELECT 
+      id,
+      `name`,
+      surname,
+      username, 
+      groupname
+    FROM `benutzer` 
+    WHERE 
+      username = '" . $username . "'";
 
-  $sql = "SELECT id, `name`, surname, username, groupename FROM `benutzer` WHERE `username` = '" . $username . "'";
+  $sqlResult = mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
-  $sqlResult = mysqli_query($conn, $sql);
+  $result = mysqli_fetch_array($sqlResult, MYSQLI_ASSOC);
 
-  while ($arrayOutput = mysqli_fetch_array($sqlResult, MYSQLI_ASSOC)) {
-    $result = $arrayOutput;
+  if ($sqlResult) {
+    return $result;
+  }else{
+    return $sqlResult;
   }
-
-  return $result;
 }
 
 
@@ -247,7 +256,7 @@ function addTodo($conn, $values, $uid)
               `creation_date`,
               `url`,
               `fk_todo_status`,
-              `groupename`
+              groupname
             ) VALUES (
               '" . $values['title'] . "',
               '" . $values['problem'] . "',
@@ -307,7 +316,7 @@ function updateTodo($conn, $values, $getId, $uid)
       `creation_date` = NOW(),
       `datum` = " . $values['date'] . ",
       `url` = '" . $values['url'] . "',
-      `groupename` = '" . $values['todo-type'] . "'
+      `groupname` = '" . $values['todo-type'] . "'
     WHERE
       `id` = '" . $getId . "' AND `fk_benutzer` = '" . $uid . "'";
 
@@ -342,7 +351,7 @@ function getTodoDetails($conn, $getId)
      pr.id AS 'project_id',
      todo.fk_priority,
      todo.url,
-     todo.groupename
+     todo.groupname
     FROM todo
      INNER JOIN benutzer b ON(b.id = todo.fk_benutzer)
      INNER JOIN prioritaet p ON (todo.fk_priority = p.id)
@@ -353,23 +362,23 @@ function getTodoDetails($conn, $getId)
 
   $sqlResult = mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
-  $arrayOutput = mysqli_fetch_array($sqlResult, MYSQLI_ASSOC);
+  $result = mysqli_fetch_array($sqlResult, MYSQLI_ASSOC);
 
-  $arrayOutput['datum'] = ($arrayOutput['datum'] != '0')
-    ? $arrayOutput['datum'] = date("d.m.Y", (int)$arrayOutput['datum'])
-    : $arrayOutput['datum'] = '';
+  $result['datum'] = ($result['datum'] != '0')
+    ? $result['datum'] = date("Y-m-d", (int)$result['datum'])
+    : $result['datum'] = '';
 
-  $date = date_create($arrayOutput['creation_date']);
-  $arrayOutput['creation_date'] = date_format($date, "d.m.Y \\u\\m H:i");
+  $date = date_create($result['creation_date']);
+  $result['creation_date'] = date_format($date, "d.m.Y \\u\\m H:i");
 
   if ($sqlResult) {
-    return $arrayOutput;
+    return $result;
   } else {
     return $sqlResult;
   }
 }
 
-function getGroupTodos($conn, $groupename){
+function getGroupTodos($conn, $groupname){
   $sql = "SELECT
             todo.id,
             todo.title,
@@ -381,11 +390,11 @@ function getGroupTodos($conn, $groupename){
             b.name,
             b.surname,
             todo.fk_todo_status,
-            todo.groupename
+            todo.groupname
           FROM todo
             INNER JOIN benutzer b ON(b.id = todo.fk_benutzer)
             INNER JOIN prioritaet p ON (todo.fk_priority = p.id)
-          WHERE todo.groupename = '" . $groupename . "'
+          WHERE todo.groupname = '" . $groupname . "'
           ORDER BY todo.fk_priority ASC";
 
   $sqlResult = mysqli_query($conn, $sql) or die(mysqli_error($conn));
@@ -442,15 +451,15 @@ function getTodos($conn, $uid)
              pr.projectName,
              todo.url,
              todo.fk_todo_status,
-             todo.groupename
+             todo.groupname
             FROM todo
              INNER JOIN benutzer b ON(b.id = todo.fk_benutzer)
              INNER JOIN prioritaet p ON (todo.fk_priority = p.id)
              INNER JOIN projekte pr on todo.fk_projekte = pr.id
-            WHERE b.id ='" . $uid . "' AND todo.groupename = 'self-todo'
+            WHERE b.id ='" . $uid . "' AND todo.groupname = 'self-todo'
             ORDER BY todo.fk_priority ASC";
 
-  $sqlResult = mysqli_query($conn, $sql);
+  $sqlResult = mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
   $result = array();
 
@@ -469,7 +478,7 @@ function getTodos($conn, $uid)
   if ($result) {
     return $result;
   } else {
-    return false;
+    return $sqlResult;
   }
 }
 
@@ -484,14 +493,23 @@ function deleteLink($conn, $uid, $link_id){
           AND
             id = '" . $link_id . "'";
 
-  $deleteLink = mysqli_query($conn, $sql);
+  $deleteLink = mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
   if($deleteLink){
     return true;
   }else{
-    return mysqli_error($conn);
+    return $deleteLink;
   }
 
+}
+
+function updateLink($conn, $values, $uid) {
+  $uid = (int)$uid;
+
+  $sql = "
+    UPDATE links
+    SET 
+  ";
 }
 
 /**

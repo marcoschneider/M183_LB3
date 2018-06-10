@@ -4,6 +4,25 @@ $(function(){
   customSelect('#todo-type');
   customSelect('#project');
 
+  $('#update-link-submit').on("click", function () {
+    var supportLinkID = $('.link-id');
+    var linkToUpdate = $('#link-to-update').val();
+    var updateInputSubmit = '<input type="submit" name="update-link" class="button-default" value="Link aktualisieren">';
+    supportLinkID.each(function (i) {
+      if (supportLinkID[i].innerHTML === linkToUpdate) {
+        let nameOfLink = $(supportLinkID[i]).parent().text();
+        let refOfLink = $(supportLinkID[i]).parent().attr("href");
+        
+        nameOfLink = nameOfLink.replace(linkToUpdate, '');
+
+        $('#name-link').val(nameOfLink);
+        $('#link-url').val(refOfLink);
+
+        $('#update-link-trigger').replaceWith(updateInputSubmit);
+      }
+    });
+  });
+
 });
 
 function customSelect(elementID) {
@@ -12,6 +31,7 @@ function customSelect(elementID) {
     $(".dropdown-list").slideToggle(250, function () {
       $(this).toggleClass("block");
     });
+    return false;
   });
 
   var dropdownLists = elementID+' .dropdown-list';
