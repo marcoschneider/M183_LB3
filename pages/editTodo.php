@@ -53,7 +53,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
           <label>
             <?php
             echo (isset($errors['title']))
-              ? '<p class="textErrors">Projektname*</p>'
+              ? '<p class="text-error">Projektname*</p>'
               : '<p>Projektname*</p>';
             ?>
             <select name="project">
@@ -75,7 +75,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
           <label>
             <?php
             echo (isset($errors['problem']))
-              ? '<p class="textErrors">Aufgabenbeschrieb*</p>'
+              ? '<p class="text-error">Aufgabenbeschrieb*</p>'
               : '<p>Aufgabenbeschrieb</p>';
             ?>
             <textarea name="problem" id="edit">
@@ -89,7 +89,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
         <fieldset class="fieldset">
           <?php
           echo (isset($errors['niveau']) && in_array($errors['niveau'], $errors))
-            ? '<legend class="legend textErrors">Wichtigkeit*</legend>'
+            ? '<legend class="legend text-error">Wichtigkeit*</legend>'
             : '<legend class="legend">Wichtigkeit*</legend>';
           ?>
           <label>
@@ -123,7 +123,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
         <label>
           <?php
           echo (isset($errors['todo-type']) && in_array($errors['todo-type'], $errors))
-            ? '<legend class="legend textErrors">Todo-Zuteilung auswählen*</legend>'
+            ? '<legend class="legend text-error">Todo-Zuteilung auswählen*</legend>'
             : '<legend class="legend">Todo-Zuteilung auswählen*</legend>';
           ?>
           <div class="dropdown-trigger">

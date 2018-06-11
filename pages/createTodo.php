@@ -26,7 +26,7 @@
         <label>
           <?php
           echo (isset($errors['project']))
-            ? '<p class="textErrors">Projektname*</p>'
+            ? '<p class="text-error">Projektname*</p>'
             : '<p>Projektname*</p>'
           ?>
           <div id="project" class="dropdown-trigger">
@@ -43,7 +43,6 @@
               ?>
             </p>
             <ul data-name="project" class="dropdown-list">
-              <li data-list-value="'.$project['id'].'">'.$project['projectName'].'</li>
               <?php
                 foreach ($projects as $project) {
                   echo '<li data-list-value="'.$project['id'].'">'.$project['projectName'].'</li>';
@@ -56,7 +55,7 @@
         <label>
           <?php
           echo (isset($errors['todo']))
-            ? '<p class="textErrors">Aufgabenbeschrieb*</p>'
+            ? '<p class="text-error">Aufgabenbeschrieb*</p>'
             : '<p>Aufgabenbeschrieb*</p>'
           ?>
           <textarea name="problem" id="edit">
@@ -69,7 +68,7 @@
         <fieldset class="fieldset">
           <?php
             echo (isset($errors['niveau']) && in_array($errors['niveau'], $errors))
-              ? '<legend class="legend textErrors">Wichtigkeit*</legend>'
+              ? '<legend class="legend text-error">Wichtigkeit*</legend>'
               : '<legend class="legend">Wichtigkeit*</legend>';
           ?>
           <label>
@@ -103,7 +102,7 @@
         <label>
           <?php
             echo (isset($errors['todo-type']) && in_array($errors['todo-type'], $errors))
-              ? '<legend class="legend textErrors">Todo-Zuteilung auswählen*</legend>'
+              ? '<legend class="legend text-error">Todo-Zuteilung auswählen*</legend>'
               : '<legend class="legend">Todo-Zuteilung auswählen*</legend>';
           ?>
           <div id="todo-type" class="dropdown-trigger">

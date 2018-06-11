@@ -21,12 +21,14 @@ function errorMessage($message)
       foreach ($messages as $message) {
         echo '<p>'.$message.'</p>';
       }
-    echo '</div>';
+    echo '</div>
+    <div class="space"></div>';
   }else{
     echo
     '<div class="failbox">
       <p>'.$message.'</p>
-    </div>';
+    </div>
+    <div class="space"></div>';
   }
 }
 
@@ -38,7 +40,8 @@ function successMessage($message)
     foreach ($messages as $message) {
       echo '<p>'.$message.'</p>';
     }
-    echo '</div>';
+    echo '</div>
+    <div class="space"></div>';
   }else{
     echo
       '<div class="success-box">
@@ -509,7 +512,21 @@ function updateLink($conn, $values, $uid) {
   $sql = "
     UPDATE links
     SET 
+      url = '".$values['link']."',
+      link_name = '".$values['link_name']."'
+    WHERE
+      id = '".$values['link_id']."'
+      AND
+      fk_user = '".$uid."'
   ";
+
+  $sqlResult = mysqli_query($conn, $sql) or die(mysqli_error($conn));
+
+  if ($sqlResult) {
+    return true;
+  }else{
+    return $sqlResult;
+  }
 }
 
 /**

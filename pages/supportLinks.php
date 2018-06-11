@@ -7,10 +7,11 @@
  */
 $values = [];
 $errors = [];
-if (isset($_POST['submit'])){
+if (isset($_POST['submit']) || isset($_POST['update-link'])){
   if (isset($_POST['link_name']) && $_POST['link_name'] != '') {
     $link_name = htmlspecialchars(trim($_POST['link_name']));
     $values['link_name'] = $link_name;
+    $values['link_id'] = $_POST['link-id'];
   }else{
     $errors['links_name'] = 'Bitte geben Sie dem Link einen Namen';
   }
@@ -34,12 +35,6 @@ if(isset($_POST['delete-link-submit'])){
   }
 }
 
-
-if (isset($_POST['update-link'])) {
-  if (isset($_POST['link_id'])) {
-
-  }
-}
 ?>
 <div class="container">
   <div class="row">
@@ -62,7 +57,7 @@ if (isset($_POST['update-link'])) {
       </div>
     </div>
     <div class="col-5">
-      <h2 class="space">Link hinzufügen</h2>
+      <h2 id="add-link-title" class="space">Link hinzufügen</h2>
       <?php
       if (isset($_POST['submit'])){
         if (count($errors) === 0){
@@ -77,11 +72,19 @@ if (isset($_POST['update-link'])) {
         }
       }elseif (isset($_POST['update-link'])) {
         if (count($errors) === 0) {
-          $updateResult = updateLink($conn, $values, $linkID, $uid);
+          $updateResult = updateLink($conn, $values, $uid);
+          if ($updateResult === true) {
+            successMessage("Der link wurde aktualisiert");
+            redirect('?pages=support-links');
+          }else{
+            $errors['message'] = $updateResult;
+          }
+        }else{
+          errorMessage($errors);
         }
       }
       ?>
-      <form class="form" method="POST" action="">
+      <form id="add-link" class="form" method="POST" action="">
         <label>
           Name des Links*:
           <input id="name-link" type="text" name="link_name" class="form_control" value="<?php

@@ -22,6 +22,8 @@ if (isset($getId) && $getId != '') {
   }else {
     errorMessage($doneTodoResponse);
   }
+}else {
+  infoMessage("Dieses Todo konnte nicht in die History gespeichert werden.", 6);
 }
 
 ?>

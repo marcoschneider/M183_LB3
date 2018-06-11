@@ -86,7 +86,7 @@
         <span class="tooltiptext tooltip-create-todo">Todo erstellen</span>
       </div>
       <div class="tooltip valign-wrapper">
-        <a class="tap-target" href="?pages=done-todo"><i class="tap-target-create-todo fa fa-check-circle fa-5x" aria-hidden="true"></i></a>
+        <a class="tap-target" href="?pages=done-overview"><i class="tap-target-create-todo fa fa-check-circle fa-5x" aria-hidden="true"></i></a>
         <span class="tooltiptext tooltip-done-overview">Erledigte Todos</span>
       </div>
     </div>

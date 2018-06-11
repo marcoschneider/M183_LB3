@@ -10,6 +10,9 @@ $(function(){
     var updateInputSubmit = '<input type="submit" name="update-link" class="button-default" value="Link aktualisieren">';
     supportLinkID.each(function (i) {
       if (supportLinkID[i].innerHTML === linkToUpdate) {
+
+        var hiddenLinkIdInput = '<input type="hidden" name="link-id" value="'+linkToUpdate+'">';
+
         let nameOfLink = $(supportLinkID[i]).parent().text();
         let refOfLink = $(supportLinkID[i]).parent().attr("href");
         
@@ -18,7 +21,12 @@ $(function(){
         $('#name-link').val(nameOfLink);
         $('#link-url').val(refOfLink);
 
+        $('#add-link-title').text("Link bearbeiten");
+
         $('#update-link-trigger').replaceWith(updateInputSubmit);
+        $('#add-link').append(hiddenLinkIdInput);
+      }else{
+
       }
     });
   });

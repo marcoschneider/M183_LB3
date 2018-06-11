@@ -16,12 +16,12 @@ if(isset($_GET['pages']) && $_GET['pages'] === 'done-todo') {
 }
 
 if (isset($getId) && $getId != '') {
-  var_dump(updateTodoStatus($conn,$uid,$getId));
-  if (updateTodoStatus($conn, $uid, $getId) === true) {
+  $updateResponse = updateTodoStatus($conn, $uid, $getId);
+  if ($updateResponse === true) {
     redirect('?pages=done-overview');
   }
 } else {
-  echo "<p class='aside col-6 black-text'>Dieses Todo konnte nicht in die History gespeichert werden.</p>";
+  infoMessage("Dieses Todo konnte nicht in die History gespeichert werden.", 6);
 }
 
 ?>

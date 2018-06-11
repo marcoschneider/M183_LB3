@@ -3,7 +3,6 @@
 $arrayResult = getTodos($conn, $uid);
 $resultStatus = countTodoStatus($conn, $uid);
 
-var_dump($arrayResult);
 ?>
 <div class="container">
   <div class="row">
