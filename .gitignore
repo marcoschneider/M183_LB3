@@ -1,4 +1,5 @@
 .idea
 /node_modules/
 /bower_components/
-/php/functions/dbcon.php
+/public/assets/css/sco.styles.css
+/res/lib/dbcon.php

@@ -8,8 +8,8 @@
 
 error_reporting(E_ALL & ~E_NOTICE);
 
-require('../php/functions/dbcon.php');
-require('../php/functions/functions.php');
+require('../res/lib/dbcon.res');
+require('../res/lib/functions.res');
 
 $value = array();
 $errors = array();

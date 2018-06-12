@@ -11,9 +11,12 @@ if (isset($_POST['submit']) || isset($_POST['update-link'])){
   if (isset($_POST['link_name']) && $_POST['link_name'] != '') {
     $link_name = htmlspecialchars(trim($_POST['link_name']));
     $values['link_name'] = $link_name;
-    $values['link_id'] = $_POST['link-id'];
   }else{
     $errors['links_name'] = 'Bitte geben Sie dem Link einen Namen';
+  }
+
+  if (isset($_POST['link_id'])) {
+    $values['link_id'] = htmlspecialchars($_POST['link_id']);
   }
 
   if (isset($_POST['link']) && $_POST['link'] != '') {
@@ -26,7 +29,7 @@ if (isset($_POST['submit']) || isset($_POST['update-link'])){
 
 $result = getLinks($conn, $uid);
 
-if(isset($_POST['delete-link-submit'])){
+if(isset($_POST['delete-link-submit'])) {
   if(isset($_POST['link_id']) && $_POST['link_id'] != ""){
     $link_id = htmlspecialchars(trim($_POST['link_id']));
     $values['link-to-delete'] = $link_id;
@@ -50,7 +53,7 @@ if(isset($_POST['delete-link-submit'])){
             $ul .= '</ul>';
             echo $ul;
           }else{
-            infoMessage("Es wurden keine Links in Ihrer Datenbank gefunden", 6);
+            infoMessage("Es wurden keine Links in Ihrer Datenbank gefunden", 12);
           }
 
         ?>
@@ -60,7 +63,7 @@ if(isset($_POST['delete-link-submit'])){
       <h2 id="add-link-title" class="space">Link hinzufügen</h2>
       <?php
       if (isset($_POST['submit'])){
-        if (count($errors) === 0){
+        if (count($errors) <= 0){
           $insertResult = addLink($conn, $values, $uid);
           if($insertResult === true) {
             redirect('?pages=support-links');
@@ -71,10 +74,9 @@ if(isset($_POST['delete-link-submit'])){
           errorMessage($errors);
         }
       }elseif (isset($_POST['update-link'])) {
-        if (count($errors) === 0) {
+        if (count($errors) <= 0) {
           $updateResult = updateLink($conn, $values, $uid);
           if ($updateResult === true) {
-            successMessage("Der link wurde aktualisiert");
             redirect('?pages=support-links');
           }else{
             $errors['message'] = $updateResult;
@@ -88,9 +90,9 @@ if(isset($_POST['delete-link-submit'])){
         <label>
           Name des Links*:
           <input id="name-link" type="text" name="link_name" class="form_control" value="<?php
-          if(!empty($_POST['link_name'])){
-            echo $_POST['link_name'];
-          }
+          echo (isset($_POST ['link_name']))
+            ? $_POST['link_name']
+            : '';
           ?>">
         </label>
         <div class="space-with-border"></div>
@@ -98,9 +100,9 @@ if(isset($_POST['delete-link-submit'])){
           URL hinzufügen*
           <br>
           <input id="link-url" placeholder="https://www.example.ch" type="url" name="link" class="form_control" value="<?php
-          if(!empty($_POST['link'])){
-            echo $_POST['link'];
-          }
+          echo (isset($_POST ['link']))
+            ? $_POST['link']
+            : '';
           ?>">
         </label>
         <div class="space"></div>
@@ -111,7 +113,7 @@ if(isset($_POST['delete-link-submit'])){
       <h2 class="space">Link löschen/bearbeiten</h2>
         <?php
         if (isset($_POST['delete-link-submit'])){
-          if (count($errors) === 0){
+          if (count($errors) < 0){
             foreach($result as $link){
               if($values['link-to-delete'] === $link['id']){
                 $link_id = $values['link-to-delete'];
@@ -126,7 +128,7 @@ if(isset($_POST['delete-link-submit'])){
               }
             }
             echo '<div class="space">';
-              errorMessage($errors['link-to-delete']);
+              errorMessage($errors);
             echo '</div>';
           }else{
             echo '<div class="space">';

@@ -84,7 +84,7 @@ if(isset($_POST['submitPassword'])){
       if(isset($_POST['submit'])) {
         if (count($errors) === 0) {
           if (updateUserdata($conn, $uid, $values) === true) {
-            redirect('index.php?logout');
+            redirect('index.res?logout');
           }else{
             echo '<div class="failbox">
               <p>Diesen Benutzername gibt es bereits</p>
@@ -129,7 +129,7 @@ if(isset($_POST['submitPassword'])){
         if(isset($_POST['submitPassword'])) {
           if (count($errors) === 0) {
             if (updateUserCredentials($conn, $uid, $values['new_password']) === true) {
-              redirect('index.php?logout');
+              redirect('index.res?logout');
             }else{
               echo '<div class="failbox">
                 <p>Ein Fehler ist aufgetreten</p>

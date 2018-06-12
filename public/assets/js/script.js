@@ -11,7 +11,7 @@ $(function(){
     supportLinkID.each(function (i) {
       if (supportLinkID[i].innerHTML === linkToUpdate) {
 
-        var hiddenLinkIdInput = '<input type="hidden" name="link-id" value="'+linkToUpdate+'">';
+        var hiddenLinkIdInput = '<input type="hidden" name="link_id" value="'+linkToUpdate+'">';
 
         let nameOfLink = $(supportLinkID[i]).parent().text();
         let refOfLink = $(supportLinkID[i]).parent().attr("href");

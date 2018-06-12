@@ -246,11 +246,12 @@ function auth_user($conn, $username, $password)
 //insert To-do into DB
 function addTodo($conn, $values, $uid)
 {
-  $values['fk_priority'] = (int)$values['fk_priority'];
+
+  var_dump($values);
+  $values['fk_priority'] = (int)$values['niveau'];
   $values['date'] = ($values['date'] == '0') ? 0 : $values['date'];
 
   $sql = " INSERT INTO `todo` (
-              `title`,
               `problem`,
               `datum`,
               `fk_benutzer`,
@@ -261,7 +262,6 @@ function addTodo($conn, $values, $uid)
               `fk_todo_status`,
               groupname
             ) VALUES (
-              '" . $values['title'] . "',
               '" . $values['problem'] . "',
               " . $values['date'] . ",
               '" . $uid . "',
@@ -345,7 +345,6 @@ function getTodoDetails($conn, $getId)
   $sql = "
     SELECT
      todo.id,
-     todo.title,
      todo.problem,
      todo.creation_date,
      todo.datum,
