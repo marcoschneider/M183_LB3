@@ -1,7 +1,7 @@
 html,body{
   height: 100%;
 
-  .textErrors {
+  .text-error {
     color: red;
   }
 
@@ -48,6 +48,10 @@ html,body{
     &:hover{
       background-color: $second-primary-color;
       color: #333333;
+    }
+
+    .fa-user{
+      margin-right: 5px;
     }
   }
 
@@ -112,6 +116,7 @@ html,body{
     z-index: 400;
     margin-top: 2.5vh;
     position: fixed;
+    right: 0;
 
     .tooltip {
       position: relative;

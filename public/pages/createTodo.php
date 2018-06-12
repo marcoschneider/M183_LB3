@@ -26,15 +26,18 @@
         <label>
           <?php
           echo (isset($errors['project']))
-            ? '<p class="textErrors">Projektname*</p>'
+            ? '<p class="text-error">Projektname*</p>'
             : '<p>Projektname*</p>'
           ?>
           <div id="project" class="dropdown-trigger">
             <p>
               <?php
                 foreach ($projects as $project){
-                  if ($_POST['project'] === $project['id']) {
+                  if (isset($_POST['project']) && $_POST['project'] === $project['id']) {
                     echo $project['projectName'];
+                  }else{
+                    echo '--Bitte wählen--';
+                    break;
                   }
                 }
               ?>
@@ -52,7 +55,7 @@
         <label>
           <?php
           echo (isset($errors['todo']))
-            ? '<p class="textErrors">Aufgabenbeschrieb*</p>'
+            ? '<p class="text-error">Aufgabenbeschrieb*</p>'
             : '<p>Aufgabenbeschrieb*</p>'
           ?>
           <textarea name="problem" id="edit">
@@ -65,7 +68,7 @@
         <fieldset class="fieldset">
           <?php
             echo (isset($errors['niveau']) && in_array($errors['niveau'], $errors))
-              ? '<legend class="legend textErrors">Wichtigkeit*</legend>'
+              ? '<legend class="legend text-error">Wichtigkeit*</legend>'
               : '<legend class="legend">Wichtigkeit*</legend>';
           ?>
           <label>
@@ -99,7 +102,7 @@
         <label>
           <?php
             echo (isset($errors['todo-type']) && in_array($errors['todo-type'], $errors))
-              ? '<legend class="legend textErrors">Todo-Zuteilung auswählen*</legend>'
+              ? '<legend class="legend text-error">Todo-Zuteilung auswählen*</legend>'
               : '<legend class="legend">Todo-Zuteilung auswählen*</legend>';
           ?>
           <div id="todo-type" class="dropdown-trigger">
@@ -107,7 +110,7 @@
             <?php
               if(isset($_POST['todo-type']) && $_POST['todo-type'] === "self-todo"){
                 echo 'In Selbsttodo eintragen';
-              }elseif(isset($_POST['todo-type']) && $_POST['todo-type'] === strtolower($_SESSION['groupename'])){
+              }elseif(isset($_POST['todo-type']) && $_POST['todo-type'] === strtolower($groupname)){
                 echo 'In Gruppentodo eintragen';
               }else{
                 echo '--Bitte wählen--';
@@ -115,7 +118,7 @@
             </p>
             <ul data-name="todo-type" class="dropdown-list">
               <li data-list-value="self-todo">In Selbsttodo eintragen</li>
-              <li data-list-value="<?= strtolower($_SESSION['groupename']) ?>">In Gruppentodo eintragen</li>
+              <li data-list-value="<?= strtolower($groupname) ?>">In Gruppentodo eintragen</li>
             </ul>
           </div>
         </label>
@@ -153,7 +156,7 @@
   <div class="clearer"></div>
   <script type="text/javascript">
     CKEDITOR.replace('edit', {
-      customConfig: '/p/php/sopd-web-support/assets/js/ckeditor/config.js'
+      customConfig: '/assets/js/ckeditor/config.js'
     });
   </script>
 <?php

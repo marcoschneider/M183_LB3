@@ -2,6 +2,7 @@
 
 $arrayResult = getTodos($conn, $uid);
 $resultStatus = countTodoStatus($conn, $uid);
+
 ?>
 <div class="container">
   <div class="row">
@@ -10,7 +11,7 @@ $resultStatus = countTodoStatus($conn, $uid);
       <?php
       if($arrayResult){
         foreach($arrayResult as $result){
-          if($result['fk_todo_status'] === '2' && $result['groupename'] === 'self-todo') {
+          if($result['fk_todo_status'] === '2' && $result['groupname'] === 'self-todo') {
             ?>
             <div class="todo-wrapper">
               <a class="link" href="?pages=todo-details&id=<?= $result['id'] ?>">

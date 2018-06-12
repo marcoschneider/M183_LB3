@@ -1,11 +1,11 @@
 <?php
 
-$arrayResult = getGroupTodos($conn, $groupename);
+$arrayResult = getGroupTodos($conn, $groupname);
 $resultStatus = countTodoStatus($conn, $uid);
 ?>
 <div class="row container">
   <div class="col-12">
-    <p class="team-text">Dein Team: <span class="ff5252"><?= $groupename?></span></p>
+    <p class="team-text">Dein Team: <span class="ff5252"><?= $groupname?></span></p>
     <h1 class="page-title">Todo Gruppenübersicht</h1>
     <?php
     if($arrayResult){

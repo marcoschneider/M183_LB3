@@ -8,24 +8,16 @@ $resultStatus = countTodoStatus($conn, $uid);
     <?php
     if($arrayResult){
       foreach($arrayResult as $result){
-        if(strlen($result['problem']) >= 200 ) {
-          $pos = strpos($result['problem'], ' ', 125);
-          $shortText = substr($result['problem'], 0, $pos);
-        }else{
-          $shortText = $result['problem'];
-        }
-        $date = date_create($result['creation_date']);
-        $date = date_format($date, "d.m.Y \\u\\m H:i");
         if($result['fk_todo_status'] === '1') {
           ?>
           <div class="todo-wrapper">
             <a class="link" href="?pages=todo-details&id=<?= $result['id'] ?>">
               <h3 class="title-todo-wrapper"><?= $result['projectName'] ?></h3>
               <div class="date-todo-wrapper">
-                <?= trim($date) ?>
+                <?= trim($result['creation_date']) ?>
               </div>
               <div class="description">
-                <?= strip_tags($shortText) ?>
+                <?= strip_tags($result['problem']) ?>
               </div>
               <div class="action-links-wrapper">
                 <a class="overview-action-links" href="?pages=update-todo&id=<?= $result['id'] ?>">

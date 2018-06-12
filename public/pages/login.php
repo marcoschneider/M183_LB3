@@ -7,8 +7,9 @@
  */
 
   session_start();
-  require('../php/functions/dbcon.php');
-  require('../php/functions/functions.php');
+
+  require('../../res/lib/dbcon.php');
+  require('../../res/lib/functions.php');
 
   // redirect if logged in already
   if(isset($_SESSION['loggedin'])){
@@ -26,10 +27,11 @@
 
       $login = auth_user($conn, $username,$password);
 
-      var_dump($login);
       if ($login === true) {
-        $_SESSION['loggedin'] = $username;
-        redirect('?pages=support-links');
+        $_SESSION['loggedin'] = true;
+        $user = getUid($conn, $username);
+        $_SESSION['kernel']['userdata'] = $user;
+        redirect('../../?pages=support-links');
       } else {
         $errors['usernameAndPassword'] = 'Benutzername oder Passwort falsch!';
       }
@@ -47,7 +49,7 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../../../bower_components/bootstrap/dist/css/bootstrap-grid.min.css" />
+    <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap-grid.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/sco.styles.css"/>
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32x32.png">

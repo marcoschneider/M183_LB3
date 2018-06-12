@@ -1,12 +1,12 @@
 {
-  "name": "vfei",
-  "description": "A theme based on Viaduct-Base.",
+  "name": "Sass Compiling",
+  "description": "Gulp Sass compling",
   "bowerDir": "./bower_components",
   "css": {
     "file": "sco.styles.scss",
     "src": [
-      "src/scss/**/*.scss"
+      "public/assets/src/scss/**/*.scss"
     ],
-    "dest": "assets/css"
+    "dest": "public/assets/css"
   }
 }
