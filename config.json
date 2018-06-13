@@ -5,7 +5,7 @@
   "css": {
     "file": "sco.styles.scss",
     "src": [
-      "public/assets/src/scss/**/*.scss"
+      "public/src/scss/**/*.scss"
     ],
     "dest": "public/assets/css"
   }

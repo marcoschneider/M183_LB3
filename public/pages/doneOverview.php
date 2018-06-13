@@ -21,10 +21,10 @@ $resultStatus = countTodoStatus($conn, $uid);
               </div>
               <div class="action-links-wrapper">
                 <a class="overview-action-links" href="?pages=update-todo&id=<?= $result['id'] ?>">
-                  <i class="fa fa-reply" aria-hidden="true"></i>
+                  <i class="fas fa-reply" aria-hidden="true"></i>
                 </a>
                 <a class="overview-action-links" href="?pages=delete-todo&id=<?= $result['id'] ?>">
-                  <i class="fa fa-trash-o fa-lg"></i>
+                  <i class="fas fa-trash"></i>
                 </a>
               </div>
               <div class="importance">

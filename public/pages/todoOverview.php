@@ -1,6 +1,6 @@
 <?php
 
-$arrayResult = getTodos($conn, $uid);
+$todos = getTodos($conn, $uid);
 $resultStatus = countTodoStatus($conn, $uid);
 
 ?>
@@ -9,8 +9,8 @@ $resultStatus = countTodoStatus($conn, $uid);
     <div class="col-12">
       <h1 class="page-title">Todo Übersicht</h1>
       <?php
-      if($arrayResult){
-        foreach($arrayResult as $result){
+      if(is_array($todos)){
+        foreach($todos as $result){
           if($result['fk_todo_status'] === '2' && $result['groupname'] === 'self-todo') {
             ?>
             <div class="todo-wrapper">
@@ -24,10 +24,10 @@ $resultStatus = countTodoStatus($conn, $uid);
                 </div>
                 <div class="action-links-wrapper">
                   <a class="overview-action-links" href="?pages=done-todo&id=<?= $result['id'] ?>">
-                    <i class="fa fa-check" aria-hidden="true"></i>
+                    <i class="fas fa-check" aria-hidden="true"></i>
                   </a>
                   <a class="overview-action-links" href="?pages=edit-todo&id=<?= $result['id'] ?>">
-                    <i class="fa fa-pencil-square-o fa-lg"></i>
+                    <i class="fas fa-edit"></i>
                   </a>
                 </div>
                 <div class="importance">
