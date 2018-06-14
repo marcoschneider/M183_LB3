@@ -3,16 +3,18 @@
 $arrayResult = getGroupTodos($conn, $groupname);
 $resultStatus = countTodoStatus($conn, $uid);
 ?>
-<div class="row container">
-  <div class="col-12">
-    <p class="team-text">Dein Team: <span class="ff5252"><?= $groupname?></span></p>
-    <h1 class="page-title">Todo Gruppenübersicht</h1>
+<div class="container">
+  <div class="row">
+    <h1 class="page-title col-8">Todo Gruppenübersicht</h1>
+    <p class="team-text col-4 align-right">Dein Team: <span><?= $groupname?></span></p>
+  </div>
+  <div class="row">
     <?php
     if($arrayResult){
       foreach($arrayResult as $result) {
         if($result['fk_todo_status'] === '2') {
           ?>
-          <div class="todo-wrapper">
+          <div class="todo-wrapper col-sm-12 col-md-6 col-lg-3">
             <a class="link" href="?pages=todo-details&id=<?= $result['id'] ?>">
               <h3 class="title-todo-wrapper"><?= $result['title'] ?></h3>
               <div class="date-todo-wrapper">
@@ -36,9 +38,9 @@ $resultStatus = countTodoStatus($conn, $uid);
           <?php
         }
       }
-      /*if ($resultStatus['countedStatusTaskOverview'] === '0'){
-        echo "<p class='aside col-6 black-text'>Du hast keine Todos offen. Alle Todos sind erledigt.</p>";
-      }*/
+      if ($resultStatus['countedStatusTaskOverview'] === '0'){
+        infoMessage("Du hast keine Todos offen", 6);
+      }
     }else{
       echo "<p class='aside col-6 black-text'>Es wurden keine Todos in Ihrer Datenbank gefunden</p>";
     }

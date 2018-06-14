@@ -6,14 +6,15 @@ $resultStatus = countTodoStatus($conn, $uid);
 ?>
 <div class="container">
   <div class="row">
-    <div class="col-12">
-      <h1 class="page-title">Todo Übersicht</h1>
+    <h1 class="page-title col-12">Todo Übersicht</h1>
+  </div>
+  <div class="row">
       <?php
       if(is_array($todos)){
         foreach($todos as $result){
           if($result['fk_todo_status'] === '2' && $result['groupname'] === 'self-todo') {
             ?>
-            <div class="todo-wrapper">
+            <div class="todo-wrapper col-sm-12 col-md-6 col-lg-3">
               <a class="link" href="?pages=todo-details&id=<?= $result['id'] ?>">
                 <h3 class="title-todo-wrapper"><?= $result['projectName'] ?></h3>
                 <div class="date-todo-wrapper">
@@ -46,6 +47,5 @@ $resultStatus = countTodoStatus($conn, $uid);
       }
 
       ?>
-    </div>
   </div>
 </div>

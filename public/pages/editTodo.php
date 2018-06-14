@@ -70,6 +70,19 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
             </select>
           </label>
         </p>
+        <div class="space"></div>
+        <label>
+          <?php
+          echo (isset($errors['title']))
+            ? '<p class="text-error">Titel*</p>'
+            : '<p>Titel</p>';
+          ?>
+          <input name="title" class="form_control" value="<?php
+          echo (!empty($result['title']))
+            ? $result['title']
+            : '';
+          ?>">
+        </label>
         <div class="space-with-border"></div>
         <p>
           <label>
@@ -144,7 +157,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
             </p>
             <ul data-name="todo-type" class="dropdown-list">
               <li data-list-value="self-todo">In Selbsttodo eintragen</li>
-              <li data-list-value="<?= strtolower($_SESSION['groupname']) ?>">In Gruppentodo eintragen</li>
+              <li data-list-value="<?= $groupname ?>">In Gruppentodo eintragen</li>
             </ul>
           </div>
         </label>
@@ -184,7 +197,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
 </div>
 <script type="text/javascript">
   CKEDITOR.replace('edit', {
-    customConfig: '/assets/js/ckeditor/config.js'
+    customConfig: '/public/assets/js/ckeditor/config.js'
   });
 </script>
 <?php

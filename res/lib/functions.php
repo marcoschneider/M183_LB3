@@ -247,13 +247,13 @@ function auth_user($conn, $username, $password)
 function addTodo($conn, $values, $uid)
 {
 
-  var_dump($values);
   $values['fk_priority'] = (int)$values['niveau'];
   $values['date'] = ($values['date'] == '0') ? 0 : $values['date'];
 
   $sql = " INSERT INTO `todo` (
               `problem`,
               `datum`,
+              `title`,
               `fk_benutzer`,
               `fk_priority`,
               `fk_projekte`,
@@ -264,6 +264,7 @@ function addTodo($conn, $values, $uid)
             ) VALUES (
               '" . $values['problem'] . "',
               " . $values['date'] . ",
+              '" . $values['title'] . "',
               '" . $uid . "',
               '" . $values['niveau'] . "',
               '" . $values['project'] . "',
@@ -310,13 +311,17 @@ function deleteTodo($conn, $uid, $getId)
  */
 function updateTodo($conn, $values, $getId, $uid)
 {
+
+  $editTimestamp = time();
+
   $sql = "
     UPDATE todo
     SET
       `fk_projekte` = '" . $values['project'] . "',
+      `title` = '" . $values['title'] . "',
       `problem` = '" . $values['problem'] . "',
       `fk_priority` = '" . $values['niveau'] . "',
-      `creation_date` = NOW(),
+      `edit_date` = " . $editTimestamp . ",
       `datum` = " . $values['date'] . ",
       `url` = '" . $values['url'] . "',
       `groupname` = '" . $values['todo-type'] . "'
@@ -346,6 +351,7 @@ function getTodoDetails($conn, $getId)
     SELECT
      todo.id,
      todo.problem,
+     todo.title,
      todo.creation_date,
      todo.datum,
      p.niveau,
@@ -366,9 +372,13 @@ function getTodoDetails($conn, $getId)
 
   $result = mysqli_fetch_array($sqlResult, MYSQLI_ASSOC);
 
-  $result['datum'] = ($result['datum'] != '0')
+  var_dump($result['datum']);
+
+  $result['datum'] = ($result['datum'] != '0' || $result['datum'] != null)
     ? $result['datum'] = date("Y-m-d", (int)$result['datum'])
     : $result['datum'] = '';
+
+  var_dump($result['datum']);
 
   $date = date_create($result['creation_date']);
   $result['creation_date'] = date_format($date, "d.m.Y \\u\\m H:i");
@@ -697,6 +707,12 @@ $values = array();
     $errors['project'] = "Bitte wählen Sie ein Projekt aus";
   }
 
+  if (isset($formValues['title']) && $formValues['title'] != '') {
+    $values['title'] = htmlspecialchars($formValues['title']);
+  }else{
+    $errors['title'] = "Bitte einen Titel eingeben";
+  }
+
   //Überprüft ob das Feld ausgefüllt ist.
   if(isset($formValues['problem']) && $formValues['problem'] != ''){
     $description = mysqli_real_escape_string($conn, $formValues['problem']);
@@ -755,5 +771,3 @@ $values = array();
   $values['errors'] = $errors;
   return $values;
 }
-
-?>

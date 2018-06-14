@@ -163,6 +163,6 @@ if(isset($_POST['submit'])){
       <p>&copy Copyright Somedia Production Web Support</p>
     </div>
   </body>
-  <script src="../assets/js/jquery-3.1.1.js"></script>
+  <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
   <script src="../assets/js/script.js"></script>
 </html>

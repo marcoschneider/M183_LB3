@@ -51,6 +51,19 @@
             </ul>
           </div>
         </label>
+        <div class="space"></div>
+        <label>
+          <?php
+            echo (isset($errors['title']))
+              ? '<p class="text-error">Titel*</p>'
+              : '<p>Titel</p>';
+          ?>
+          <input name="title" class="form_control" value="<?php
+          echo (!empty($_POST['title']))
+            ? $_POST['title']
+            : '';
+          ?>">
+        </label>
         <div class="space-with-border"></div>
         <label>
           <?php
@@ -156,7 +169,7 @@
   <div class="clearer"></div>
   <script type="text/javascript">
     CKEDITOR.replace('edit', {
-      customConfig: '/assets/js/ckeditor/config.js'
+      customConfig: '/public/assets/js/ckeditor/config.js'
     });
   </script>
 <?php

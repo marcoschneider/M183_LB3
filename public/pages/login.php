@@ -8,8 +8,10 @@
 
   session_start();
 
-  require('../../res/lib/dbcon.php');
+  require('../../res/config.inc.php');
   require('../../res/lib/functions.php');
+
+  $conn = Config::getDb();
 
   // redirect if logged in already
   if(isset($_SESSION['loggedin'])){
