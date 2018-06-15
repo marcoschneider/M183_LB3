@@ -13,7 +13,8 @@ if (isset($getId) && $getId != '') {
     <div class="tododetails-wrapper">
     <?php
     if(isset($result)) {  ?>
-      <h1 class="detail-title"><?= $result['projectName'] ?></h1>
+      <h1 class="detail-title"><?= $result['title'] ?></h1>
+      <h2 class="detail-project"><?= $result['projectName'] ?></h2>
       <div class="detail-output-wrapper">
       <?php
         echo ($result['datum'] != '')

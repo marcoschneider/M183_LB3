@@ -13,6 +13,8 @@ function redirect($page)
   header("Location: " . $page);
 }
 
+
+
 function errorMessage($message)
 {
   if (is_array($message)) {
@@ -32,6 +34,8 @@ function errorMessage($message)
   }
 }
 
+
+
 function successMessage($message)
 {
   if (is_array($message)) {
@@ -50,6 +54,8 @@ function successMessage($message)
   }
 }
 
+
+
 function infoMessage($message, $colSize)
 {
   if (is_array($message)) {
@@ -67,6 +73,8 @@ function infoMessage($message, $colSize)
   }
 }
 
+
+
 function sqlErrors($mysqli_errno) {
   switch ($mysqli_errno){
     case '1062':
@@ -76,6 +84,8 @@ function sqlErrors($mysqli_errno) {
 
   return $mysqli_custom_error;
 }
+
+
 
 //insert registration in DB
 /**
@@ -372,13 +382,9 @@ function getTodoDetails($conn, $getId)
 
   $result = mysqli_fetch_array($sqlResult, MYSQLI_ASSOC);
 
-  var_dump($result['datum']);
-
-  $result['datum'] = ($result['datum'] != '0' || $result['datum'] != null)
-    ? $result['datum'] = date("Y-m-d", (int)$result['datum'])
-    : $result['datum'] = '';
-
-  var_dump($result['datum']);
+  $result['datum'] = ($result['datum'] == '0' || $result['datum'] === null)
+    ? $result['datum'] = ''
+    : $result['datum'] = date("Y-m-d", (int)$result['datum']);
 
   $date = date_create($result['creation_date']);
   $result['creation_date'] = date_format($date, "d.m.Y \\u\\m H:i");
@@ -469,7 +475,7 @@ function getTodos($conn, $uid)
              INNER JOIN prioritaet p ON (todo.fk_priority = p.id)
              INNER JOIN projekte pr on todo.fk_projekte = pr.id
             WHERE b.id ='" . $uid . "' AND todo.groupname = 'self-todo'
-            ORDER BY todo.fk_priority ASC";
+            ORDER BY todo.fk_priority ASC, todo.creation_date DESC";
 
   $sqlResult = mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
