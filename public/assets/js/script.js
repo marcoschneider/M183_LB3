@@ -1,3 +1,5 @@
+var ajaxUrl = "/res/lib/ajax.php";
+
 $(function(){
 
   customSelect('#dropdown-register');
@@ -31,7 +33,25 @@ $(function(){
     });
   });
 
+  $('#test_ajax').on('click', function () {
+    ajaxTest();
+  })
 });
+
+
+function ajaxTest() {
+  $.ajax({
+    url: ajaxUrl,
+    type: 'POST',
+    data: {jsonData: JSON.stringify({trigger: 'getusername'})},
+    success: function (response) {
+      $('#output-error').text(response.username);
+    },
+    error: function (e) {
+      $('#output-error').html(e)
+    }
+  })
+}
 
 function customSelect(elementID) {
 

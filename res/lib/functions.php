@@ -231,7 +231,7 @@ function auth_user($conn, $username, $password)
   $escPass = mysqli_real_escape_string($conn, $password);
 
   //Checks if username and password matches post
-  $sql = "SELECT id FROM k72021_sco_uebungen.benutzer WHERE `username`='" . $escUser . "' AND `password`='" . $escPass . "'";
+  $sql = "SELECT id FROM benutzer WHERE `username`='" . $escUser . "' AND `password`='" . $escPass . "'";
 
   $result = mysqli_query($conn, $sql);
 
@@ -657,11 +657,11 @@ function updateTodoStatus($conn, $uid, $getId)
  */
 function countTodoStatus($conn, $uid)
 {
-  $sqlCountedTask = "SELECT count(*) AS 'countedStatus' FROM todo WHERE fk_todo_status = 2 AND fk_benutzer = '" . $uid . "'";
-  $sqlCountDone = "SELECT count(*) AS 'countedStatus' FROM todo WHERE fk_todo_status = 1 AND fk_benutzer = '" . $uid . "'";
+  $countedTodos = "SELECT count(*) AS 'countedStatus' FROM todo WHERE fk_todo_status = 2 AND fk_benutzer = '" . $uid . "'";
+  $coutnedDone = "SELECT count(*) AS 'countedStatus' FROM todo WHERE fk_todo_status = 1 AND fk_benutzer = '" . $uid . "'";
 
-  $countedTask = mysqli_query($conn, $sqlCountedTask);
-  $countedDone = mysqli_query($conn, $sqlCountDone);
+  $countedTask = mysqli_query($conn, $countedTodos);
+  $countedDone = mysqli_query($conn, $coutnedDone);
 
   $countResultTaskOverview = mysqli_fetch_array($countedTask, MYSQLI_ASSOC);
   $countResultTaskOverview['countedStatusTaskOverview'] = $countResultTaskOverview['countedStatus'];

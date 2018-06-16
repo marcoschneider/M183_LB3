@@ -10,7 +10,7 @@ $resultStatus = countTodoStatus($conn, $uid);
   </div>
   <div class="row">
       <?php
-      if(is_array($todos)){
+      if(isset($todos)){
         foreach($todos as $result){
           if($result['fk_todo_status'] === '2' && $result['groupname'] === 'self-todo') {
             ?>
@@ -40,10 +40,8 @@ $resultStatus = countTodoStatus($conn, $uid);
           }
         }
         if ($resultStatus['countedStatusTaskOverview'] === '0'){
-          infoMessage("Du hast keine Todos offen. Alle Todos sind erledigt.", "6");
+          infoMessage("Es wurden keine Todos in Ihrer Datenbank gefunden.", 6);
         }
-      }else{
-        infoMessage("Es wurden keine Todo's in Ihrer Datenbank gefunden", "6");
       }
 
       ?>

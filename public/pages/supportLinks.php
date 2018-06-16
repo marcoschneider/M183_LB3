@@ -5,6 +5,7 @@
  * Date: 15.06.2017
  * Time: 08:43
  */
+
 $values = [];
 $errors = [];
 if (isset($_POST['submit']) || isset($_POST['update-link'])){
@@ -151,6 +152,14 @@ if(isset($_POST['delete-link-submit'])) {
         <div class="space"></div>
         <button id="update-link-submit" type="button" class="button-default">Link bearbeiten</button>
       </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <input id="test_ajax" type="button" value="Test Ajax">
+      <div id="output-error">
+
+      </div>
     </div>
   </div>
 </div>

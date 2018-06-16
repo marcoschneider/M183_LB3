@@ -1,9 +1,6 @@
 <?php
-$results = '';
-$userData = "SELECT `name`, surname, username FROM benutzer WHERE id = '" . $uid . "'";
-
-$userData = mysqli_query($conn, $userData);
-$results = mysqli_fetch_array($userData, MYSQLI_ASSOC);
+$userModel = new UserModel($conn, $uid);
+$results = $userModel->getUserdata();
 
 $values = [];
 $errors = [];
@@ -71,7 +68,7 @@ if(isset($_POST['submitPassword'])){
 
 <div class="row container">
   <div class="col-6">
-    <h1 class="margin-bot-25">Information</h1>
+    <h1 class="">Information</h1>
     <p>
       Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
       At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
@@ -84,40 +81,34 @@ if(isset($_POST['submitPassword'])){
       if(isset($_POST['submit'])) {
         if (count($errors) === 0) {
           if (updateUserdata($conn, $uid, $values) === true) {
-            redirect('index.res?logout');
+            redirect('?pages=logout');
           }else{
-            echo '<div class="failbox">
-              <p>Diesen Benutzername gibt es bereits</p>
-            </div>';
+            errorMessage("Diesen Benutzername gibt es bereits");
           }
         } else {
-        echo '<div class="failbox">';
-          foreach ($errors as $error) {
-            echo '<p>' . $error . '</p>';
-          }
-          echo '</div>';
+          errorMessage($errors);
         }
       }
     ?>
-    <h1 class="margin-bot-25">Benutzerdaten</h1>
+    <h1 class="">Benutzerdaten</h1>
     <div class="user-data-wrapper ">
       <form class="col-12" method="post" action="">
         <div>
           <p class="margin-right-25"><b>Name:</b></p>
           <label>
-            <input class="margin-bot-25 input-userdata" name="name" type="text" value="<?= $results['name'] ?>">
+            <input class="input-userdata" name="name" type="text" value="<?= $results['name'] ?>">
           </label>
         </div>
         <div>
           <p class="margin-right-25"><b>Nachname:</b></p>
           <label>
-            <input class="margin-bot-25 input-userdata" name="surname" type="text" value="<?= $results['surname'] ?>">
+            <input class="input-userdata" name="surname" type="text" value="<?= $results['surname'] ?>">
           </label>
         </div>
         <div>
           <p class="margin-right-25"><b>Benutzername:</b></p>
           <label>
-            <input class="margin-bot-25 input-userdata" name="username" type="text" value="<?= $results['username'] ?>">
+            <input class="input-userdata" name="username" type="text" value="<?= $results['username'] ?>">
           </label>
         </div>
        <div class="space">
@@ -129,18 +120,12 @@ if(isset($_POST['submitPassword'])){
         if(isset($_POST['submitPassword'])) {
           if (count($errors) === 0) {
             if (updateUserCredentials($conn, $uid, $values['new_password']) === true) {
-              redirect('index.res?logout');
+              redirect('?pages=logout');
             }else{
-              echo '<div class="failbox">
-                <p>Ein Fehler ist aufgetreten</p>
-              </div>';
+              errorMessage("Ein Fehler ist aufgetreten");
             }
           } else {
-            echo '<div class="failbox">';
-            foreach ($errors as $error) {
-              echo '<p>' . $error . '</p>';
-            }
-            echo '</div>';
+            errorMessage($errors);
           }
         }
       ?>

@@ -42,15 +42,13 @@
     }
   }
 
-  mysqli_close($conn);
-
+  $conn->close();
 ?>
 
 <!DOCTYPE html>
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap-grid.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/sco.styles.css"/>
@@ -59,6 +57,7 @@
     <title>Login</title>
   </head>
   <body>
+  <div class="container-fluid">
     <header class="row">
       <div class="col-12">
         <div class="brand-logo">
@@ -66,6 +65,7 @@
         </div>
       </div>
     </header>
+  </div>
     <div class="content-wrapper">
       <div class="login-wrapper">
         <form class="login-form" method="post" action="">
@@ -80,19 +80,13 @@
         <?php
         if (isset($_POST['submit'])) {
           if (count($errors) != 0) {
-            foreach ($errors as $error) {
-              echo '
-                <div class="failbox">
-                  <p class="center"> ' . $error . '</p>
-                </div>
-              ';
-            }
+            errorMessage($errors);
           }
         }
         ?>
       </div>
     </div>
-    <div class="footer-login col-12">
+    <div class="footer-login">
       <p>Resize the browser window to see how the content respond to the resizing.</p>
       <br>
       <p>&copy Copyright Somedia Production Web Support</p>

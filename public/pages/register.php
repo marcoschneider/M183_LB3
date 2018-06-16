@@ -8,8 +8,10 @@
 
 error_reporting(E_ALL & ~E_NOTICE);
 
-require('../res/lib/dbcon.res');
-require('../res/lib/functions.res');
+require('../../res/config.inc.php');
+require('../../res/lib/functions.php');
+
+$conn = Config::getDb();
 
 $value = array();
 $errors = array();
@@ -71,7 +73,6 @@ if(isset($_POST['submit'])){
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/css/sco.styles.css"/>
-    <link rel="stylesheet" href="../assets/css/font-awesome.min.css"/>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../assets/img/favicon-16x16.png">
