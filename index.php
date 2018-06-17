@@ -43,7 +43,7 @@ $username = $_SESSION['kernel']['userdata']['username'];
     <meta http-equiv="Content-Type" content="text/html" lang="de"/>
     <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="node_modules/ckeditor/ckeditor.js"></script>
-    <title>SOPD Support Web App</title>
+    <title>Todo Web App</title>
   </head>
 	<body>
     <header>
@@ -66,7 +66,7 @@ $username = $_SESSION['kernel']['userdata']['username'];
               'Favorite Links' => '?pages=support-links',
               'Aufgabenübersicht' => '?pages=todo-overview',
               'Gruppenübersicht' => '?pages=group-overview',
-              'Allgemeine Infos'  => '?pages=infos'
+              'Play Game'  => '?pages=game'
             );
 
             $navigation =  createMenu($links);
@@ -124,6 +124,9 @@ $username = $_SESSION['kernel']['userdata']['username'];
               break;
             case 'update-todo':
               include 'public/pages/updateTodo.php';
+              break;
+            case 'game':
+              include 'public/pages/game.php';
               break;
             case 'logout':
               session_unset();
