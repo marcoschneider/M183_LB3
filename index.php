@@ -5,8 +5,6 @@
 //starts Session
 session_start();
 
-header('Content-Type: text/html; charset=utf-8');
-
 //import configs and import lib
 require 'res/config.inc.php';
 require LIBRARY_PATH.'/functions.php';
@@ -25,6 +23,7 @@ if(!$_SESSION['loggedin']) {
 //SESSION configurations
 $uid = $_SESSION['kernel']['userdata']["id"];
 $groupname = $_SESSION['kernel']['userdata']['group_name'];
+$shortGroupname = $_SESSION['kernel']['userdata']['group_short'];
 $username = $_SESSION['kernel']['userdata']['username'];
 
 ?>

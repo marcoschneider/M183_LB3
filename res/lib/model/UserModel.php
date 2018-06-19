@@ -18,7 +18,7 @@ class UserModel
   }
 
   public function getUserdata() {
-    $userData = "SELECT `name`, surname, username FROM user WHERE id = '" . $this->uid . "'";
+    $userData = "SELECT firstname, surname, username FROM user WHERE id = '" . $this->uid . "'";
 
     $result = $this->conn->query($userData);
 

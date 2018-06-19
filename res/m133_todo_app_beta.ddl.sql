@@ -26,8 +26,13 @@ CREATE TABLE user(
   firstname VARCHAR(255) NOT NULL,
   surname VARCHAR(255) NOT NULL,
   username VARCHAR(255) NOT NULL,
-  password CHAR(64) NOT NULL ,
+  password CHAR(64) NOT NULL
+);
+
+CREATE TABLE user_group(
+  fk_user INT(11) NOT NULL,
   fk_group INT(11) NOT NULL,
+  FOREIGN KEY (fk_user) REFERENCES user(id),
   FOREIGN KEY (fk_group) REFERENCES `group`(id)
 );
 
@@ -50,7 +55,7 @@ CREATE TABLE todo(
   website_url VARCHAR(512),
   fk_project INT(11) NOT NULL ,
   fk_priority INT(11) NOT NULL ,
-  fk_group INT(11) NOT NULL ,
+  fk_group INT(11) ,
   fk_user INT(11) NOT NULL ,
   FOREIGN KEY (fk_project) REFERENCES project(id),
   FOREIGN KEY (fk_priority) REFERENCES priority(id),

@@ -217,13 +217,15 @@ function getUid($conn, $username)
 
   $sql = "
     SELECT 
-      `user`.id,
-      `firstname`,
+      u.id,
+      firstname,
       surname,
       username, 
-      g.group_name
-    FROM `user` 
-      INNER JOIN `group` g ON g.id = fk_group
+      g.group_name,
+      g.group_short
+    FROM `user` u
+      INNER JOIN user_group ug ON ug.fk_user =  u.id
+      INNER JOIN `group` g on ug.fk_group = g.id
     WHERE 
       username = '" . $username . "'";
 
@@ -281,18 +283,21 @@ function addTodo($conn, $values, $uid)
 
   $values['fk_priority'] = (int)$values['niveau'];
   $values['date'] = ($values['date'] == '0') ? 0 : $values['date'];
+  $values['todo-type'] = $values['todo-type'] === 'self-todo' ? null : $values['todo-type'];
+
+  var_dump($values);
 
   $sql = " INSERT INTO `todo` (
               `problem`,
-              `datum`,
+              `fixed_date`,
               `title`,
               `fk_user`,
               `fk_priority`,
-              `fk_projekte`,
+              `fk_project`,
               `creation_date`,
-              `url`,
-              `fk_todo_status`,
-              groupname
+              `website_url`,
+              `todo_status`,
+              fk_group
             ) VALUES (
               '" . $values['problem'] . "',
               " . $values['date'] . ",
@@ -300,9 +305,9 @@ function addTodo($conn, $values, $uid)
               '" . $uid . "',
               '" . $values['niveau'] . "',
               '" . $values['project'] . "',
-              NOW(),
+              CURRENT_TIMESTAMP,
               '" . $values['url'] . "',
-              '2',
+              '1',
               '" . $values['todo-type'] . "'
             )";
 
@@ -498,7 +503,7 @@ function getTodos($conn, $uid)
              INNER JOIN user u ON(u.id = todo.fk_user)
              INNER JOIN priority p ON (todo.fk_priority = p.id)
              INNER JOIN project pr on todo.fk_project = pr.id
-             INNER JOIN `group` g ON u.fk_group = g.id
+             INNER JOIN `group` g on todo.fk_group = g.id
             WHERE u.id ='" . $uid . "'
             ORDER BY todo.fk_priority ASC, todo.creation_date DESC";
 
@@ -660,11 +665,12 @@ function doneTodo($conn, $uid, $getId)
 function updateTodoStatus($conn, $uid, $getId)
 {
 
-  $sql = "UPDATE
-            `todo`
-         SET
-            `todo_status` = 0
-         WHERE `todo`.`id` = '" . $getId . "' AND fk_user = '" . $uid . "'";
+  $sql = "
+  UPDATE
+    `todo`
+  SET
+    `todo_status` = 0
+  WHERE `todo`.`id` = '" . $getId . "' AND fk_user = '" . $uid . "'";
 
   $updateTodoStatus = mysqli_query($conn, $sql);
 

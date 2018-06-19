@@ -10,11 +10,11 @@ $resultStatus = countTodoStatus($conn, $uid);
     <?php
     if($arrayResult){
       foreach($arrayResult as $result){
-        if($result['fk_todo_status'] === '1') {
+        if($result['todo_status'] === '0') {
           ?>
           <div class="todo-wrapper col-sm-12 col-md-6 col-lg-3">
             <a class="link" href="?pages=todo-details&id=<?= $result['id'] ?>">
-              <h3 class="title-todo-wrapper"><?= $result['projectName'] ?></h3>
+              <h3 class="title-todo-wrapper"><?= $result['title'] ?></h3>
               <div class="date-todo-wrapper">
                 <?= trim($result['creation_date']) ?>
               </div>

@@ -123,7 +123,7 @@
             <?php
               if(isset($_POST['todo-type']) && $_POST['todo-type'] === "self-todo"){
                 echo 'In Selbsttodo eintragen';
-              }elseif(isset($_POST['todo-type']) && $_POST['todo-type'] === strtolower($groupname)){
+              }elseif(isset($_POST['todo-type']) && $_POST['todo-type'] === strtolower($shortGroupname)){
                 echo 'In Gruppentodo eintragen';
               }else{
                 echo '--Bitte wählen--';
@@ -131,7 +131,7 @@
             </p>
             <ul data-name="todo-type" class="dropdown-list">
               <li data-list-value="self-todo">In Selbsttodo eintragen</li>
-              <li data-list-value="<?= strtolower($groupname) ?>">In Gruppentodo eintragen</li>
+              <li data-list-value="<?= strtolower($shortGroupname) ?>"><?= $groupname ?></li>
             </ul>
           </div>
         </label>

@@ -84,7 +84,7 @@ if(isset($_POST['submitPassword'])){
           $userdataResponse = updateUserdata($conn, $uid, $values);
           if ($userdataResponse === true) {
             redirect("?pages=userdata");
-            $_SESSION['kernel']['userdata']['name'] = $values['name'];
+            $_SESSION['kernel']['userdata']['firstname'] = $values['name'];
             $_SESSION['kernel']['userdata']['surname'] = $values['surname'];
             $_SESSION['kernel']['userdata']['username'] = $values['username'];
             successMessage("Deine Benutzerdaten wurden aktualisiert");
@@ -102,7 +102,7 @@ if(isset($_POST['submitPassword'])){
         <div>
           <p class="margin-right-25"><b>Name:</b></p>
           <label>
-            <input class="input-userdata" name="name" type="text" value="<?= $results['name'] ?>">
+            <input class="input-userdata" name="name" type="text" value="<?= $results['firstname'] ?>">
           </label>
         </div>
         <div>

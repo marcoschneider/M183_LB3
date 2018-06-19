@@ -8,6 +8,8 @@
 
 $values = [];
 $errors = [];
+
+//Update form validatio
 if (isset($_POST['submit']) || isset($_POST['update-link'])){
   if (isset($_POST['link_name']) && $_POST['link_name'] != '') {
     $link_name = htmlspecialchars(trim($_POST['link_name']));
@@ -30,6 +32,7 @@ if (isset($_POST['submit']) || isset($_POST['update-link'])){
 
 $result = getLinks($conn, $uid);
 
+//Delete form validation
 if(isset($_POST['delete-link-submit'])) {
   if(isset($_POST['link_id']) && $_POST['link_id'] != ""){
     $link_id = htmlspecialchars(trim($_POST['link_id']));
@@ -114,7 +117,7 @@ if(isset($_POST['delete-link-submit'])) {
       <h2 class="space">Link löschen/bearbeiten</h2>
         <?php
         if (isset($_POST['delete-link-submit'])){
-          if (count($errors) < 0){
+          if (empty($errors)){
             foreach($result as $link){
               if($values['link-to-delete'] === $link['id']){
                 $link_id = $values['link-to-delete'];
