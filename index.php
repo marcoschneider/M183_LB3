@@ -5,10 +5,14 @@
 //starts Session
 session_start();
 
+header('Content-Type: text/html; charset=utf-8');
+
 //import configs and import lib
 require 'res/config.inc.php';
 require LIBRARY_PATH.'/functions.php';
+require LIBRARY_PATH.'/User.php';
 require LIBRARY_PATH.'/model/UserModel.php';
+
 
 $conn = Config::getDb();
 
@@ -20,7 +24,7 @@ if(!$_SESSION['loggedin']) {
 
 //SESSION configurations
 $uid = $_SESSION['kernel']['userdata']["id"];
-$groupname = $_SESSION['kernel']['userdata']['groupname'];
+$groupname = $_SESSION['kernel']['userdata']['group_name'];
 $username = $_SESSION['kernel']['userdata']['username'];
 
 ?>
@@ -152,6 +156,7 @@ $username = $_SESSION['kernel']['userdata']['username'];
       </div>
     </footer>
     <script type="text/javascript" src="public/assets/js/script.js"></script>
+    <script type="text/javascript" src="public/assets/js/cargame.js"></script>
     <script type="text/javascript" src="public/assets/js/menubar.js"></script>
 	</body>
 </html>

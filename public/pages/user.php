@@ -1,4 +1,5 @@
 <?php
+
 $userModel = new UserModel($conn, $uid);
 $results = $userModel->getUserdata();
 
@@ -80,8 +81,13 @@ if(isset($_POST['submitPassword'])){
     <?php
       if(isset($_POST['submit'])) {
         if (count($errors) === 0) {
-          if (updateUserdata($conn, $uid, $values) === true) {
-            redirect('?pages=logout');
+          $userdataResponse = updateUserdata($conn, $uid, $values);
+          if ($userdataResponse === true) {
+            redirect("?pages=userdata");
+            $_SESSION['kernel']['userdata']['name'] = $values['name'];
+            $_SESSION['kernel']['userdata']['surname'] = $values['surname'];
+            $_SESSION['kernel']['userdata']['username'] = $values['username'];
+            successMessage("Deine Benutzerdaten wurden aktualisiert");
           }else{
             errorMessage("Diesen Benutzername gibt es bereits");
           }
@@ -111,9 +117,8 @@ if(isset($_POST['submitPassword'])){
             <input class="input-userdata" name="username" type="text" value="<?= $results['username'] ?>">
           </label>
         </div>
-       <div class="space">
-         <input class="button-default" type="submit" name="submit" value="Speichern">
-       </div>
+       <input class="button-default" type="submit" name="submit" value="Speichern">
+      <div class="space"></div>
       </form>
       <div class="clearer"></div>
       <?php
@@ -131,7 +136,7 @@ if(isset($_POST['submitPassword'])){
       ?>
       <form class="col-12" method="post" action="">
         <div>
-          <p class="margin-right-25"><b>Passwort*:</b></p>
+          <p><b>Passwort*:</b></p>
           <label>
             <input placeholder="Aktuelles Passwort" class="input-userdata" type="password" name="password" value="">
           </label>

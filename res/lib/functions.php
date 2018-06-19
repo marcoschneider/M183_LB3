@@ -14,7 +14,6 @@ function redirect($page)
 }
 
 
-
 function errorMessage($message)
 {
   if (is_array($message)) {
@@ -33,7 +32,6 @@ function errorMessage($message)
     <div class="space"></div>';
   }
 }
-
 
 
 function successMessage($message)
@@ -55,7 +53,6 @@ function successMessage($message)
 }
 
 
-
 function infoMessage($message, $colSize)
 {
   if (is_array($message)) {
@@ -74,7 +71,6 @@ function infoMessage($message, $colSize)
 }
 
 
-
 function sqlErrors($mysqli_errno) {
   switch ($mysqli_errno){
     case '1062':
@@ -84,7 +80,6 @@ function sqlErrors($mysqli_errno) {
 
   return $mysqli_custom_error;
 }
-
 
 
 //insert registration in DB
@@ -100,8 +95,8 @@ function insertRegister($name, $surname, $team, $conn, $username_reg, $password_
 {
 
   $sql = "
-  INSERT INTO `benutzer` 
-    (`name`, `surname`, `password`, `username` , `groupname`) 
+  INSERT INTO `user` 
+    (`firstname`, `surname`, `password`, `username` , `fk_group`) 
   VALUES  (
     '" . $name . "',
     '" . $surname . "',
@@ -119,6 +114,7 @@ function insertRegister($name, $surname, $team, $conn, $username_reg, $password_
   }
 }
 
+
 //insert user edit in database
 /**
  * @param $conn
@@ -128,10 +124,9 @@ function insertRegister($name, $surname, $team, $conn, $username_reg, $password_
  */
 function updateUserCredentials($conn, $uid, $newPassword)
 {
-  $sql = "UPDATE `benutzer` SET `password` = '" . hash("sha256", $newPassword) . "' WHERE id = '" . $uid . "'";
+  $sql = "UPDATE `user` SET `password` = '" . hash("sha256", $newPassword) . "' WHERE id = '" . $uid . "'";
 
   $updateResult = mysqli_query($conn, $sql);
-
 
   if ($updateResult) {
     return true;
@@ -140,13 +135,39 @@ function updateUserCredentials($conn, $uid, $newPassword)
   }
 }
 
+
+function getAllGroups($conn) {
+  $sql = "
+    SELECT
+      id,
+      group_name,
+      group_short
+    FROM `group`
+  ";
+
+  $values = [];
+
+  $mysqli_result = mysqli_query($conn,$sql) or die(mysqli_error($conn));
+
+  while ($result = $mysqli_result->fetch_assoc()) {
+    $values[] = $result;
+  }
+
+  if ($mysqli_result){
+    return $values;
+  }else{
+    return $mysqli_result;
+  }
+}
+
+
 function getAllProjects($conn) {
   $sql = "
     SELECT 
       id,
-      projectName,
-      cleanedProjectName
-    FROM projekte
+      project_name,
+      short_name
+    FROM project
   ";
 
   $values = [];
@@ -173,7 +194,7 @@ function getAllProjects($conn) {
  */
 function updateUserdata($conn, $uid, $values)
 {
-  $sql = "UPDATE `benutzer` SET `name` = '" . $values['name'] . "', `surname` = '" . $values['surname'] . "', `username` = '" . $values['username'] . "' WHERE id = '" . $uid . "'";
+  $sql = "UPDATE `user` SET `name` = '" . $values['name'] . "', `surname` = '" . $values['surname'] . "', `username` = '" . $values['username'] . "' WHERE id = '" . $uid . "'";
 
   $updateResult = mysqli_query($conn, $sql);
 
@@ -196,12 +217,13 @@ function getUid($conn, $username)
 
   $sql = "
     SELECT 
-      id,
-      `name`,
+      `user`.id,
+      `firstname`,
       surname,
       username, 
-      groupname
-    FROM `benutzer` 
+      g.group_name
+    FROM `user` 
+      INNER JOIN `group` g ON g.id = fk_group
     WHERE 
       username = '" . $username . "'";
 
@@ -231,7 +253,7 @@ function auth_user($conn, $username, $password)
   $escPass = mysqli_real_escape_string($conn, $password);
 
   //Checks if username and password matches post
-  $sql = "SELECT id FROM benutzer WHERE `username`='" . $escUser . "' AND `password`='" . $escPass . "'";
+  $sql = "SELECT id FROM user WHERE `username`='" . $escUser . "' AND `password`='" . $escPass . "'";
 
   $result = mysqli_query($conn, $sql);
 
@@ -264,7 +286,7 @@ function addTodo($conn, $values, $uid)
               `problem`,
               `datum`,
               `title`,
-              `fk_benutzer`,
+              `fk_user`,
               `fk_priority`,
               `fk_projekte`,
               `creation_date`,
@@ -302,7 +324,7 @@ function addTodo($conn, $values, $uid)
 function deleteTodo($conn, $uid, $getId)
 {
 
-  $sql = "DELETE FROM `todo` WHERE `id` = '" . $getId . "' AND `fk_benutzer` = '" . $uid . "'";
+  $sql = "DELETE FROM `todo` WHERE `id` = '" . $getId . "' AND `fk_user` = '" . $uid . "'";
   $deleteTodo = mysqli_query($conn, $sql);
 
   if ($deleteTodo) {
@@ -336,7 +358,7 @@ function updateTodo($conn, $values, $getId, $uid)
       `url` = '" . $values['url'] . "',
       `groupname` = '" . $values['todo-type'] . "'
     WHERE
-      `id` = '" . $getId . "' AND `fk_benutzer` = '" . $uid . "'";
+      `id` = '" . $getId . "' AND `fk_user` = '" . $uid . "'";
 
   $updateTodo = mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
@@ -363,17 +385,18 @@ function getTodoDetails($conn, $getId)
      todo.problem,
      todo.title,
      todo.creation_date,
-     todo.datum,
+     todo.fixed_date,
      p.niveau,
-     pr.projectName,
+     pr.project_name,
      pr.id AS 'project_id',
      todo.fk_priority,
-     todo.url,
-     todo.groupname
-    FROM todo
-     INNER JOIN benutzer b ON(b.id = todo.fk_benutzer)
-     INNER JOIN prioritaet p ON (todo.fk_priority = p.id)
-     INNER JOIN projekte pr ON (todo.fk_projekte = pr.id)
+     todo.website_url,
+     g.group_name
+    FROM m133_todo_app_beta.todo
+     INNER JOIN user u ON(u.id = todo.fk_user)
+     INNER JOIN priority p ON (todo.fk_priority = p.id)
+     INNER JOIN project pr ON (todo.fk_project = pr.id)
+     INNER JOIN `group` g on (todo.fk_group) = g.id
     WHERE todo.id = '" . $getId . "'
     ORDER BY todo.id DESC
   ";
@@ -382,9 +405,9 @@ function getTodoDetails($conn, $getId)
 
   $result = mysqli_fetch_array($sqlResult, MYSQLI_ASSOC);
 
-  $result['datum'] = ($result['datum'] == '0' || $result['datum'] === null)
-    ? $result['datum'] = ''
-    : $result['datum'] = date("Y-m-d", (int)$result['datum']);
+  $result['fixed_date'] = ($result['fixed_date'] == '0' || $result['fixed_date'] === null)
+    ? $result['fixed_date'] = ''
+    : $result['fixed_date'] = date("Y-m-d", (int)$result['fixed_date']);
 
   $date = date_create($result['creation_date']);
   $result['creation_date'] = date_format($date, "d.m.Y \\u\\m H:i");
@@ -403,16 +426,17 @@ function getGroupTodos($conn, $groupname){
             todo.problem,
             todo.creation_date,
             p.niveau,
-            todo.url,
-            b.username,
-            b.name,
-            b.surname,
-            todo.fk_todo_status,
-            todo.groupname
-          FROM todo
-            INNER JOIN benutzer b ON(b.id = todo.fk_benutzer)
-            INNER JOIN prioritaet p ON (todo.fk_priority = p.id)
-          WHERE todo.groupname = '" . $groupname . "'
+            todo.website_url,
+            u.username,
+            u.firstname,
+            u.surname,
+            todo.todo_status,
+            g.group_name
+          FROM m133_todo_app_beta.todo
+            INNER JOIN user u ON(u.id = todo.fk_user)
+            INNER JOIN priority p ON (todo.fk_priority = p.id)
+            INNER JOIN `group` g on (todo.fk_group = g.id)
+          WHERE g.group_name = '" . $groupname . "'
           ORDER BY todo.fk_priority ASC";
 
   $sqlResult = mysqli_query($conn, $sql) or die(mysqli_error($conn));
@@ -439,7 +463,7 @@ function getGroupTodos($conn, $groupname){
 function deleteGroupTodos($conn, $todoID, $uid) {
   $sql = "
     DELETE FROM todo
-    WHERE todo.id = ".$todoID." AND todo.fk_benutzer = ".$uid."
+    WHERE todo.id = ".$todoID." AND todo.fk_user = ".$uid."
   ";
 
   $result = mysqli_query($conn, $sql) or die(mysqli_error($conn));
@@ -466,15 +490,16 @@ function getTodos($conn, $uid)
              todo.problem,
              todo.creation_date,
              p.niveau,
-             pr.projectName,
-             todo.url,
-             todo.fk_todo_status,
-             todo.groupname
-            FROM todo
-             INNER JOIN benutzer b ON(b.id = todo.fk_benutzer)
-             INNER JOIN prioritaet p ON (todo.fk_priority = p.id)
-             INNER JOIN projekte pr on todo.fk_projekte = pr.id
-            WHERE b.id ='" . $uid . "' AND todo.groupname = 'self-todo'
+             pr.project_name,
+             todo.website_url,
+             todo.todo_status,
+             g.group_name
+            FROM m133_todo_app_beta.todo
+             INNER JOIN user u ON(u.id = todo.fk_user)
+             INNER JOIN priority p ON (todo.fk_priority = p.id)
+             INNER JOIN project pr on todo.fk_project = pr.id
+             INNER JOIN `group` g ON u.fk_group = g.id
+            WHERE u.id ='" . $uid . "'
             ORDER BY todo.fk_priority ASC, todo.creation_date DESC";
 
   $sqlResult = mysqli_query($conn, $sql) or die(mysqli_error($conn));
@@ -505,7 +530,7 @@ function deleteLink($conn, $uid, $link_id){
   $uid = (int)$uid;
 
   $sql = "DELETE FROM
-            links
+            link
           WHERE 
             fk_user = '" . $uid . "'
           AND
@@ -525,9 +550,9 @@ function updateLink($conn, $values, $uid) {
   $uid = (int)$uid;
 
   $sql = "
-    UPDATE links
+    UPDATE link
     SET 
-      url = '".$values['link']."',
+      link_url = '".$values['link']."',
       link_name = '".$values['link_name']."'
     WHERE
       id = '".$values['link_id']."'
@@ -555,8 +580,8 @@ function addLink($conn, $values, $uid)
 
   $uid = (int)$uid;
 
-  $sql = "INSERT INTO `links`(
-                  `url`,
+  $sql = "INSERT INTO `link`(
+                  `link_url`,
                   `link_name`,
                   `fk_user`
                 )VALUES(
@@ -582,10 +607,10 @@ function addLink($conn, $values, $uid)
 function getLinks($conn, $uid)
 {
   $sql = "SELECT
-              links.url,
-              links.id,
-              links.link_name
-            FROM links
+              link_url,
+              id,
+              link_name
+            FROM link
             WHERE fk_user ='" . $uid . "'";
 
   $sqlResult = mysqli_query($conn, $sql);
@@ -614,8 +639,8 @@ function doneTodo($conn, $uid, $getId)
   $sql = "UPDATE
             `todo` 
          SET
-            `fk_todo_status` = 1
-         WHERE `todo`.`id` = '" . $getId . "' AND fk_benutzer = '" . $uid . "'";
+            `todo_status` = 1
+         WHERE `todo`.`id` = '" . $getId . "' AND fk_user = '" . $uid . "'";
 
   $updateTodoStatus = mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
@@ -638,8 +663,8 @@ function updateTodoStatus($conn, $uid, $getId)
   $sql = "UPDATE
             `todo`
          SET
-            `fk_todo_status` = 2
-         WHERE `todo`.`id` = '" . $getId . "' AND fk_benutzer = '" . $uid . "'";
+            `todo_status` = 0
+         WHERE `todo`.`id` = '" . $getId . "' AND fk_user = '" . $uid . "'";
 
   $updateTodoStatus = mysqli_query($conn, $sql);
 
@@ -657,11 +682,11 @@ function updateTodoStatus($conn, $uid, $getId)
  */
 function countTodoStatus($conn, $uid)
 {
-  $countedTodos = "SELECT count(*) AS 'countedStatus' FROM todo WHERE fk_todo_status = 2 AND fk_benutzer = '" . $uid . "'";
-  $coutnedDone = "SELECT count(*) AS 'countedStatus' FROM todo WHERE fk_todo_status = 1 AND fk_benutzer = '" . $uid . "'";
+  $countedTodos = "SELECT count(*) AS 'countedStatus' FROM m133_todo_app_beta.todo WHERE todo_status = 1 AND fk_user = '" . $uid . "'";
+  $countedDone = "SELECT count(*) AS 'countedStatus' FROM m133_todo_app_beta.todo WHERE todo_status = 0 AND fk_user = '" . $uid . "'";
 
   $countedTask = mysqli_query($conn, $countedTodos);
-  $countedDone = mysqli_query($conn, $coutnedDone);
+  $countedDone = mysqli_query($conn, $countedDone);
 
   $countResultTaskOverview = mysqli_fetch_array($countedTask, MYSQLI_ASSOC);
   $countResultTaskOverview['countedStatusTaskOverview'] = $countResultTaskOverview['countedStatus'];

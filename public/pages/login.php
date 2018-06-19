@@ -29,6 +29,8 @@
 
       $login = auth_user($conn, $username,$password);
 
+      var_dump($login);
+
       if ($login === true) {
         $_SESSION['loggedin'] = true;
         $user = getUid($conn, $username);

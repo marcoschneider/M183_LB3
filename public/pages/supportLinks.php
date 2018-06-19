@@ -49,7 +49,7 @@ if(isset($_POST['delete-link-submit'])) {
         if($result != false){
             $ul = '<ul>';
             foreach ($result as $link) {
-              $ul .= '<li><a target="_blank" href="' . $link['url'] . '">' . $link['link_name'] . '<span class="link-id">' . $link['id'] . '</span></a></li>';
+              $ul .= '<li><a target="_blank" href="' . $link['link_url'] . '">' . $link['link_name'] . '<span class="link-id">' . $link['id'] . '</span></a></li>';
             }
             $ul .= '</ul>';
             echo $ul;

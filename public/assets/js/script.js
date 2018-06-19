@@ -1,4 +1,4 @@
-var ajaxUrl = "/res/lib/ajax.php";
+var ajaxUrl = "/res/lib/User.php";
 
 $(function(){
 
@@ -43,9 +43,12 @@ function ajaxTest() {
   $.ajax({
     url: ajaxUrl,
     type: 'POST',
-    data: {jsonData: JSON.stringify({trigger: 'getusername'})},
+    data: {jsonData: JSON.stringify({
+        trigger: 'getUserdata'
+    })},
     success: function (response) {
       $('#output-error').text(response.username);
+      console.log(response);
     },
     error: function (e) {
       $('#output-error').html(e)

@@ -12,17 +12,13 @@ class UserModel
   private $conn;
   private $uid;
 
-  public function __construct($conn, $uid) {
+  function __construct($conn, $uid) {
     $this->conn = $conn;
     $this->uid = $uid;
   }
 
-  public static function updateUserdata($userdata) {
-
-  }
-
   public function getUserdata() {
-    $userData = "SELECT `name`, surname, username FROM benutzer WHERE id = '" . $this->uid . "'";
+    $userData = "SELECT `name`, surname, username FROM user WHERE id = '" . $this->uid . "'";
 
     $result = $this->conn->query($userData);
 
@@ -30,6 +26,25 @@ class UserModel
       return $result->fetch_assoc();
     }else{
       return $this->conn->error;
+    }
+  }
+
+  private function updateUserdata($firstname, $surname, $username) {
+    $sql = "
+    UPDATE user 
+    SET 
+      `name` = '". $firstname ."',
+      surname = '".$surname."',
+      username = '".$username."'
+    WHERE id = '".$this->uid."'
+    ";
+
+    $result = $this->conn->query($sql);
+
+    if ($result) {
+      return true;
+    }else{
+      return $result;
     }
   }
 

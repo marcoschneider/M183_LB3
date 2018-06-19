@@ -10,15 +10,12 @@ define("RESOURCE_PATH", realpath(basename(__DIR__)));
 define("LIBRARY_PATH", realpath(basename(__DIR__)) . '/lib');
 
 class Config{
-  public static function getPage($pageName){
-
-  }
 
   public static function getDb() {
     $host = "localhost";
     $user = "root";
     $pass = "toor";
-    $db = "m133_todo_app";
+    $db = "m133_todo_app_beta";
 
     $mysqli = new mysqli($host, $user, $pass, $db);
 

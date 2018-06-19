@@ -13,6 +13,8 @@ require('../../res/lib/functions.php');
 
 $conn = Config::getDb();
 
+$groups = getAllGroups($conn);
+
 $value = array();
 $errors = array();
 $registerError = "";
@@ -101,33 +103,22 @@ if(isset($_POST['submit'])){
           <div id="dropdown-register" class="dropdown-trigger">
             <p>
               <?php
-              if(isset($_POST['team'])){
-                switch ($_POST['team']){
-                  case 'support':
-                    echo 'Support';
-                    break;
-                  case 'drupal':
-                    echo 'Drupal';
-                    break;
-                  case 'typo3':
-                    echo 'Typo3';
-                    break;
-                  case 'diam':
-                    echo 'DIAM';
-                    break;
-                  default:
-                    echo '--Bitte wählen--';
-                    break;
+              foreach ($groups as $group){
+                if (isset($_POST['group']) && $_POST['group'] === $group['id']) {
+                  echo $group['group_name'];
+                }else{
+                  echo '--Bitte wählen--';
+                  break;
                 }
-              }else{
-                echo '--Bitte wählen--';
-              } ?>
+              }
+              ?>
             </p>
-            <ul data-name="team" class="dropdown-list">
-              <li data-list-value="support">Support</li>
-              <li data-list-value="drupal">Drupal</li>
-              <li data-list-value="typo3">Typo3</li>
-              <li data-list-value="diam">DIAM</li>
+            <ul data-name="group" class="dropdown-list">
+              <?php
+                foreach ($groups as $group) {
+                  echo '<li data-list-value="'.$group['id'].'">'.$group['group_name'].'</li>';
+                }
+              ?>
             </ul>
           </div>
           <label class="label">

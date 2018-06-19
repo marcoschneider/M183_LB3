@@ -3,5 +3,11 @@ var car;
 var parkingSpot;
 
 $(function () {
-  playingField = $('#')
+  playingField = $('#game-field');
+  car = $('#car');
+
 });
+
+function generateParkingSpot() {
+  parkingSpot = $('#parking-spot');
+}

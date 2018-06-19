@@ -34,7 +34,7 @@
               <?php
                 foreach ($projects as $project){
                   if (isset($_POST['project']) && $_POST['project'] === $project['id']) {
-                    echo $project['projectName'];
+                    echo $project['project_name'];
                   }else{
                     echo '--Bitte wählen--';
                     break;
@@ -45,7 +45,7 @@
             <ul data-name="project" class="dropdown-list">
               <?php
                 foreach ($projects as $project) {
-                  echo '<li data-list-value="'.$project['id'].'">'.$project['projectName'].'</li>';
+                  echo '<li data-list-value="'.$project['id'].'">'.$project['project_name'].'</li>';
                 }
               ?>
             </ul>
