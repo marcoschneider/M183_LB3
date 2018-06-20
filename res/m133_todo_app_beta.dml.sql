@@ -48,6 +48,6 @@ INSERT INTO m133_todo_app_beta.todo
    last_edit, creation_date, website_url,
    fk_project, fk_priority, fk_group, fk_user)
 VALUES
-  ('Test Title', 'Problem', 0, NOW(),
-   NOW(), NOW(), 'https://www.google.ch',
+  ('Test Title', 'Problem', 0, 155244875,
+    155244875, 155244875, 'https://www.google.ch',
   1, 2, 1, 1);

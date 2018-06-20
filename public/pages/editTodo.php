@@ -10,7 +10,6 @@ error_reporting(E_ALL);
 $result = [];
 $getId = $_GET['id'];
 
-
 //Gets todo Details
 $projects = getAllProjects($conn);
 $todo = getTodoDetails($conn, $getId);
@@ -35,7 +34,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
           $errors = $values['errors'];
 
           if (count($errors) === 0){
-            $updateTodo = updateTodo($conn, $values, $getId, $uid);
+            $updateTodo = saveEdit($conn, $values, $getId, $uid);
             if($updateTodo === true){
               redirect('?pages=todo-overview');
               die();
@@ -139,25 +138,25 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
             ? '<legend class="legend text-error">Todo-Zuteilung auswählen*</legend>'
             : '<legend class="legend">Todo-Zuteilung auswählen*</legend>';
           ?>
-          <div class="dropdown-trigger">
+          <div id="todo-type-edit" class="dropdown-trigger">
             <p>
               <?php
               if(isset($result['group_name']) && $result['group_id'] === "1"){
-                echo $result['group_name'];
+                echo 'Eigentodo';
               }elseif ($result['group_id'] != "1"){
-                echo 'Gruppentodo';
+                echo $result['group_name'];
               }else{
                 echo '--Bitte wählen--';
               }
 
-              echo (isset($result['groupname']))
+              echo (isset($result['group_id']))
                 ? '<input type="hidden" name="todo-type" value="'.$result['group_id'].'" />'
                 : '';
               ?>
             </p>
             <ul data-name="todo-type" class="dropdown-list">
-              <li data-list-value="self-todo">In Selbsttodo eintragen</li>
-              <li data-list-value="<?= $groupname ?>">In Gruppentodo eintragen</li>
+              <li data-list-value="1">Eigentodo</li>
+              <li data-list-value="<?= $groupID ?>"><?= $groupname ?></li>
             </ul>
           </div>
         </label>
@@ -166,8 +165,8 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
           <label>
             <a class="legend">Wann muss das Problem erledigt sein? (Optional)</a>
             <br>
-            <input class="form_control" type="date" name="date" value="<?php
-              echo (!empty($result['fixed_date'])) ? $result['fixed_date'] : '';
+            <input class="form_control" type="date" name="fixed_date" value="<?php
+              echo (!empty($result['fixed_date_edit'])) ? $result['fixed_date_edit'] : '';
             ?>">
           </label>
         </p>

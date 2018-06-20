@@ -3,7 +3,8 @@ var ajaxUrl = "/res/lib/User.php";
 $(function(){
 
   customSelect('#dropdown-register');
-  customSelect('#todo-type');
+  customSelect('#todo-type-create');
+  customSelect('#todo-type-edit');
   customSelect('#project');
 
   $('#update-link-submit').on("click", function () {
@@ -65,7 +66,7 @@ function customSelect(elementID) {
     return false;
   });
 
-  var dropdownLists = elementID+' .dropdown-list';
+  var dropdownLists = elementID + ' .dropdown-list';
 
   $(dropdownLists+' li').on("click", function () {
     var liText = $(this).text();

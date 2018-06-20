@@ -26,8 +26,12 @@ if (isset($getId) && $getId != '') {
         <?= $result['problem'] ?>
       </div>
       <div class="detail-output-wrapper">
-        <p class="detail-fixed-date">Letzte Erstellung oder Bearbeitung: </p>
+        <p class="detail-fixed-date">Erstellt am: </p>
         <p><?= $result['creation_date'] ?></p>
+      </div>
+      <div class="detail-output-wrapper">
+        <p class="detail-fixed-date">Zuletzt bearbeitet: </p>
+        <p><?= $result['last_edit'] ?></p>
       </div>
       <div class="detail-output-wrapper">
         <p class="detail-fixed-date">Priotirät: </p>

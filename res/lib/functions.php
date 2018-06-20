@@ -284,29 +284,29 @@ function addTodo($conn, $values, $uid)
 {
 
   $values['fk_priority'] = (int)$values['niveau'];
-  $values['date'] = ($values['date'] == '0') ? 0 : $values['date'];
+  $values['fixed_date'] = $values['fixed_date'] == 0 ? null : $values['fixed_date'];
 
   $sql = " INSERT INTO `todo` (
               `problem`,
               `fixed_date`,
               `title`,
-              `fk_user`,
-              `fk_priority`,
-              `fk_project`,
               `creation_date`,
               `website_url`,
               `todo_status`,
-              fk_group
+              `fk_user`,
+              `fk_priority`,
+              `fk_project`,
+              `fk_group`
             ) VALUES (
               '" . $values['problem'] . "',
-              " . $values['date'] . ",
+              " . $values['fixed_date'] . ",
               '" . $values['title'] . "',
+              " . time() . ",
+              '" . $values['url'] . "',
+              '1',
               '" . $uid . "',
               '" . $values['niveau'] . "',
               '" . $values['project'] . "',
-              CURRENT_TIMESTAMP,
-              '" . $values['url'] . "',
-              '1',
               '" . $values['todo-type'] . "'
             )";
 
@@ -345,7 +345,7 @@ function deleteTodo($conn, $uid, $getId)
  * @param $uid
  * @return bool
  */
-function updateTodo($conn, $values, $getId, $uid)
+function saveEdit($conn, $values, $getId, $uid)
 {
 
   $editTimestamp = time();
@@ -357,9 +357,9 @@ function updateTodo($conn, $values, $getId, $uid)
       `title` = '" . $values['title'] . "',
       `problem` = '" . $values['problem'] . "',
       `fk_priority` = '" . $values['niveau'] . "',
-      `edit_date` = " . $editTimestamp . ",
-      `datum` = " . $values['date'] . ",
-      `url` = '" . $values['url'] . "',
+      `last_edit` = " . $editTimestamp . ",
+      `fixed_date` = " . $values['fixed_date'] . ",
+      `website_url` = '" . $values['url'] . "',
       `groupname` = '" . $values['todo-type'] . "'
     WHERE
       `id` = '" . $getId . "' AND `fk_user` = '" . $uid . "'";
@@ -390,11 +390,12 @@ function getTodoDetails($conn, $getId)
      todo.title,
      todo.creation_date,
      todo.fixed_date,
+     todo.last_edit,
+     todo.fk_priority,
+     todo.website_url,
      p.niveau,
      pr.project_name,
      pr.id AS 'project_id',
-     todo.fk_priority,
-     todo.website_url,
      g.id AS 'group_id',
      g.group_name
     FROM m133_todo_app_beta.todo
@@ -410,16 +411,9 @@ function getTodoDetails($conn, $getId)
 
   $result = mysqli_fetch_array($sqlResult, MYSQLI_ASSOC);
 
-  var_dump($result['fixed_date']);
-
-  $result['fixed_date'] = ($result['fixed_date'] == '0000-00-00 00:00:00')
-    ? $result['fixed_date'] = ''
-    : $result['fixed_date'] = date("Y-m-d", (int)$result['fixed_date']);
-
-  $date = date_create($result['creation_date']);
-  $result['creation_date'] = date_format($date, "d.m.Y \\u\\m H:i");
-
-
+  $result['fixed_date_edit'] = date("Y-m-d", $result['fixed_date']);
+  $result['fixed_date'] = date("d.m.Y", $result['fixed_date']);
+  $result['creation_date'] = date("d.m.Y \\u\\m H:i", $result['creation_date']);
 
   if ($sqlResult) {
     return $result;
@@ -446,7 +440,7 @@ function getGroupTodos($conn, $groupname){
             INNER JOIN priority p ON (todo.fk_priority = p.id)
             INNER JOIN `group` g on (todo.fk_group = g.id)
           WHERE g.group_name = '" . $groupname . "'
-          ORDER BY todo.fk_priority ASC";
+          ORDER BY p.id ASC";
 
   $sqlResult = mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
@@ -457,8 +451,9 @@ function getGroupTodos($conn, $groupname){
       $pos = strpos($arrayOutput['problem'], ' ', 125);
       $arrayOutput['problem'] = substr($arrayOutput['problem'], 0, $pos);
     }
-    $date = date_create($arrayOutput['creation_date']);
-    $arrayOutput['creation_date'] = date_format($date, "d.m.Y \\u\\m H:i");
+
+    $arrayOutput['creation_date'] = date("d.m.Y \\u\\m H:i", $arrayOutput['creation_date']);
+
     array_push($result, $arrayOutput);
   }
 
@@ -521,8 +516,8 @@ function getTodos($conn, $uid)
       $pos = strpos($arrayOutput['problem'], ' ', 125);
       $arrayOutput['problem'] = substr($arrayOutput['problem'], 0, $pos);
     }
-    $arrayOutput['creation_date'] = date_create($arrayOutput['creation_date']);
-    $arrayOutput['creation_date'] = date_format($arrayOutput['creation_date'], "d.m.Y \\u\\m H:i");
+
+    $arrayOutput['creation_date'] = date("d.m.Y \\u\\m H:i", $arrayOutput['creation_date']);
 
     array_push($result, $arrayOutput);
   }
@@ -648,7 +643,7 @@ function doneTodo($conn, $uid, $getId)
   $sql = "UPDATE
             `todo` 
          SET
-            `todo_status` = 1
+            `todo_status` = 0
          WHERE `todo`.`id` = '" . $getId . "' AND fk_user = '" . $uid . "'";
 
   $updateTodoStatus = mysqli_query($conn, $sql) or die(mysqli_error($conn));
@@ -673,7 +668,7 @@ function updateTodoStatus($conn, $uid, $getId)
   UPDATE
     `todo`
   SET
-    `todo_status` = 0
+    `todo_status` = 1
   WHERE `todo`.`id` = '" . $getId . "' AND fk_user = '" . $uid . "'";
 
   $updateTodoStatus = mysqli_query($conn, $sql);
@@ -788,12 +783,12 @@ $values = array();
     $errors['todo-type'] = "Bitte wählen Sie die Todo-Zuteilung aus";
   }
 
-  if (isset($formValues['date']) && $formValues['date'] != ''){
-    $todoDate = strtotime($formValues['date']);
+  if (isset($formValues['fixed_date']) && $formValues['fixed_date'] != ''){
+    $todoDate = strtotime($formValues['fixed_date']);
     if($todoDate > time() - (24 * 60 * 60)){
-      $values['date'] = $todoDate;
+      $values['fixed_date'] = $todoDate;
     }else{
-      $errors['date'] = "In der Vergangenheit kann keine Aufgabe erledigt werden ;)";
+      $errors['fixed_date'] = "In der Vergangenheit kann keine Aufgabe erledigt werden ;)";
     }
   }else{
     $values['date'] = 0;
