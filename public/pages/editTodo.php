@@ -65,7 +65,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
                   }else if(isset($_POST['project'])){
                     echo 'selected';
                   }
-                ?>><?=$project['projectName']?></option>
+                ?>><?=$project['project_name']?></option>
               <?php } ?>
             </select>
           </label>
@@ -142,16 +142,16 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
           <div class="dropdown-trigger">
             <p>
               <?php
-              if(isset($result['groupname']) && $result['groupname'] === "self-todo"){
-                echo 'In Selbsttodo eintragen';
-              }elseif(isset($result['groupname']) && $result['groupname'] === strtolower($_SESSION['groupname'])){
-                echo 'In Gruppentodo eintragen';
+              if(isset($result['group_name']) && $result['group_id'] === "1"){
+                echo $result['group_name'];
+              }elseif ($result['group_id'] != "1"){
+                echo 'Gruppentodo';
               }else{
                 echo '--Bitte wählen--';
               }
 
               echo (isset($result['groupname']))
-                ? '<input type="hidden" name="todo-type" value="'.$result['groupname'].'" />'
+                ? '<input type="hidden" name="todo-type" value="'.$result['group_id'].'" />'
                 : '';
               ?>
             </p>
@@ -167,7 +167,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
             <a class="legend">Wann muss das Problem erledigt sein? (Optional)</a>
             <br>
             <input class="form_control" type="date" name="date" value="<?php
-              echo (!empty($result['datum'])) ? $result['datum'] : '';
+              echo (!empty($result['fixed_date'])) ? $result['fixed_date'] : '';
             ?>">
           </label>
         </p>
@@ -177,7 +177,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
             Webseite: (Optional)
             <br>
             <input placeholder="http(s)://www.example.com" type="text" name="url" class="form_control" value="<?php
-              echo (!empty($result['url'])) ? $result['url'] : '';
+              echo (!empty($result['website_url'])) ? $result['website_url'] : '';
             ?>">
           </label>
         </p>

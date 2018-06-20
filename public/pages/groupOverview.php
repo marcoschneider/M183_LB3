@@ -43,6 +43,7 @@ $resultStatus = countTodoStatus($conn, $uid);
       }
     }else{
       echo "<p class='aside col-6 black-text'>Es wurden keine Todos in Ihrer Datenbank gefunden</p>";
+      infoMessage("Es wurden keine Todos in der Gruppe gefunden", 6);
     }
 
     ?>

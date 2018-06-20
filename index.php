@@ -23,7 +23,7 @@ if(!$_SESSION['loggedin']) {
 //SESSION configurations
 $uid = $_SESSION['kernel']['userdata']["id"];
 $groupname = $_SESSION['kernel']['userdata']['group_name'];
-$shortGroupname = $_SESSION['kernel']['userdata']['group_short'];
+$groupID = $_SESSION['kernel']['userdata']['group_id'];
 $username = $_SESSION['kernel']['userdata']['username'];
 
 ?>

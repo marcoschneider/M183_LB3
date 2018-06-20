@@ -14,11 +14,11 @@ if (isset($getId) && $getId != '') {
     <?php
     if(isset($result)) {  ?>
       <h1 class="detail-title"><?= $result['title'] ?></h1>
-      <h2 class="detail-project"><?= $result['projectName'] ?></h2>
+      <h2 class="detail-project"><?= $result['project_name'] ?></h2>
       <div class="detail-output-wrapper">
       <?php
-        echo ($result['datum'] != '')
-          ? '<p class="detail-fixed-date">Fixes Datum: </p><span> ' . $result['datum'] . '</span>'
+        echo ($result['fixed_date'] != '')
+          ? '<p class="detail-fixed-date">Fixes Datum: </p><span> ' . $result['fixed_date'] . '</span>'
           : '<p>Kein fixes Datum vorhanden.</p>';
       ?>
       </div>
@@ -35,8 +35,8 @@ if (isset($getId) && $getId != '') {
       </div>
       <div class="detail-output-wrapper">
         <?php
-          echo ($result['url'] != '')
-            ? '<p class="detail-fixed-date">URL: </p><a href="' . $result['url'] . '">' . $result['url'] . '</a>'
+          echo ($result['website_url'] != '')
+            ? '<p class="detail-fixed-date">URL: </p><a href="' . $result['website_url'] . '">' . $result['website_url'] . '</a>'
             : '<p class="detail-fixed-date">URL: </p><p>Keine externe URL erfasst.</p>'
         ?>
       </div>

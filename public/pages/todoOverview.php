@@ -12,7 +12,7 @@ $resultStatus = countTodoStatus($conn, $uid);
       <?php
       if(isset($todos)){
         foreach($todos as $result){
-          if($result['todo_status'] === '1' && $result['group_name'] === 'self-todo') {
+          if($result['todo_status'] === '1' && $result['group_short'] === 'self-todo') {
             ?>
             <div class="todo-wrapper col-sm-12 col-md-6 col-lg-3">
               <a class="link" href="?pages=todo-details&id=<?= $result['id'] ?>">

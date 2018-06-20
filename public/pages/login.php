@@ -32,8 +32,8 @@
       var_dump($login);
 
       if ($login === true) {
-        $_SESSION['loggedin'] = true;
         $user = getUid($conn, $username);
+        $_SESSION['loggedin'] = true;
         $_SESSION['kernel']['userdata'] = $user;
         redirect('../../?pages=support-links');
       } else {

@@ -221,13 +221,15 @@ function getUid($conn, $username)
       firstname,
       surname,
       username, 
+      g.id AS 'group_id',
       g.group_name,
       g.group_short
     FROM `user` u
       INNER JOIN user_group ug ON ug.fk_user =  u.id
       INNER JOIN `group` g on ug.fk_group = g.id
     WHERE 
-      username = '" . $username . "'";
+      username = '" . $username . "'
+    AND g.group_short != 'self-todo'";
 
   $sqlResult = mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
@@ -283,9 +285,6 @@ function addTodo($conn, $values, $uid)
 
   $values['fk_priority'] = (int)$values['niveau'];
   $values['date'] = ($values['date'] == '0') ? 0 : $values['date'];
-  $values['todo-type'] = $values['todo-type'] === 'self-todo' ? null : $values['todo-type'];
-
-  var_dump($values);
 
   $sql = " INSERT INTO `todo` (
               `problem`,
@@ -396,6 +395,7 @@ function getTodoDetails($conn, $getId)
      pr.id AS 'project_id',
      todo.fk_priority,
      todo.website_url,
+     g.id AS 'group_id',
      g.group_name
     FROM m133_todo_app_beta.todo
      INNER JOIN user u ON(u.id = todo.fk_user)
@@ -410,12 +410,16 @@ function getTodoDetails($conn, $getId)
 
   $result = mysqli_fetch_array($sqlResult, MYSQLI_ASSOC);
 
-  $result['fixed_date'] = ($result['fixed_date'] == '0' || $result['fixed_date'] === null)
+  var_dump($result['fixed_date']);
+
+  $result['fixed_date'] = ($result['fixed_date'] == '0000-00-00 00:00:00')
     ? $result['fixed_date'] = ''
     : $result['fixed_date'] = date("Y-m-d", (int)$result['fixed_date']);
 
   $date = date_create($result['creation_date']);
   $result['creation_date'] = date_format($date, "d.m.Y \\u\\m H:i");
+
+
 
   if ($sqlResult) {
     return $result;
@@ -494,11 +498,12 @@ function getTodos($conn, $uid)
              todo.title,
              todo.problem,
              todo.creation_date,
-             p.niveau,
-             pr.project_name,
              todo.website_url,
              todo.todo_status,
-             g.group_name
+             p.niveau,
+             pr.project_name,
+             g.group_name,
+             g.group_short
             FROM m133_todo_app_beta.todo
              INNER JOIN user u ON(u.id = todo.fk_user)
              INNER JOIN priority p ON (todo.fk_priority = p.id)
@@ -516,7 +521,6 @@ function getTodos($conn, $uid)
       $pos = strpos($arrayOutput['problem'], ' ', 125);
       $arrayOutput['problem'] = substr($arrayOutput['problem'], 0, $pos);
     }
-
     $arrayOutput['creation_date'] = date_create($arrayOutput['creation_date']);
     $arrayOutput['creation_date'] = date_format($arrayOutput['creation_date'], "d.m.Y \\u\\m H:i");
 
