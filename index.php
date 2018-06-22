@@ -8,6 +8,14 @@ session_start();
 //import configs and import lib
 require 'res/config.inc.php';
 require LIBRARY_PATH.'/functions.php';
+//require LIBRARY_PATH.'/Ajax.php';
+require LIBRARY_PATH.'/model/UserModel.php';
+
+//SESSION configurations
+$uid = $_SESSION['kernel']['userdata']["id"];
+$groupname = $_SESSION['kernel']['userdata']['group_name'];
+$groupID = $_SESSION['kernel']['userdata']['group_id'];
+$username = $_SESSION['kernel']['userdata']['username'];
 
 $conn = Config::getDb();
 
@@ -16,11 +24,6 @@ if(!$_SESSION['loggedin']) {
   redirect("public/pages/login.php");
   die();
 }
-
-//SESSION configurations
-$uid = $_SESSION['kernel']['userdata']["id"];
-$groupname = $_SESSION['kernel']['userdata']['groupname'];
-$username = $_SESSION['kernel']['userdata']['username'];
 
 ?>
 
@@ -42,7 +45,7 @@ $username = $_SESSION['kernel']['userdata']['username'];
     <meta http-equiv="Content-Type" content="text/html" lang="de"/>
     <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="node_modules/ckeditor/ckeditor.js"></script>
-    <title>SOPD Support Web App</title>
+    <title>Todo Web App</title>
   </head>
 	<body>
     <header>
@@ -65,7 +68,7 @@ $username = $_SESSION['kernel']['userdata']['username'];
               'Favorite Links' => '?pages=support-links',
               'Aufgabenübersicht' => '?pages=todo-overview',
               'Gruppenübersicht' => '?pages=group-overview',
-              'Allgemeine Infos'  => '?pages=infos'
+              'Play Game'  => '?pages=game'
             );
 
             $navigation =  createMenu($links);
@@ -124,6 +127,9 @@ $username = $_SESSION['kernel']['userdata']['username'];
             case 'update-todo':
               include 'public/pages/updateTodo.php';
               break;
+            case 'game':
+              include 'public/pages/game.php';
+              break;
             case 'logout':
               session_unset();
               session_destroy();
@@ -147,7 +153,8 @@ $username = $_SESSION['kernel']['userdata']['username'];
         <p>&copy Copyright Viaduct Web Support</p>
       </div>
     </footer>
-    <script type="text/javascript" src="public/assets/js/script.js"></script>
-    <script type="text/javascript" src="public/assets/js/menubar.js"></script>
+    <?php
+      Config::scripts();
+    ?>
 	</body>
 </html>

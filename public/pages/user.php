@@ -1,9 +1,7 @@
 <?php
-$results = '';
-$userData = "SELECT `name`, surname, username FROM benutzer WHERE id = '" . $uid . "'";
 
-$userData = mysqli_query($conn, $userData);
-$results = mysqli_fetch_array($userData, MYSQLI_ASSOC);
+/*$userModel = new UserModel($conn, $uid);
+$results = $userModel->getUserdata();*/
 
 $values = [];
 $errors = [];
@@ -49,29 +47,13 @@ if(isset($_POST['submitPassword'])){
     $errors['repeat_password'] = 'Das Feld "Passwort wiederholen" muss ausgefült sein';
   }
 
-  if ($results['password'] === $values['password']) {
-    $oldPassword = $values['password'];
-  } else {
-    $errors['actual-password'] = 'Bitte verwenden Sie ihr aktuelles Passwort';
-  }
-
-  if ($values['new_password'] === $values['repeat_password']){
-    $newPassword = $oldPassword;
-  } else {
-    $errors['wrong-repeated-password'] = "Die Passwörter stimmen nicht überein";
-  }
-
-  if($results['password'] === $values['new_password']){
-    $errors['same-as-before'] = "Bitte nicht das gleiche Passwort wie vorhin verwenden";
-  }
-
 }
 
 ?>
 
 <div class="row container">
   <div class="col-6">
-    <h1 class="margin-bot-25">Information</h1>
+    <h1 class="">Information</h1>
     <p>
       Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
       At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
@@ -83,70 +65,62 @@ if(isset($_POST['submitPassword'])){
     <?php
       if(isset($_POST['submit'])) {
         if (count($errors) === 0) {
-          if (updateUserdata($conn, $uid, $values) === true) {
-            redirect('index.res?logout');
+          $userdataResponse = updateUserdata($conn, $uid, $values);
+          if ($userdataResponse === true) {
+            redirect("?pages=userdata");
+            $_SESSION['kernel']['userdata']['firstname'] = $values['name'];
+            $_SESSION['kernel']['userdata']['surname'] = $values['surname'];
+            $_SESSION['kernel']['userdata']['username'] = $values['username'];
+            successMessage("Deine Benutzerdaten wurden aktualisiert");
           }else{
-            echo '<div class="failbox">
-              <p>Diesen Benutzername gibt es bereits</p>
-            </div>';
+            errorMessage("Diesen Benutzername gibt es bereits");
           }
         } else {
-        echo '<div class="failbox">';
-          foreach ($errors as $error) {
-            echo '<p>' . $error . '</p>';
-          }
-          echo '</div>';
+          errorMessage($errors);
         }
       }
     ?>
-    <h1 class="margin-bot-25">Benutzerdaten</h1>
+    <h1 class="">Benutzerdaten</h1>
     <div class="user-data-wrapper ">
       <form class="col-12" method="post" action="">
         <div>
           <p class="margin-right-25"><b>Name:</b></p>
           <label>
-            <input class="margin-bot-25 input-userdata" name="name" type="text" value="<?= $results['name'] ?>">
+            <input id="input-userdata-firstname" class="input-userdata" name="name" type="text" value="">
           </label>
         </div>
         <div>
           <p class="margin-right-25"><b>Nachname:</b></p>
           <label>
-            <input class="margin-bot-25 input-userdata" name="surname" type="text" value="<?= $results['surname'] ?>">
+            <input id="input-userdata-surname" class="input-userdata" name="surname" type="text" value="">
           </label>
         </div>
         <div>
           <p class="margin-right-25"><b>Benutzername:</b></p>
           <label>
-            <input class="margin-bot-25 input-userdata" name="username" type="text" value="<?= $results['username'] ?>">
+            <input id="input-userdata-username" class="input-userdata" name="username" type="text" value="">
           </label>
         </div>
-       <div class="space">
-         <input class="button-default" type="submit" name="submit" value="Speichern">
-       </div>
+       <input class="button-default" type="submit" name="submit" value="Speichern">
+      <div class="space"></div>
       </form>
       <div class="clearer"></div>
       <?php
         if(isset($_POST['submitPassword'])) {
           if (count($errors) === 0) {
             if (updateUserCredentials($conn, $uid, $values['new_password']) === true) {
-              redirect('index.res?logout');
+              redirect('?pages=logout');
             }else{
-              echo '<div class="failbox">
-                <p>Ein Fehler ist aufgetreten</p>
-              </div>';
+              errorMessage("Ein Fehler ist aufgetreten");
             }
           } else {
-            echo '<div class="failbox">';
-            foreach ($errors as $error) {
-              echo '<p>' . $error . '</p>';
-            }
-            echo '</div>';
+            errorMessage($errors);
           }
         }
       ?>
       <form class="col-12" method="post" action="">
         <div>
-          <p class="margin-right-25"><b>Passwort*:</b></p>
+          <p><b>Passwort*:</b></p>
           <label>
             <input placeholder="Aktuelles Passwort" class="input-userdata" type="password" name="password" value="">
           </label>

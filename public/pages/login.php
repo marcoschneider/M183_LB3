@@ -1,19 +1,21 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: MarcoPolo
+ * Ajax: MarcoPolo
  * Date: 07.04.2017
  * Time: 20:41
  */
 
   session_start();
 
-  require('../../res/lib/dbcon.php');
+  require('../../res/config.inc.php');
   require('../../res/lib/functions.php');
+
+  $conn = Config::getDb();
 
   // redirect if logged in already
   if(isset($_SESSION['loggedin'])){
-    redirect('../?pages=support-links');
+    redirect('../?pages=todo-overview');
   }
 
   $errors = [];
@@ -28,10 +30,10 @@
       $login = auth_user($conn, $username,$password);
 
       if ($login === true) {
-        $_SESSION['loggedin'] = true;
         $user = getUid($conn, $username);
+        $_SESSION['loggedin'] = true;
         $_SESSION['kernel']['userdata'] = $user;
-        redirect('../../?pages=support-links');
+        redirect('../../?pages=todo-overview');
       } else {
         $errors['usernameAndPassword'] = 'Benutzername oder Passwort falsch!';
       }
@@ -40,15 +42,13 @@
     }
   }
 
-  mysqli_close($conn);
-
+  $conn->close();
 ?>
 
 <!DOCTYPE html>
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap-grid.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/sco.styles.css"/>
@@ -57,6 +57,7 @@
     <title>Login</title>
   </head>
   <body>
+  <div class="container-fluid">
     <header class="row">
       <div class="col-12">
         <div class="brand-logo">
@@ -64,6 +65,7 @@
         </div>
       </div>
     </header>
+  </div>
     <div class="content-wrapper">
       <div class="login-wrapper">
         <form class="login-form" method="post" action="">
@@ -78,19 +80,13 @@
         <?php
         if (isset($_POST['submit'])) {
           if (count($errors) != 0) {
-            foreach ($errors as $error) {
-              echo '
-                <div class="failbox">
-                  <p class="center"> ' . $error . '</p>
-                </div>
-              ';
-            }
+            errorMessage($errors);
           }
         }
         ?>
       </div>
     </div>
-    <div class="footer-login col-12">
+    <div class="footer-login">
       <p>Resize the browser window to see how the content respond to the resizing.</p>
       <br>
       <p>&copy Copyright Somedia Production Web Support</p>

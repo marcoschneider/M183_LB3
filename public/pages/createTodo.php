@@ -10,11 +10,11 @@
         $errors = $values['errors'];
 
         if (count($errors) === 0){
-          $insertQuery = addTodo($conn, $values, $uid);
-          if($insertQuery === true){
+          $addTodo = addTodo($conn, $values, $uid);
+          if($addTodo === true){
             redirect('?pages=todo-overview');
           }else{
-            $errors['message'] = "<b>Fehlermedlung: </b>" . $insertQuery;
+            $errors['message'] = "<b>Fehlermedlung: </b>" . $addTodo;
           }
         }
       }
@@ -34,7 +34,7 @@
               <?php
                 foreach ($projects as $project){
                   if (isset($_POST['project']) && $_POST['project'] === $project['id']) {
-                    echo $project['projectName'];
+                    echo $project['project_name'];
                   }else{
                     echo '--Bitte wählen--';
                     break;
@@ -45,11 +45,24 @@
             <ul data-name="project" class="dropdown-list">
               <?php
                 foreach ($projects as $project) {
-                  echo '<li data-list-value="'.$project['id'].'">'.$project['projectName'].'</li>';
+                  echo '<li data-list-value="'.$project['id'].'">'.$project['project_name'].'</li>';
                 }
               ?>
             </ul>
           </div>
+        </label>
+        <div class="space"></div>
+        <label>
+          <?php
+            echo (isset($errors['title']))
+              ? '<p class="text-error">Titel*</p>'
+              : '<p>Titel</p>';
+          ?>
+          <input name="title" class="form_control" value="<?php
+          echo (!empty($_POST['title']))
+            ? $_POST['title']
+            : '';
+          ?>">
         </label>
         <div class="space-with-border"></div>
         <label>
@@ -105,27 +118,28 @@
               ? '<legend class="legend text-error">Todo-Zuteilung auswählen*</legend>'
               : '<legend class="legend">Todo-Zuteilung auswählen*</legend>';
           ?>
-          <div id="todo-type" class="dropdown-trigger">
+          <div id="todo-type-create" class="dropdown-trigger">
             <p>
             <?php
-              if(isset($_POST['todo-type']) && $_POST['todo-type'] === "self-todo"){
-                echo 'In Selbsttodo eintragen';
-              }elseif(isset($_POST['todo-type']) && $_POST['todo-type'] === strtolower($groupname)){
-                echo 'In Gruppentodo eintragen';
+              if(isset($_REQUEST['todo-type']) && $_REQUEST['todo-type'] === "1"){
+                echo 'Eigentodo';
+              }elseif (isset($_REQUEST['todo-type']) && $_REQUEST['todo-type'] != "1"){
+                echo $_REQUEST['group_name'];
               }else{
                 echo '--Bitte wählen--';
-              } ?>
+              }
+              ?>
             </p>
             <ul data-name="todo-type" class="dropdown-list">
-              <li data-list-value="self-todo">In Selbsttodo eintragen</li>
-              <li data-list-value="<?= strtolower($groupname) ?>">In Gruppentodo eintragen</li>
+              <li data-list-value="1">Eigentodo</li>
+              <li data-list-value="<?= $groupID ?>"><?= $groupname ?></li>
             </ul>
           </div>
         </label>
         <div class="space-with-border"></div>
         <label>
           Bis wann muss die Aufbabe erledigt sein? (Optional)
-          <input class="form_control" type="date" name="date" value="<?php
+          <input class="form_control" type="date" name="fixed_date" value="<?php
             echo (!empty($_POST['date'])) ? $_POST['date'] : '';
           ?>">
         </label>
@@ -156,7 +170,7 @@
   <div class="clearer"></div>
   <script type="text/javascript">
     CKEDITOR.replace('edit', {
-      customConfig: '/assets/js/ckeditor/config.js'
+      customConfig: '/public/assets/js/ckeditor/config.js'
     });
   </script>
 <?php

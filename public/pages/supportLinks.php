@@ -1,12 +1,15 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: maschneider
+ * Ajax: maschneider
  * Date: 15.06.2017
  * Time: 08:43
  */
+
 $values = [];
 $errors = [];
+
+//Update form validatio
 if (isset($_POST['submit']) || isset($_POST['update-link'])){
   if (isset($_POST['link_name']) && $_POST['link_name'] != '') {
     $link_name = htmlspecialchars(trim($_POST['link_name']));
@@ -29,6 +32,7 @@ if (isset($_POST['submit']) || isset($_POST['update-link'])){
 
 $result = getLinks($conn, $uid);
 
+//Delete form validation
 if(isset($_POST['delete-link-submit'])) {
   if(isset($_POST['link_id']) && $_POST['link_id'] != ""){
     $link_id = htmlspecialchars(trim($_POST['link_id']));
@@ -48,7 +52,7 @@ if(isset($_POST['delete-link-submit'])) {
         if($result != false){
             $ul = '<ul>';
             foreach ($result as $link) {
-              $ul .= '<li><a target="_blank" href="' . $link['url'] . '">' . $link['link_name'] . '<span class="link-id">' . $link['id'] . '</span></a></li>';
+              $ul .= '<li><a target="_blank" href="' . $link['link_url'] . '">' . $link['link_name'] . '<span class="link-id">' . $link['id'] . '</span></a></li>';
             }
             $ul .= '</ul>';
             echo $ul;
@@ -113,7 +117,7 @@ if(isset($_POST['delete-link-submit'])) {
       <h2 class="space">Link löschen/bearbeiten</h2>
         <?php
         if (isset($_POST['delete-link-submit'])){
-          if (count($errors) < 0){
+          if (empty($errors)){
             foreach($result as $link){
               if($values['link-to-delete'] === $link['id']){
                 $link_id = $values['link-to-delete'];
@@ -137,7 +141,7 @@ if(isset($_POST['delete-link-submit'])) {
           }
         }
         ?>
-      <form class="form" method="POST" action="">
+      <form id="update-edit-link-form" class="form" method="POST" action="">
         <label>
           ID des Links*:
           <input id="link-to-update" type="text" name="link_id" class="form_control" value="<?php
@@ -151,6 +155,11 @@ if(isset($_POST['delete-link-submit'])) {
         <div class="space"></div>
         <button id="update-link-submit" type="button" class="button-default">Link bearbeiten</button>
       </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+
     </div>
   </div>
 </div>

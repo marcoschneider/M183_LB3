@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: School
+ * Ajax: School
  * Date: 29.06.2017
  * Time: 22:57
  */
@@ -18,4 +18,5 @@ if(isset($getId) && $getId != ''){
 }else{
   infoMessage("Dieses Todo konnte nicht gelöscht werden.", 6);
 }
+
 ?>

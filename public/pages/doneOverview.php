@@ -2,17 +2,19 @@
 $arrayResult = getTodos($conn, $uid);
 $resultStatus = countTodoStatus($conn, $uid);
 ?>
-<div class="row container">
-  <div class="col-12">
-    <h1 class="page-title">Erledigte Todos Übersicht</h1>
+<div class="container">
+  <div class="row">
+    <h1 class="page-title col-12">Erledigte Todos Übersicht</h1>
+  </div>
+  <div class="row">
     <?php
     if($arrayResult){
       foreach($arrayResult as $result){
-        if($result['fk_todo_status'] === '1') {
+        if($result['todo_status'] === '0') {
           ?>
-          <div class="todo-wrapper">
+          <div class="todo-wrapper col-sm-12 col-md-6 col-lg-3">
             <a class="link" href="?pages=todo-details&id=<?= $result['id'] ?>">
-              <h3 class="title-todo-wrapper"><?= $result['projectName'] ?></h3>
+              <h3 class="title-todo-wrapper"><?= $result['title'] ?></h3>
               <div class="date-todo-wrapper">
                 <?= trim($result['creation_date']) ?>
               </div>
@@ -21,10 +23,10 @@ $resultStatus = countTodoStatus($conn, $uid);
               </div>
               <div class="action-links-wrapper">
                 <a class="overview-action-links" href="?pages=update-todo&id=<?= $result['id'] ?>">
-                  <i class="fa fa-reply" aria-hidden="true"></i>
+                  <i class="fas fa-reply" aria-hidden="true"></i>
                 </a>
                 <a class="overview-action-links" href="?pages=delete-todo&id=<?= $result['id'] ?>">
-                  <i class="fa fa-trash-o fa-lg"></i>
+                  <i class="fas fa-trash"></i>
                 </a>
               </div>
               <div class="importance">
@@ -37,10 +39,10 @@ $resultStatus = countTodoStatus($conn, $uid);
         }
       }
       if ($resultStatus['countedStatusDoneOverview'] === '0'){
-        echo "<p class='aside col-6 black-text'>Du hast alle Todo's abgeschlossen. Happy Birthday</p>";
+        infoMessage("Du hast alle Todo's abgeschlossen", 6);
       }
     }else{
-      echo "<p class='aside col-6 black-text'>Es wurden keine Todos in Ihrer Datenbank gefunden</p>";
+      infoMessage("Es wurden keine Todos in Ihrer Datenbank gefunden", 6);
     }
     ?>
   </div>

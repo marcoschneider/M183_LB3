@@ -1,8 +1,14 @@
+var ajaxUrl = "/res/lib/Ajax.php";
+var handler;
+
 $(function(){
 
   customSelect('#dropdown-register');
-  customSelect('#todo-type');
+  customSelect('#todo-type-create');
+  customSelect('#todo-type-edit');
   customSelect('#project');
+
+  getUserdata();
 
   $('#update-link-submit').on("click", function () {
     var supportLinkID = $('.link-id');
@@ -15,7 +21,7 @@ $(function(){
 
         let nameOfLink = $(supportLinkID[i]).parent().text();
         let refOfLink = $(supportLinkID[i]).parent().attr("href");
-        
+
         nameOfLink = nameOfLink.replace(linkToUpdate, '');
 
         $('#name-link').val(nameOfLink);
@@ -26,17 +32,35 @@ $(function(){
         $('#update-link-trigger').replaceWith(updateInputSubmit);
         $('#add-link').append(hiddenLinkIdInput);
       }else{
-
+        var error = "<div class='failbox'>Dieser Link existiert nicht</div>";
+        $('#update-edit-link-form').append(error);
       }
     });
   });
-
 });
+
+
+function getUserdata() {
+  $.ajax({
+    url: ajaxUrl,
+    type: 'POST',
+    data: {jsonData: JSON.stringify({
+        trigger: 'getUserdata'
+    })},
+    success: function (response) {
+      handler = new ResponseHandler(response);
+      handler.showUserdata();
+    },
+    error: function (e) {
+      console.log(e);
+    }
+  })
+}
 
 function customSelect(elementID) {
 
   $(elementID).on("click", function () {
-    $(".dropdown-list").slideToggle(250, function () {
+    $(elementID+" .dropdown-list").slideToggle(250, function () {
       $(this).toggleClass("block");
     });
     return false;

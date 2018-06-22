@@ -1,21 +1,22 @@
 <?php
 
-$arrayResult = getTodos($conn, $uid);
+$todos = getTodos($conn, $uid);
 $resultStatus = countTodoStatus($conn, $uid);
 
 ?>
 <div class="container">
   <div class="row">
-    <div class="col-12">
-      <h1 class="page-title">Todo Übersicht</h1>
+    <h1 class="page-title col-12">Todo Übersicht</h1>
+  </div>
+  <div class="row">
       <?php
-      if($arrayResult){
-        foreach($arrayResult as $result){
-          if($result['fk_todo_status'] === '2' && $result['groupname'] === 'self-todo') {
+      if(isset($todos)){
+        foreach($todos as $result){
+          if($result['todo_status'] === '1' && $result['group_short'] === 'self-todo') {
             ?>
-            <div class="todo-wrapper">
+            <div class="todo-wrapper col-sm-12 col-md-6 col-lg-3">
               <a class="link" href="?pages=todo-details&id=<?= $result['id'] ?>">
-                <h3 class="title-todo-wrapper"><?= $result['projectName'] ?></h3>
+                <h3 class="title-todo-wrapper"><?= $result['title'] ?></h3>
                 <div class="date-todo-wrapper">
                   <?= trim($result['creation_date']) ?>
                 </div>
@@ -24,10 +25,10 @@ $resultStatus = countTodoStatus($conn, $uid);
                 </div>
                 <div class="action-links-wrapper">
                   <a class="overview-action-links" href="?pages=done-todo&id=<?= $result['id'] ?>">
-                    <i class="fa fa-check" aria-hidden="true"></i>
+                    <i class="fas fa-check" aria-hidden="true"></i>
                   </a>
                   <a class="overview-action-links" href="?pages=edit-todo&id=<?= $result['id'] ?>">
-                    <i class="fa fa-pencil-square-o fa-lg"></i>
+                    <i class="fas fa-edit"></i>
                   </a>
                 </div>
                 <div class="importance">
@@ -39,13 +40,10 @@ $resultStatus = countTodoStatus($conn, $uid);
           }
         }
         if ($resultStatus['countedStatusTaskOverview'] === '0'){
-          infoMessage("Du hast keine Todos offen. Alle Todos sind erledigt.", "6");
+          infoMessage("Es wurden keine Todos in Ihrer Datenbank gefunden.", 6);
         }
-      }else{
-        infoMessage("Es wurden keine Todo's in Ihrer Datenbank gefunden", "6");
       }
 
       ?>
-    </div>
   </div>
 </div>

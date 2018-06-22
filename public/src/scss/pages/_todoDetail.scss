@@ -1,8 +1,9 @@
 .tododetails-wrapper{
   .detail-title{
-    margin-bottom: 15px;
+    margin: 0;
     font-size: 1.75em;
   }
+
 
   .detail-output-wrapper{
     margin-bottom: 30px;
@@ -26,7 +27,7 @@
     }
 
     p{
-      margin: 0.5vh 0;
+      margin: 1.5vh 0;
 
       s{
         text-decoration: line-through;

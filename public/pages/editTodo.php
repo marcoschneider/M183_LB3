@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: MarcoPolo
+ * Ajax: MarcoPolo
  * Date: 30.06.2017
  * Time: 21:15
  */
@@ -9,7 +9,6 @@ error_reporting(E_ALL);
 
 $result = [];
 $getId = $_GET['id'];
-
 
 //Gets todo Details
 $projects = getAllProjects($conn);
@@ -35,7 +34,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
           $errors = $values['errors'];
 
           if (count($errors) === 0){
-            $updateTodo = updateTodo($conn, $values, $getId, $uid);
+            $updateTodo = saveEdit($conn, $values, $getId, $uid);
             if($updateTodo === true){
               redirect('?pages=todo-overview');
               die();
@@ -65,11 +64,24 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
                   }else if(isset($_POST['project'])){
                     echo 'selected';
                   }
-                ?>><?=$project['projectName']?></option>
+                ?>><?=$project['project_name']?></option>
               <?php } ?>
             </select>
           </label>
         </p>
+        <div class="space"></div>
+        <label>
+          <?php
+          echo (isset($errors['title']))
+            ? '<p class="text-error">Titel*</p>'
+            : '<p>Titel</p>';
+          ?>
+          <input name="title" class="form_control" value="<?php
+          echo (!empty($result['title']))
+            ? $result['title']
+            : '';
+          ?>">
+        </label>
         <div class="space-with-border"></div>
         <p>
           <label>
@@ -126,25 +138,25 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
             ? '<legend class="legend text-error">Todo-Zuteilung auswählen*</legend>'
             : '<legend class="legend">Todo-Zuteilung auswählen*</legend>';
           ?>
-          <div class="dropdown-trigger">
+          <div id="todo-type-edit" class="dropdown-trigger">
             <p>
               <?php
-              if(isset($result['groupname']) && $result['groupname'] === "self-todo"){
-                echo 'In Selbsttodo eintragen';
-              }elseif(isset($result['groupname']) && $result['groupname'] === strtolower($_SESSION['groupname'])){
-                echo 'In Gruppentodo eintragen';
+              if(isset($result['group_name']) && $result['group_id'] === "1"){
+                echo 'Eigentodo';
+              }elseif ($result['group_id'] != "1"){
+                echo $result['group_name'];
               }else{
                 echo '--Bitte wählen--';
               }
 
-              echo (isset($result['groupname']))
-                ? '<input type="hidden" name="todo-type" value="'.$result['groupname'].'" />'
+              echo (isset($result['group_id']))
+                ? '<input type="hidden" name="todo-type" value="'.$result['group_id'].'" />'
                 : '';
               ?>
             </p>
             <ul data-name="todo-type" class="dropdown-list">
-              <li data-list-value="self-todo">In Selbsttodo eintragen</li>
-              <li data-list-value="<?= strtolower($_SESSION['groupname']) ?>">In Gruppentodo eintragen</li>
+              <li data-list-value="1">Eigentodo</li>
+              <li data-list-value="<?= $groupID ?>"><?= $groupname ?></li>
             </ul>
           </div>
         </label>
@@ -153,8 +165,8 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
           <label>
             <a class="legend">Wann muss das Problem erledigt sein? (Optional)</a>
             <br>
-            <input class="form_control" type="date" name="date" value="<?php
-              echo (!empty($result['datum'])) ? $result['datum'] : '';
+            <input class="form_control" type="date" name="fixed_date" value="<?php
+              echo (!empty($result['fixed_date_edit'])) ? $result['fixed_date_edit'] : '';
             ?>">
           </label>
         </p>
@@ -164,7 +176,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
             Webseite: (Optional)
             <br>
             <input placeholder="http(s)://www.example.com" type="text" name="url" class="form_control" value="<?php
-              echo (!empty($result['url'])) ? $result['url'] : '';
+              echo (!empty($result['website_url'])) ? $result['website_url'] : '';
             ?>">
           </label>
         </p>
@@ -184,7 +196,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
 </div>
 <script type="text/javascript">
   CKEDITOR.replace('edit', {
-    customConfig: '/assets/js/ckeditor/config.js'
+    customConfig: '/public/assets/js/ckeditor/config.js'
   });
 </script>
 <?php

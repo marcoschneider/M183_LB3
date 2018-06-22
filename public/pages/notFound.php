@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: School
+ * Ajax: School
  * Date: 07.06.2018
  * Time: 19:21
  */

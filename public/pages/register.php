@@ -1,15 +1,19 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: MarcoPolo
+ * Ajax: MarcoPolo
  * Date: 17.04.2017
  * Time: 14:08
  */
 
 error_reporting(E_ALL & ~E_NOTICE);
 
-require('../res/lib/dbcon.res');
-require('../res/lib/functions.res');
+require('../../res/config.inc.php');
+require('../../res/lib/functions.php');
+
+$conn = Config::getDb();
+
+$groups = getAllGroups($conn);
 
 $value = array();
 $errors = array();
@@ -71,7 +75,6 @@ if(isset($_POST['submit'])){
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/css/sco.styles.css"/>
-    <link rel="stylesheet" href="../assets/css/font-awesome.min.css"/>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../assets/img/favicon-16x16.png">
@@ -100,33 +103,22 @@ if(isset($_POST['submit'])){
           <div id="dropdown-register" class="dropdown-trigger">
             <p>
               <?php
-              if(isset($_POST['team'])){
-                switch ($_POST['team']){
-                  case 'support':
-                    echo 'Support';
-                    break;
-                  case 'drupal':
-                    echo 'Drupal';
-                    break;
-                  case 'typo3':
-                    echo 'Typo3';
-                    break;
-                  case 'diam':
-                    echo 'DIAM';
-                    break;
-                  default:
-                    echo '--Bitte wählen--';
-                    break;
+              foreach ($groups as $group){
+                if (isset($_POST['group']) && $_POST['group'] === $group['id']) {
+                  echo $group['group_name'];
+                }else{
+                  echo '--Bitte wählen--';
+                  break;
                 }
-              }else{
-                echo '--Bitte wählen--';
-              } ?>
+              }
+              ?>
             </p>
-            <ul data-name="team" class="dropdown-list">
-              <li data-list-value="support">Support</li>
-              <li data-list-value="drupal">Drupal</li>
-              <li data-list-value="typo3">Typo3</li>
-              <li data-list-value="diam">DIAM</li>
+            <ul data-name="group" class="dropdown-list">
+              <?php
+                foreach ($groups as $group) {
+                  echo '<li data-list-value="'.$group['id'].'">'.$group['group_name'].'</li>';
+                }
+              ?>
             </ul>
           </div>
           <label class="label">
@@ -163,6 +155,6 @@ if(isset($_POST['submit'])){
       <p>&copy Copyright Somedia Production Web Support</p>
     </div>
   </body>
-  <script src="../assets/js/jquery-3.1.1.js"></script>
+  <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
   <script src="../assets/js/script.js"></script>
 </html>
