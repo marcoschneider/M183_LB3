@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: School
+ * Ajax: School
  * Date: 12.06.2018
  * Time: 10:09
  */
@@ -29,8 +29,30 @@ class Config{
   }
 
   public static function styles() {
-    $styles = [
-      "path" => ""
+    $scripts = [
+      "public/assets/js/script.js",
+      "public/assets/js/response-handler.js",
+      "public/assets/js/cargame.js",
+      "public/assets/js/menubar.js",
+      "bower_components/toastr/toastr.js"
     ];
+
+    foreach($scripts as $script) {
+      echo '<script type="text/javascript" src="' . $script . '"></script>';
+    }
+  }
+
+  public static function scripts() {
+    $scripts = [
+      "public/assets/js/script.js",
+      "public/assets/js/response-handler.js",
+      "public/assets/js/cargame.js",
+      "public/assets/js/menubar.js",
+      "bower_components/toastr/toastr.js"
+    ];
+
+    foreach($scripts as $script) {
+      echo '<script type="text/javascript" src="' . $script . '"></script>';
+    }
   }
 }

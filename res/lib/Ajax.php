@@ -1,12 +1,17 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: maschneider
+ * Ajax: maschneider
  * Date: 16.06.2018
  * Time: 11:24
  */
 
-class User{
+require_once './../config.inc.php';
+session_start();
+$conn = Config::getDb();
+$uid = $_SESSION['kernel']['userdata']['id'];
+
+class Ajax{
 
   private $conn;
   private $uid;
@@ -19,7 +24,6 @@ class User{
 
   public function getRequest(){
     header('Content-Type: application/json');
-    var_dump($_REQUEST);
     if (isset($_REQUEST['jsonData'])) {
       $action = json_decode($_REQUEST['jsonData']);
       $trigger = $action->trigger;
@@ -28,12 +32,13 @@ class User{
   }
 
   private function handleRequest($trigger, $action) {
+    $result = '';
     switch ($trigger){
       case 'change-userdata':
-        $result=$this->updateUserdata($action['firstname'], $action['surname'], $action['username']);
+        $result = $this->updateUserdata($action['firstname'], $action['surname'], $action['username']);
         break;
       case 'getUserdata':
-        $result=$this->getUserdata();
+        $result = $this->getUserdata();
         break;
     }
     $this->sendResponse($result);
@@ -45,8 +50,8 @@ class User{
     }
   }
 
-  public function getUserdata() {
-    $userData = "SELECT `name`, surname, username FROM user WHERE id = '" . $this->uid . "'";
+  protected function getUserdata() {
+    $userData = "SELECT firstname, surname, username FROM `user` WHERE id = '" . $this->uid . "'";
 
     $result = $this->conn->query($userData);
 
@@ -60,7 +65,7 @@ class User{
   private function updateUserdata($firstname, $surname, $username) {
     $sql = "UPDATE user 
     SET 
-      `name` = '". $firstname ."',
+      firstname = '". $firstname ."',
       surname = '".$surname."',
       username = '".$username."'
     WHERE id = '".$this->uid."'
@@ -76,5 +81,8 @@ class User{
   }
 
 }
+
+$ajax = new Ajax($conn, $uid);
+$ajax->getRequest();
 
 ?>

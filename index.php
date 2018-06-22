@@ -8,9 +8,14 @@ session_start();
 //import configs and import lib
 require 'res/config.inc.php';
 require LIBRARY_PATH.'/functions.php';
-require LIBRARY_PATH.'/User.php';
+//require LIBRARY_PATH.'/Ajax.php';
 require LIBRARY_PATH.'/model/UserModel.php';
 
+//SESSION configurations
+$uid = $_SESSION['kernel']['userdata']["id"];
+$groupname = $_SESSION['kernel']['userdata']['group_name'];
+$groupID = $_SESSION['kernel']['userdata']['group_id'];
+$username = $_SESSION['kernel']['userdata']['username'];
 
 $conn = Config::getDb();
 
@@ -19,12 +24,6 @@ if(!$_SESSION['loggedin']) {
   redirect("public/pages/login.php");
   die();
 }
-
-//SESSION configurations
-$uid = $_SESSION['kernel']['userdata']["id"];
-$groupname = $_SESSION['kernel']['userdata']['group_name'];
-$groupID = $_SESSION['kernel']['userdata']['group_id'];
-$username = $_SESSION['kernel']['userdata']['username'];
 
 ?>
 
@@ -154,8 +153,8 @@ $username = $_SESSION['kernel']['userdata']['username'];
         <p>&copy Copyright Viaduct Web Support</p>
       </div>
     </footer>
-    <script type="text/javascript" src="public/assets/js/script.js"></script>
-    <script type="text/javascript" src="public/assets/js/cargame.js"></script>
-    <script type="text/javascript" src="public/assets/js/menubar.js"></script>
+    <?php
+      Config::scripts();
+    ?>
 	</body>
 </html>

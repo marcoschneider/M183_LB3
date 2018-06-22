@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: maschneider
+ * Ajax: maschneider
  * Date: 15.06.2017
  * Time: 08:43
  */
@@ -141,7 +141,7 @@ if(isset($_POST['delete-link-submit'])) {
           }
         }
         ?>
-      <form class="form" method="POST" action="">
+      <form id="update-edit-link-form" class="form" method="POST" action="">
         <label>
           ID des Links*:
           <input id="link-to-update" type="text" name="link_id" class="form_control" value="<?php
@@ -159,10 +159,7 @@ if(isset($_POST['delete-link-submit'])) {
   </div>
   <div class="row">
     <div class="col-12">
-      <input id="test_ajax" type="button" value="Test Ajax">
-      <div id="output-error">
 
-      </div>
     </div>
   </div>
 </div>

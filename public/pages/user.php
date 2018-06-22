@@ -1,7 +1,7 @@
 <?php
 
-$userModel = new UserModel($conn, $uid);
-$results = $userModel->getUserdata();
+/*$userModel = new UserModel($conn, $uid);
+$results = $userModel->getUserdata();*/
 
 $values = [];
 $errors = [];
@@ -47,22 +47,6 @@ if(isset($_POST['submitPassword'])){
     $errors['repeat_password'] = 'Das Feld "Passwort wiederholen" muss ausgefült sein';
   }
 
-  if ($results['password'] === $values['password']) {
-    $oldPassword = $values['password'];
-  } else {
-    $errors['actual-password'] = 'Bitte verwenden Sie ihr aktuelles Passwort';
-  }
-
-  if ($values['new_password'] === $values['repeat_password']){
-    $newPassword = $oldPassword;
-  } else {
-    $errors['wrong-repeated-password'] = "Die Passwörter stimmen nicht überein";
-  }
-
-  if($results['password'] === $values['new_password']){
-    $errors['same-as-before'] = "Bitte nicht das gleiche Passwort wie vorhin verwenden";
-  }
-
 }
 
 ?>
@@ -102,19 +86,19 @@ if(isset($_POST['submitPassword'])){
         <div>
           <p class="margin-right-25"><b>Name:</b></p>
           <label>
-            <input class="input-userdata" name="name" type="text" value="<?= $results['firstname'] ?>">
+            <input id="input-userdata-firstname" class="input-userdata" name="name" type="text" value="">
           </label>
         </div>
         <div>
           <p class="margin-right-25"><b>Nachname:</b></p>
           <label>
-            <input class="input-userdata" name="surname" type="text" value="<?= $results['surname'] ?>">
+            <input id="input-userdata-surname" class="input-userdata" name="surname" type="text" value="">
           </label>
         </div>
         <div>
           <p class="margin-right-25"><b>Benutzername:</b></p>
           <label>
-            <input class="input-userdata" name="username" type="text" value="<?= $results['username'] ?>">
+            <input id="input-userdata-username" class="input-userdata" name="username" type="text" value="">
           </label>
         </div>
        <input class="button-default" type="submit" name="submit" value="Speichern">

@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: maschneider
+ * Ajax: maschneider
  * Date: 15.06.2018
  * Time: 23:36
  */

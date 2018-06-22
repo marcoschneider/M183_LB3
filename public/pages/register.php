@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: MarcoPolo
+ * Ajax: MarcoPolo
  * Date: 17.04.2017
  * Time: 14:08
  */

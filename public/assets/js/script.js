@@ -1,4 +1,5 @@
-var ajaxUrl = "/res/lib/User.php";
+var ajaxUrl = "/res/lib/Ajax.php";
+var handler;
 
 $(function(){
 
@@ -6,6 +7,8 @@ $(function(){
   customSelect('#todo-type-create');
   customSelect('#todo-type-edit');
   customSelect('#project');
+
+  getUserdata();
 
   $('#update-link-submit').on("click", function () {
     var supportLinkID = $('.link-id');
@@ -18,7 +21,7 @@ $(function(){
 
         let nameOfLink = $(supportLinkID[i]).parent().text();
         let refOfLink = $(supportLinkID[i]).parent().attr("href");
-        
+
         nameOfLink = nameOfLink.replace(linkToUpdate, '');
 
         $('#name-link').val(nameOfLink);
@@ -29,18 +32,15 @@ $(function(){
         $('#update-link-trigger').replaceWith(updateInputSubmit);
         $('#add-link').append(hiddenLinkIdInput);
       }else{
-
+        var error = "<div class='failbox'>Dieser Link existiert nicht</div>";
+        $('#update-edit-link-form').append(error);
       }
     });
   });
-
-  $('#test_ajax').on('click', function () {
-    ajaxTest();
-  })
 });
 
 
-function ajaxTest() {
+function getUserdata() {
   $.ajax({
     url: ajaxUrl,
     type: 'POST',
@@ -48,11 +48,11 @@ function ajaxTest() {
         trigger: 'getUserdata'
     })},
     success: function (response) {
-      $('#output-error').text(response.username);
-      console.log(response);
+      handler = new ResponseHandler(response);
+      handler.showUserdata();
     },
     error: function (e) {
-      $('#output-error').html(e)
+      console.log(e);
     }
   })
 }

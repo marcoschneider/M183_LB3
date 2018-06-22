@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: MarcoPolo
+ * Ajax: MarcoPolo
  * Date: 07.04.2017
  * Time: 20:40
  * @param $page
@@ -206,7 +206,7 @@ function updateUserdata($conn, $uid, $values)
   }
 }
 
-//get User ID
+//get Ajax ID
 /**
  * @param $conn
  * @param $username
@@ -353,17 +353,20 @@ function saveEdit($conn, $values, $getId, $uid)
 
   $editTimestamp = time();
 
+  $values['project'] = (int)$values['project'];
+  $values['todo-type'] = (int)$values['todo-type'];
+
   $sql = "
     UPDATE todo
     SET
-      `fk_projekte` = '" . $values['project'] . "',
       `title` = '" . $values['title'] . "',
       `problem` = '" . $values['problem'] . "',
-      `fk_priority` = '" . $values['niveau'] . "',
-      `last_edit` = " . $editTimestamp . ",
       `fixed_date` = " . $values['fixed_date'] . ",
+      `last_edit` = " . $editTimestamp . ",
       `website_url` = '" . $values['url'] . "',
-      `groupname` = '" . $values['todo-type'] . "'
+      `fk_priority` = '" . $values['niveau'] . "',
+      `fk_project` = '" . $values['project'] . "',
+      `fk_group` = '" . $values['todo-type'] . "'
     WHERE
       `id` = '" . $getId . "' AND `fk_user` = '" . $uid . "'";
 
@@ -379,7 +382,6 @@ function saveEdit($conn, $values, $getId, $uid)
 
 /**
  * @param $conn
- * @param $uid
  * @param $getId
  * @return array|bool
  */
@@ -414,7 +416,7 @@ function getTodoDetails($conn, $getId)
 
   $result = mysqli_fetch_array($sqlResult, MYSQLI_ASSOC);
 
-  $result['fixed_date_edit'] = date("Y-m-d", $result['fixed_date']);
+  $result['fixed_date_edit'] = $result['fixed_date'] != 0 ? date("d.m.Y", $result['fixed_date']) : $result['fixed_date']  ;
   $result['fixed_date'] = $result['fixed_date'] != 0 ? date("d.m.Y", $result['fixed_date']) : $result['fixed_date'];
   $result['last_edit'] = $result['last_edit'] != null ? date("d.m.Y \\u\\m H:i", $result['last_edit']) : $result['last_edit'];
   $result['creation_date'] = date("d.m.Y \\u\\m H:i", $result['creation_date']);

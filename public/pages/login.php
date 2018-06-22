@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: MarcoPolo
+ * Ajax: MarcoPolo
  * Date: 07.04.2017
  * Time: 20:41
  */
@@ -15,7 +15,7 @@
 
   // redirect if logged in already
   if(isset($_SESSION['loggedin'])){
-    redirect('../?pages=support-links');
+    redirect('../?pages=todo-overview');
   }
 
   $errors = [];
@@ -29,13 +29,11 @@
 
       $login = auth_user($conn, $username,$password);
 
-      var_dump($login);
-
       if ($login === true) {
         $user = getUid($conn, $username);
         $_SESSION['loggedin'] = true;
         $_SESSION['kernel']['userdata'] = $user;
-        redirect('../../?pages=support-links');
+        redirect('../../?pages=todo-overview');
       } else {
         $errors['usernameAndPassword'] = 'Benutzername oder Passwort falsch!';
       }
