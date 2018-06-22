@@ -60,13 +60,13 @@ function ajaxTest() {
 function customSelect(elementID) {
 
   $(elementID).on("click", function () {
-    $(".dropdown-list").slideToggle(250, function () {
+    $(elementID+" .dropdown-list").slideToggle(250, function () {
       $(this).toggleClass("block");
     });
     return false;
   });
 
-  var dropdownLists = elementID + ' .dropdown-list';
+  var dropdownLists = elementID+' .dropdown-list';
 
   $(dropdownLists+' li').on("click", function () {
     var liText = $(this).text();

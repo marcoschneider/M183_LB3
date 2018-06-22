@@ -284,7 +284,10 @@ function addTodo($conn, $values, $uid)
 {
 
   $values['fk_priority'] = (int)$values['niveau'];
-  $values['fixed_date'] = $values['fixed_date'] == 0 ? null : $values['fixed_date'];
+  $values['todo-type'] = (int)$values['todo-type'];
+  $values['project'] = (int)$values['project'];
+
+  $timestamp = time();
 
   $sql = " INSERT INTO `todo` (
               `problem`,
@@ -301,13 +304,13 @@ function addTodo($conn, $values, $uid)
               '" . $values['problem'] . "',
               " . $values['fixed_date'] . ",
               '" . $values['title'] . "',
-              " . time() . ",
+              " . $timestamp . ",
               '" . $values['url'] . "',
-              '1',
-              '" . $uid . "',
-              '" . $values['niveau'] . "',
-              '" . $values['project'] . "',
-              '" . $values['todo-type'] . "'
+              1,
+              " . $uid . ",
+              " . $values['niveau'] . ",
+              " . $values['project'] . ",
+              " . $values['todo-type'] . "
             )";
 
   $taskResult = mysqli_query($conn, $sql) or die(mysqli_error($conn));
@@ -412,8 +415,10 @@ function getTodoDetails($conn, $getId)
   $result = mysqli_fetch_array($sqlResult, MYSQLI_ASSOC);
 
   $result['fixed_date_edit'] = date("Y-m-d", $result['fixed_date']);
-  $result['fixed_date'] = date("d.m.Y", $result['fixed_date']);
+  $result['fixed_date'] = $result['fixed_date'] != 0 ? date("d.m.Y", $result['fixed_date']) : $result['fixed_date'];
+  $result['last_edit'] = $result['last_edit'] != null ? date("d.m.Y \\u\\m H:i", $result['last_edit']) : $result['last_edit'];
   $result['creation_date'] = date("d.m.Y \\u\\m H:i", $result['creation_date']);
+
 
   if ($sqlResult) {
     return $result;
@@ -791,7 +796,7 @@ $values = array();
       $errors['fixed_date'] = "In der Vergangenheit kann keine Aufgabe erledigt werden ;)";
     }
   }else{
-    $values['date'] = 0;
+    $values['fixed_date'] = 0;
   }
 
   if (isset($formValues['url']) && $formValues['url'] != '') {

@@ -13,11 +13,20 @@ if (isset($getId) && $getId != '') {
     <div class="tododetails-wrapper">
     <?php
     if(isset($result)) {  ?>
-      <h1 class="detail-title"><?= $result['title'] ?></h1>
-      <h2 class="detail-project"><?= $result['project_name'] ?></h2>
+      <div class="space">
+        <div class="row">
+          <div class="col-6">
+            <h1 class="detail-title"><?= $result['title'] ?></h1>
+          </div>
+          <div class="col-6">
+            <h4>Projekt: </h4>
+            <span><?= $result['project_name'] ?></span>
+          </div>
+        </div>
+      </div>
       <div class="detail-output-wrapper">
       <?php
-        echo ($result['fixed_date'] != '')
+        echo ($result['fixed_date'] != 0)
           ? '<p class="detail-fixed-date">Fixes Datum: </p><span> ' . $result['fixed_date'] . '</span>'
           : '<p>Kein fixes Datum vorhanden.</p>';
       ?>
@@ -30,8 +39,11 @@ if (isset($getId) && $getId != '') {
         <p><?= $result['creation_date'] ?></p>
       </div>
       <div class="detail-output-wrapper">
-        <p class="detail-fixed-date">Zuletzt bearbeitet: </p>
-        <p><?= $result['last_edit'] ?></p>
+        <?php
+          echo $result['last_edit'] != 0
+            ? '<p class="detail-fixed-date">Zuletzt bearbeitet: </p><span>' . $result['last_edit'] . '</span>'
+            : '';
+        ?>
       </div>
       <div class="detail-output-wrapper">
         <p class="detail-fixed-date">Priotirät: </p>
