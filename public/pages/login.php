@@ -18,31 +18,6 @@
     redirect('../?pages=todo-overview');
   }
 
-  $errors = [];
-
-  // catch username and password post
-  if(isset($_POST['username']) && isset($_POST['password'])) {
-    if($_POST['username'] != '' && $_POST['password'] != '') {
-
-      $username = $_POST['username'];
-      $password = hash("sha256", $_POST['password']);
-
-      $login = auth_user($conn, $username,$password);
-
-      if ($login === true) {
-        $user = getUid($conn, $username);
-        $_SESSION['loggedin'] = true;
-        $_SESSION['kernel']['userdata'] = $user;
-        redirect('../../?pages=todo-overview');
-      } else {
-        $errors['usernameAndPassword'] = 'Benutzername oder Passwort falsch!';
-      }
-    }else{
-      $errors['emptyFields'] = 'Felder wurden nicht ausgefüllt';
-    }
-  }
-
-  $conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -51,6 +26,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap-grid.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="../../node_modules/toastr/build/toastr.min.css">
     <link rel="stylesheet" href="../assets/css/sco.styles.css"/>
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../assets/img/favicon-16x16.png">
@@ -73,7 +49,7 @@
           <input class="field-login" type="text" name="username" id="fname">
           <label class="label" for="pname">Passwort:</label>
           <input class="field-login" type="password" name="password" id="pname">
-          <input class="login-button" type="submit" name="submit" value="Anmelden"/>
+          <input id="login-button" class="login-button" type="button" value="Anmelden"/>
           <a class="register-button" href="register.php">Registrieren</a>
         </form>
         <div class="clearer"></div>
@@ -92,4 +68,9 @@
       <p>&copy Copyright Somedia Production Web Support</p>
     </div>
   </body>
+  <script type="text/javascript" src="../../bower_components/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="../../bower_components/js-sha256/build/sha256.min.js"></script>
+  <script type="text/javascript" src="../../node_modules/toastr/build/toastr.min.js"></script>
+  <script type="text/javascript" src="../assets/js/response-handler.js"></script>
+  <script type="text/javascript" src="../assets/js/script.js"></script>
 </html>

@@ -8,14 +8,7 @@ session_start();
 //import configs and import lib
 require 'res/config.inc.php';
 require LIBRARY_PATH.'/functions.php';
-//require LIBRARY_PATH.'/Ajax.php';
 require LIBRARY_PATH.'/model/UserModel.php';
-
-//SESSION configurations
-$uid = $_SESSION['kernel']['userdata']["id"];
-$groupname = $_SESSION['kernel']['userdata']['group_name'];
-$groupID = $_SESSION['kernel']['userdata']['group_id'];
-$username = $_SESSION['kernel']['userdata']['username'];
 
 $conn = Config::getDb();
 
@@ -25,17 +18,21 @@ if(!$_SESSION['loggedin']) {
   die();
 }
 
+//SESSION configurations
+$uid = $_SESSION['kernel']['userdata']["id"];
+$groupname = $_SESSION['kernel']['userdata']['group_name'];
+$groupID = $_SESSION['kernel']['userdata']['group_id'];
+$username = $_SESSION['kernel']['userdata']['username'];
+
 ?>
 
 
 <!DOCTYPE html>
 <html>
   <head>
-    <?php header('Content-type: text/html; charset=utf-8'); ?>
-    <link rel="stylesheet" href="bower_components/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css" />
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-grid.min.css" />
-    <link rel="stylesheet" href="bower_components/normalize.css/normalize.css" />
-    <link rel="stylesheet" href="public/assets/css/sco.styles.css"/>
+    <?php header('Content-type: text/html; charset=utf-8');
+    Config::styles();
+    ?>
     <link rel="icon" type="image/png" sizes="32x32" href="public/assets/img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="public/assets/img/favicon-16x16.png">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">

@@ -6,27 +6,6 @@ $results = $userModel->getUserdata();*/
 $values = [];
 $errors = [];
 
-if(isset($_POST['submit'])){
-
-  if(isset($_POST['name']) && $_POST['name'] != ''){
-    $values['name'] = htmlspecialchars($_POST['name']);
-  }else{
-    $errors['name'] = "Ein Name muss angegeben werden.";
-  }
-
-  if(isset($_POST['surname']) && $_POST['surname'] != ''){
-    $values['surname'] = htmlspecialchars($_POST['surname']);
-  }else{
-    $errors['surname'] = "Ein Nachname muss angegeben werden.";
-  }
-
-  if(isset($_POST['username']) && $_POST['username'] != ''){
-    $values['username'] = htmlspecialchars($_POST['username']);
-  }else{
-    $errors['username'] = "Ein Benutzername muss angegeben werden.";
-  }
-}
-
 if(isset($_POST['submitPassword'])){
 
   if(isset($_POST['password']) && $_POST['password'] != ''){
@@ -101,7 +80,7 @@ if(isset($_POST['submitPassword'])){
             <input id="input-userdata-username" class="input-userdata" name="username" type="text" value="">
           </label>
         </div>
-       <input class="button-default" type="submit" name="submit" value="Speichern">
+        <input id="update-userdata" class="button-default" type="button" value="Speichern"/>
       <div class="space"></div>
       </form>
       <div class="clearer"></div>

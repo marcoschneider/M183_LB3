@@ -10,6 +10,14 @@ $(function(){
 
   getUserdata();
 
+  $('#update-userdata').on("click", function () {
+    changeUserdata();
+  });
+
+  $('#login-button').on("click", function () {
+    auth_user();
+  });
+
   $('#update-link-submit').on("click", function () {
     var supportLinkID = $('.link-id');
     var linkToUpdate = $('#link-to-update').val();
@@ -47,12 +55,64 @@ function getUserdata() {
     data: {jsonData: JSON.stringify({
         trigger: 'getUserdata'
     })},
-    success: function (response) {
-      handler = new ResponseHandler(response);
+    success: function (res) {
+      handler = new ResponseHandler(res);
       handler.showUserdata();
     },
     error: function (e) {
       console.log(e);
+    }
+  })
+}
+
+function changeUserdata() {
+  var firstname = $('#input-userdata-firstname').val();
+  var surname = $('#input-userdata-surname').val();
+  var username = $('#input-userdata-username').val();
+
+  $.ajax({
+    url: ajaxUrl,
+    type: 'POST',
+    data: {jsonData: JSON.stringify({
+      trigger: 'updateUserdata',
+      firstname: firstname,
+      surname: surname,
+      username: username
+    })},
+    success: function (res) {
+      handler = new ResponseHandler();
+      if (res === true) {
+        timeout(50);
+        toastr.success("Die Benutzerdaten wurden aktualisiert");
+      }else{
+        for (var i = 0; i < res.length; i++) {
+          toastr.error(res[i]);
+        }
+      }
+    },
+
+  })
+}
+
+function auth_user() {
+  var username = $('#fname').val();
+  var pass = $('#pname').val();
+  pass = sha256(pass);
+
+  $.ajax({
+    url: ajaxUrl,
+    type: 'POST',
+    data: {jsonData: JSON.stringify({
+      trigger: 'authUser',
+      username: username,
+      password: pass,
+    })},
+    success: function (res) {
+      if (res === true) {
+        window.location.replace("/?pages=todo-overview");
+      }else{
+        toastr.error(res);
+      }
     }
   })
 }
@@ -76,4 +136,10 @@ function customSelect(elementID) {
     liData = liText + "<input type=\"hidden\" name='" + name + "' value='" + liData + "'/>";
     $(elementID+' p').html(liData);
   });
+}
+
+function timeout($timeout) {
+  setTimeout(function () {
+    getUserdata();
+  }, $timeout);
 }
