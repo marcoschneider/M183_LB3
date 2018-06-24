@@ -12,16 +12,15 @@ class UserController
   private $uid;
   private $userModel;
 
-  public function __construct($conn, $uid)
+  public function __construct(UserModel $userModel)
   {
-    $this->conn = $conn;
-    $this->uid = $uid;
+    $this->userModel = $userModel;
+    $this->uid = $this->userModel->uid;
+    $this->conn = $this->userModel->conn;
   }
 
-  public function authUser(UserModel $user, $username, $pass)
+  public function authUser($username, $pass)
   {
-
-    $this->userModel = $user;
     $this->userModel->setUsername($username);
 
     if ($username != '' && strlen($pass) == 64) {

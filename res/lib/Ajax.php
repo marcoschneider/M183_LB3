@@ -59,7 +59,7 @@ class Ajax
         $result = $this->userModel->getUserdata();
         break;
       case 'authUser':
-        $result = $this->userController->authUser($this->userModel, $action->username, $action->password);
+        $result = $this->userController->authUser($action->username, $action->password);
         break;
     }
     $this->sendResponse($result);
@@ -119,7 +119,7 @@ class Ajax
 }
 
 $userModel = new UserModel($conn, $uid);
-$userController = new UserController($conn, $uid);
+$userController = new UserController($userModel);
 
 $ajax = new Ajax($userModel, $userController);
 $ajax->getRequest();

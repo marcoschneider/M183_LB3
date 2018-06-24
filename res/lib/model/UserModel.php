@@ -16,6 +16,7 @@ class UserModel
   function __construct($conn, $uid) {
     $this->conn = $conn;
     $this->uid = $uid;
+    $this->username = $_SESSION['kernel']['userdata']['username'];
   }
 
   public function getUserdata() {
@@ -37,7 +38,7 @@ class UserModel
 
     $result = $this->conn->query($sql);
 
-    if ($this->conn->error === '') {
+    if ($result) {
       return $result->fetch_assoc();
     } else {
       return $this->conn->error;
