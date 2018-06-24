@@ -8,6 +8,7 @@
 
 require_once './../config.inc.php';
 require_once 'model/UserModel.php';
+require_once 'controller/UserController.php';
 
 session_start();
 $conn = Config::getDb();
@@ -24,14 +25,17 @@ class Ajax
   private $conn;
   private $uid;
   private $username;
-  private $user;
+  private $userModel;
+  private $userController;
 
-  public function __construct(UserModel $userModel)
+  public function __construct(UserModel $userModel, UserController $userController)
   {
-    $this->user = $userModel;
-    $this->conn = $this->user->conn;
-    $this->username = $this->user->getUsername();
-    $this->uid = $this->user->uid;
+    $this->userModel = $userModel;
+    $this->userController = $userController;
+
+    $this->conn = $this->userModel->conn;
+    $this->username = $this->userModel->getUsername();
+    $this->uid = $this->userModel->uid;
   }
 
   public function getRequest()
@@ -52,10 +56,10 @@ class Ajax
         $result = $this->updateUserdata($action->firstname, $action->surname, $action->username);
         break;
       case 'getUserdata':
-        $result = $this->user->getUserdata();
+        $result = $this->userModel->getUserdata();
         break;
       case 'authUser':
-        $result = $this->authUser($action->username, $action->password);
+        $result = $this->userController->authUser($this->userModel, $action->username, $action->password);
         break;
     }
     $this->sendResponse($result);
@@ -68,62 +72,7 @@ class Ajax
     }
   }
 
-  private function authUser($username, $pass)
-  {
 
-    if ($username != '' && $pass != '') {
-      $username = mysqli_real_escape_string($this->conn, $username);
-      $pass = mysqli_real_escape_string($this->conn, $pass);
-      $this->username = $username;
-    } else {
-      $error = "Bitte alle felder ausfüllen";
-    }
-
-    //Checks if username and password matches post
-    $sql = "SELECT id FROM user WHERE `username`='" . $username . "' AND `password`='" . $pass . "'";
-
-    if (!isset($error)) {
-      $result = $this->conn->query($sql);
-
-      if ($result) {
-        $user = $this->getUserdata();
-        $_SESSION['loggedin'] = true;
-        $_SESSION['kernel']['userdata'] = $user;
-        return true;
-      } else {
-        return $result;
-      }
-    } else {
-      return $error;
-    }
-  }
-
-  protected function getUserdata()
-  {
-    $sql = "
-    SELECT 
-      u.id,
-      firstname,
-      surname,
-      username, 
-      g.id AS 'group_id',
-      g.group_name,
-      g.group_short
-    FROM `user` u
-      INNER JOIN user_group ug ON ug.fk_user =  u.id
-      INNER JOIN `group` g on ug.fk_group = g.id
-    WHERE 
-      username = '" . $this->username . "'
-    AND g.group_short != 'self-todo'";
-
-    $result = $this->conn->query($sql);
-
-    if ($this->conn->error === '') {
-      return $result->fetch_assoc();
-    } else {
-      return $this->conn->error;
-    }
-  }
 
   private function updateUserdata($firstname, $surname, $username)
   {
@@ -169,7 +118,10 @@ class Ajax
   }
 }
 
-$ajax = new Ajax(new UserModel($conn, $uid));
+$userModel = new UserModel($conn, $uid);
+$userController = new UserController($conn, $uid);
+
+$ajax = new Ajax($userModel, $userController);
 $ajax->getRequest();
 
 ?>

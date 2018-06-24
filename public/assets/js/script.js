@@ -109,7 +109,7 @@ function auth_user() {
     })},
     success: function (res) {
       if (res === true) {
-        window.location.replace("/?pages=todo-overview");
+        window.location.replace("/../?pages=todo-overview");
       }else{
         toastr.error(res);
       }

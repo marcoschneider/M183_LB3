@@ -32,7 +32,7 @@ class UserModel
       INNER JOIN user_group ug ON ug.fk_user =  u.id
       INNER JOIN `group` g on ug.fk_group = g.id
     WHERE 
-      u.id = '" . $this->uid . "'
+      u.username = '" . $this->username . "'
     AND g.group_short != 'self-todo'";
 
     $result = $this->conn->query($sql);
@@ -98,5 +98,9 @@ class UserModel
   public function getSurname() {
     $userdata = $this->getUserdata();
     return $userdata['surname'];
+  }
+
+  public function setUsername($username) {
+    $this->username = $username;
   }
 }

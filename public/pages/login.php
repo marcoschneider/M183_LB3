@@ -15,9 +15,8 @@
 
   // redirect if logged in already
   if(isset($_SESSION['loggedin'])){
-    redirect('../?pages=todo-overview');
+    redirect('../../?pages=todo-overview');
   }
-
 ?>
 
 <!DOCTYPE html>
@@ -46,7 +45,7 @@
       <div class="login-wrapper">
         <form class="login-form" method="post" action="">
           <label class="label" for="fname">Benutzername:</label>
-          <input class="field-login" type="text" name="username" id="fname">
+          <input class="field-login" type="text" name="username" id="fname" autofocus>
           <label class="label" for="pname">Passwort:</label>
           <input class="field-login" type="password" name="password" id="pname">
           <input id="login-button" class="login-button" type="button" value="Anmelden"/>
