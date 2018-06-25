@@ -206,68 +206,6 @@ function updateUserdata($conn, $uid, $values)
   }
 }
 
-//get Ajax ID
-/**
- * @param $conn
- * @param $username
- * @return array|null|string
- */
-function getUid($conn, $username)
-{
-
-  $sql = "
-    SELECT 
-      u.id,
-      firstname,
-      surname,
-      username, 
-      g.id AS 'group_id',
-      g.group_name,
-      g.group_short
-    FROM `user` u
-      INNER JOIN user_group ug ON ug.fk_user =  u.id
-      INNER JOIN `group` g on ug.fk_group = g.id
-    WHERE 
-      username = '" . $username . "'
-    AND g.group_short != 'self-todo'";
-
-  $sqlResult = mysqli_query($conn, $sql) or die(mysqli_error($conn));
-
-  $result = mysqli_fetch_array($sqlResult, MYSQLI_ASSOC);
-
-  if ($sqlResult) {
-    return $result;
-  }else{
-    return $sqlResult;
-  }
-}
-
-
-// authenticate user
-/**
- * @param $conn
- * @param $username
- * @param $password
- * @return bool
- */
-function auth_user($conn, $username, $password)
-{
-
-  $escUser = mysqli_real_escape_string($conn, $username);
-  $escPass = mysqli_real_escape_string($conn, $password);
-
-  //Checks if username and password matches post
-  $sql = "SELECT id FROM user WHERE `username`='" . $escUser . "' AND `password`='" . $escPass . "'";
-
-  $result = mysqli_query($conn, $sql);
-
-  if (mysqli_num_rows($result) > 0) {
-    return true;
-  } else {
-    return mysqli_error($conn);
-  }
-}
-
 
 /**
  * @param $conn
