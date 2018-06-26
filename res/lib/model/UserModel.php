@@ -16,7 +16,9 @@ class UserModel
   function __construct($conn, $uid) {
     $this->conn = $conn;
     $this->uid = $uid;
-    $this->username = $_SESSION['kernel']['userdata']['username'];
+    if (isset($_SESSION['kernel']['userdata']['username'])) {
+      $this->username = $_SESSION['kernel']['userdata']['username'];
+    }
   }
 
   public function getUserdata() {

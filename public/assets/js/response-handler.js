@@ -14,4 +14,14 @@ class ResponseHandler{
     usernameField.value = this._response.username;
   }
 
+  error() {
+    if (this._response instanceof Array) {
+      for (var i = 0; i < this._response.length; i++) {
+        toastr.error(this._response[i]);
+      }
+    }else{
+      toastr.error(res);
+    }
+  }
+
 }

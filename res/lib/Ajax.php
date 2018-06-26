@@ -61,6 +61,9 @@ class Ajax
       case 'authUser':
         $result = $this->userController->authUser($action->username, $action->password);
         break;
+      case 'registerUser':
+        $result = $this->userController->registerUser($action->firstname, $action->surname, $action->username, $action->password, $action->fk_group);
+        break;
     }
     $this->sendResponse($result);
   }

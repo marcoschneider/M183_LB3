@@ -8,8 +8,11 @@ $(function(){
   customSelect('#todo-type-edit');
   customSelect('#project');
 
-  getUserdata();
+  if (document.URL === 'http://m133.test/?pages=userdata') {
+    getUserdata();
+  }
 
+  //Event listeners
   $('#update-userdata').on("click", function () {
     changeUserdata();
   });
@@ -18,35 +21,42 @@ $(function(){
     auth_user();
   });
 
+  $('#register-button').on("click", function () {
+    register_user();
+  });
+
   $('#update-link-submit').on("click", function () {
-    var supportLinkID = $('.link-id');
-    var linkToUpdate = $('#link-to-update').val();
-    var updateInputSubmit = '<input type="submit" name="update-link" class="button-default" value="Link aktualisieren">';
-    supportLinkID.each(function (i) {
-      if (supportLinkID[i].innerHTML === linkToUpdate) {
-
-        var hiddenLinkIdInput = '<input type="hidden" name="link_id" value="'+linkToUpdate+'">';
-
-        let nameOfLink = $(supportLinkID[i]).parent().text();
-        let refOfLink = $(supportLinkID[i]).parent().attr("href");
-
-        nameOfLink = nameOfLink.replace(linkToUpdate, '');
-
-        $('#name-link').val(nameOfLink);
-        $('#link-url').val(refOfLink);
-
-        $('#add-link-title').text("Link bearbeiten");
-
-        $('#update-link-trigger').replaceWith(updateInputSubmit);
-        $('#add-link').append(hiddenLinkIdInput);
-      }else{
-        var error = "<div class='failbox'>Dieser Link existiert nicht</div>";
-        $('#update-edit-link-form').append(error);
-      }
-    });
+    editLink();
   });
 });
 
+function editLink() {
+  var supportLinkID = $('.link-id');
+  var linkToUpdate = $('#link-to-update').val();
+  var updateInputSubmit = '<input type="submit" name="update-link" class="button-default" value="Link aktualisieren">';
+  supportLinkID.each(function (i) {
+    if (supportLinkID[i].innerHTML === linkToUpdate) {
+
+      var hiddenLinkIdInput = '<input type="hidden" name="link_id" value="'+linkToUpdate+'">';
+
+      let nameOfLink = $(supportLinkID[i]).parent().text();
+      let refOfLink = $(supportLinkID[i]).parent().attr("href");
+
+      nameOfLink = nameOfLink.replace(linkToUpdate, '');
+
+      $('#name-link').val(nameOfLink);
+      $('#link-url').val(refOfLink);
+
+      $('#add-link-title').text("Link bearbeiten");
+
+      $('#update-link-trigger').replaceWith(updateInputSubmit);
+      $('#add-link').append(hiddenLinkIdInput);
+    }else{
+      var error = "<div class='failbox'>Dieser Link existiert nicht</div>";
+      $('#update-edit-link-form').append(error);
+    }
+  });
+}
 
 function getUserdata() {
   $.ajax({
@@ -80,7 +90,6 @@ function changeUserdata() {
       username: username
     })},
     success: function (res) {
-      handler = new ResponseHandler();
       if (res === true) {
         timeout(50);
         toastr.success("Die Benutzerdaten wurden aktualisiert");
@@ -114,7 +123,38 @@ function auth_user() {
         toastr.error(res);
       }
     }
-  })
+  });
+}
+
+function register_user() {
+  var firstname = $('#firstname').val();
+  var surname = $('#surname').val();
+  var username = $('#username').val();
+  var pass = $('#password').val();
+  var fk_group = $('#group-in-register').val();
+
+  pass = sha256(pass);
+
+  $.ajax({
+    url: ajaxUrl,
+    type: 'POST',
+    data: {jsonData: JSON.stringify({
+      trigger: 'registerUser',
+      firstname: firstname,
+      surname: surname,
+      username: username,
+      password: pass,
+      fk_group: fk_group
+    })},
+    success: function (res) {
+      handler = new ResponseHandler(res);
+      if (res === true) {
+        toastr.success("Benutzer wurde registriert");
+      }else{
+        handler.error();
+      }
+    }
+  });
 }
 
 function customSelect(elementID) {
@@ -133,7 +173,7 @@ function customSelect(elementID) {
     var liData = $(this).data("list-value");
     var name = $(dropdownLists).data('name');
 
-    liData = liText + "<input type=\"hidden\" name='" + name + "' value='" + liData + "'/>";
+    liData = liText + "<input id=\"group-in-register\" type=\"hidden\" name='" + name + "' value='" + liData + "'/>";
     $(elementID+' p').html(liData);
   });
 }
