@@ -47,7 +47,7 @@ class UserModel
     }
   }
 
-  private function updateUserdata($firstname, $surname, $username) {
+  public function updateUserdata($firstname, $surname, $username) {
     $errors = [];
 
     if (isset($firstname) && $firstname != '') {
@@ -79,6 +79,9 @@ class UserModel
     if (count($errors) === 0) {
       $result = $this->conn->query($sql);
       if ($result) {
+        $_SESSION['kernel']['userdata']['firstname'] = $firstname;
+        $_SESSION['kernel']['userdata']['surname'] = $surname;
+        $_SESSION['kernel']['userdata']['username'] = $username;
         return true;
       } else {
         return $result;

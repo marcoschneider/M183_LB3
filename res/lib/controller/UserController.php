@@ -103,8 +103,7 @@ class UserController
       VALUES (
         " . $lastUserID . ",
         " . $value['team'] . "
-      ),
-      (
+      ), (
         ".$lastUserID.",
         1
       )  

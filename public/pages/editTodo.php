@@ -181,7 +181,9 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
           </label>
         </p>
         <div class="space">
-          <input type="submit" name="submit" class="button-default" value="Todo speichern">
+          <input type="hidden" id="todo-id" value="<?= $_GET['id']?>"/>
+          <input type="hidden" id="user-id" value="<?= $result['uid']?>"/>
+          <input id="group-log-trigger" type="submit" name="submit" class="button-default" value="Todo speichern">
         </div>
         <p>*Pflichtfelder</p>
       </form>

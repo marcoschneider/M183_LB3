@@ -8,7 +8,10 @@
 
 require_once './../config.inc.php';
 require_once 'model/UserModel.php';
+require_once 'model/GroupLogModel.php';
+require_once 'model/TodoModel.php';
 require_once 'controller/UserController.php';
+require_once 'controller/GroupLogController.php';
 
 session_start();
 $conn = Config::getDb();
@@ -25,13 +28,21 @@ class Ajax
   private $conn;
   private $uid;
   private $username;
+
   private $userModel;
   private $userController;
+  private $groupLogModel;
+  private $groupLogController;
+  private $todoModel;
 
-  public function __construct(UserModel $userModel, UserController $userController)
-  {
+  public function __construct(UserModel $userModel, UserController $userController,
+                              GroupLogModel $groupLogModel, GroupLogController $groupLogController,
+                              TodoModel $todoModel) {
     $this->userModel = $userModel;
     $this->userController = $userController;
+    $this->groupLogController = $groupLogController;
+    $this->groupLogModel = $groupLogModel;
+    $this->todoModel = $todoModel;
 
     $this->conn = $this->userModel->conn;
     $this->username = $this->userModel->getUsername();
@@ -48,12 +59,11 @@ class Ajax
     }
   }
 
-  private function handleRequest($trigger, $action)
-  {
+  private function handleRequest($trigger, $action) {
     $result = '';
     switch ($trigger) {
       case 'updateUserdata':
-        $result = $this->updateUserdata($action->firstname, $action->surname, $action->username);
+        $result = $this->userModel->updateUserdata($action->firstname, $action->surname, $action->username);
         break;
       case 'getUserdata':
         $result = $this->userModel->getUserdata();
@@ -64,67 +74,37 @@ class Ajax
       case 'registerUser':
         $result = $this->userController->registerUser($action->firstname, $action->surname, $action->username, $action->password, $action->fk_group);
         break;
+      case 'insertLogAfterEdit':
+        $result = $this->groupLogModel->insertGroupLog($action->message, $action->todoID, 1, $action->uid);
+        break;
+      case 'insertLogAfterDelete':
+        $result = $this->groupLogModel->insertTodoConfirmationLog($action->message, $action->todoID, 2, $action->uid);
+        break;
+      case 'getInfoGroupLog':
+        $result = $this->groupLogModel->getInfoGroupLog();
+        break;
+      case 'getPendingGroupLogs':
+        $result = $this->groupLogModel->getPendingGroupLogs();
+        break;
     }
     $this->sendResponse($result);
   }
 
-  private function sendResponse($result)
-  {
+  private function sendResponse($result) {
     if (isset($result)) {
       echo json_encode($result);
     }
   }
 
-
-
-  private function updateUserdata($firstname, $surname, $username)
-  {
-
-    $errors = [];
-
-    if (isset($firstname) && $firstname != '') {
-      $firstname = htmlspecialchars($firstname);
-    } else {
-      $errors[] = "Ein Name muss angegeben werden.";
-    }
-
-    if (isset($surname) && $surname != '') {
-      $surname = htmlspecialchars($surname);
-    } else {
-      $errors[] = "Ein Nachname muss angegeben werden.";
-    }
-
-    if (isset($username) && $username != '') {
-      $username = htmlspecialchars($username);
-    } else {
-      $errors[] = "Ein Benutzername muss angegeben werden.";
-    }
-
-    $sql = "UPDATE user 
-    SET 
-      firstname = '" . $firstname . "',
-      surname = '" . $surname . "',
-      username = '" . $username . "'
-    WHERE id = '" . $this->uid . "'
-    ";
-
-    if (count($errors) === 0) {
-      $result = $this->conn->query($sql);
-      if ($result) {
-        return true;
-      } else {
-        return $result;
-      }
-    } else {
-      return $errors;
-    }
-  }
 }
 
 $userModel = new UserModel($conn, $uid);
 $userController = new UserController($userModel);
+$groupLogModel = new GroupLogModel($userModel);
+$groupLogController = new GroupLogController($groupLogModel);
+$todoModel = new TodoModel($userModel);
 
-$ajax = new Ajax($userModel, $userController);
+$ajax = new Ajax($userModel, $userController, $groupLogModel, $groupLogController, $todoModel);
 $ajax->getRequest();
 
 ?>

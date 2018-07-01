@@ -75,7 +75,7 @@ if(isset($_POST['submitPassword'])){
           </label>
         </div>
         <div>
-          <p class="margin-right-25"><b>Benutzername:</b></p>
+          <p class="margin-right-25"><b>Benutzername*:</b></p>
           <label>
             <input id="input-userdata-username" class="input-userdata" name="username" type="text" value="">
           </label>
@@ -99,19 +99,21 @@ if(isset($_POST['submitPassword'])){
       ?>
       <form class="col-12" method="post" action="">
         <div>
-          <p><b>Passwort*:</b></p>
+          <p><b>Akutelles Passwort*:</b></p>
           <label>
-            <input placeholder="Aktuelles Passwort" class="input-userdata" type="password" name="password" value="">
+            <input class="input-userdata" type="password" name="password" value="">
           </label>
         </div>
         <div>
+          <p><b>Neues Passwort*:</b></p>
           <label>
-            <input placeholder="Neues Passwort" class="input-userdata" type="password" name="new_password" value="">
+            <input class="input-userdata" type="password" name="new_password" value="">
           </label>
         </div>
         <div>
+          <p><b>Neues Passwort wiederholen*:</b></p>
           <label>
-            <input placeholder="Passwort wiederholen" class="input-userdata" type="password" name="repeat_password" value="">
+            <input class="input-userdata" type="password" name="repeat_password" value="">
           </label>
         </div>
         <div class="space">

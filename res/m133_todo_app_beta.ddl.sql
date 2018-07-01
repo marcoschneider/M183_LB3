@@ -4,6 +4,11 @@ CREATE DATABASE IF NOT EXISTS m133_todo_app_beta;
 
 USE m133_todo_app_beta;
 
+CREATE TABLE group_log_state(
+  id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  state_name VARCHAR(255)
+);
+
 CREATE TABLE priority(
   id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   niveau VARCHAR(255)
@@ -63,3 +68,13 @@ CREATE TABLE todo(
   FOREIGN KEY (fk_user) REFERENCES user(id)
 );
 
+CREATE TABLE group_log(
+  id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  message VARCHAR(255) NOT NULL,
+  fk_group_log_state int(11) NOT NULL,
+  fk_user int(11) NOT NULL,
+  fk_todo int(11) NOT NULL,
+  FOREIGN KEY (fk_user) REFERENCES user(id),
+  FOREIGN KEY (fk_todo) REFERENCES todo(id),
+  FOREIGN KEY (fk_group_log_state) REFERENCES group_log_state(id)
+);

@@ -65,7 +65,7 @@ $username = $_SESSION['kernel']['userdata']['username'];
               'Favorite Links' => '?pages=support-links',
               'Aufgabenübersicht' => '?pages=todo-overview',
               'Gruppenübersicht' => '?pages=group-overview',
-              'Play Game'  => '?pages=game'
+              'Gruppen Log'  => '?pages=group-log'
             );
 
             $navigation =  createMenu($links);
@@ -126,6 +126,9 @@ $username = $_SESSION['kernel']['userdata']['username'];
               break;
             case 'game':
               include 'public/pages/game.php';
+              break;
+            case 'group-log':
+              include 'public/pages/groupLogs.php';
               break;
             case 'logout':
               session_unset();

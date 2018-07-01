@@ -1,0 +1,22 @@
+#group-log-table, #group-log-pending-table{
+  border-collapse: collapse;
+
+  thead td{
+    font-weight: bold;
+  }
+
+  thead, tbody{
+    td{
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    tr:nth-child(even){
+      background-color: #f2f2f2;
+    }
+
+    tr:hover {
+      background-color: #ddd;
+    }
+  }
+}

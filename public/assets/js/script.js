@@ -11,6 +11,10 @@ $(function(){
   if (document.URL === 'http://m133.test/?pages=userdata') {
     getUserdata();
   }
+  if (document.URL === 'http://m133.test/?pages=group-log'){
+    showInfoGroupLogs();
+    showPendingGroupLogs();
+  }
 
   //Event listeners
   $('#update-userdata').on("click", function () {
@@ -28,6 +32,15 @@ $(function(){
   $('#update-link-submit').on("click", function () {
     editLink();
   });
+
+  $('#group-log-trigger').on("click", function () {
+    saveInfoGroupLogs();
+  });
+
+  $('#delete-group-todo').on("click", function () {
+    savePendingGroupLogs();
+  });
+
 });
 
 function editLink() {
@@ -71,6 +84,81 @@ function getUserdata() {
     },
     error: function (e) {
       console.log(e);
+    }
+  })
+}
+
+function saveInfoGroupLogs() {
+
+  var todoID = $('#todo-id').val();
+  var uid = $('#user-id').val();
+
+  $.ajax({
+    url: ajaxUrl,
+    type: 'POST',
+    data: {
+      jsonData: JSON.stringify({
+        trigger: 'insertLogAfterEdit',
+        message: 'Dein Todo wurde bearbeitet',
+        todoID: todoID,
+        uid: uid
+      })
+    },
+    success: function (res) {
+      console.log(res);
+    }
+  });
+}
+
+function savePendingGroupLogs() {
+
+  var todoID = $('#todo-id').val();
+  var uid = $('#user-id').val();
+
+  $.ajax({
+    url: ajaxUrl,
+    type: 'POST',
+    data: {
+      jsonData: JSON.stringify({
+        trigger: 'insertLogAfterDelete',
+        message: 'Dein Todo wurde zur Löschung angefordert',
+        todoID: todoID,
+        uid: uid
+      })
+    },
+    success: function (res) {
+      console.log(res);
+    }
+  });
+}
+
+function showInfoGroupLogs() {
+  $.ajax({
+    url: ajaxUrl,
+    type: 'POST',
+    data: {
+      jsonData: JSON.stringify({
+        trigger: 'getInfoGroupLog'
+    })},
+    success: function (res) {
+      handler = new ResponseHandler(res);
+      handler.showInfoGroupLogs();
+    }
+  })
+}
+
+function showPendingGroupLogs() {
+  $.ajax({
+    url: ajaxUrl,
+    type: 'POST',
+    data: {
+      jsonData: JSON.stringify({
+        trigger: 'getPendingGroupLogs'
+      })},
+    success: function (res) {
+      handler = new ResponseHandler(res);
+      handler.showPendingGroupLogs();
+      console.log(res);
     }
   })
 }

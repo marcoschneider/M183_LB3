@@ -143,6 +143,7 @@ function getAllGroups($conn) {
       group_name,
       group_short
     FROM `group`
+    WHERE group_short != 'self-todo'
   ";
 
   $values = [];
@@ -185,28 +186,6 @@ function getAllProjects($conn) {
   }
 }
 
-//insert user edit in database
-/**
- * @param $conn
- * @param $uid
- * @param $values
- * @return bool
- */
-function updateUserdata($conn, $uid, $values)
-{
-  $sql = "UPDATE `user` SET `name` = '" . $values['name'] . "', `surname` = '" . $values['surname'] . "', `username` = '" . $values['username'] . "' WHERE id = '" . $uid . "'";
-
-  $updateResult = mysqli_query($conn, $sql);
-
-
-  if ($updateResult) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-
 /**
  * @param $conn
  * @param $values
@@ -226,6 +205,8 @@ function addTodo($conn, $values, $uid)
   $values['project'] = (int)$values['project'];
 
   $timestamp = time();
+
+  var_dump($timestamp);
 
   $sql = " INSERT INTO `todo` (
               `problem`,
@@ -336,6 +317,7 @@ function getTodoDetails($conn, $getId)
      todo.last_edit,
      todo.fk_priority,
      todo.website_url,
+     u.id AS 'uid',
      p.niveau,
      pr.project_name,
      pr.id AS 'project_id',
@@ -357,7 +339,7 @@ function getTodoDetails($conn, $getId)
   $result['fixed_date_edit'] = $result['fixed_date'] != 0 ? date("d.m.Y", $result['fixed_date']) : $result['fixed_date']  ;
   $result['fixed_date'] = $result['fixed_date'] != 0 ? date("d.m.Y", $result['fixed_date']) : $result['fixed_date'];
   $result['last_edit'] = $result['last_edit'] != null ? date("d.m.Y \\u\\m H:i", $result['last_edit']) : $result['last_edit'];
-  $result['creation_date'] = date("d.m.Y \\u\\m H:i", $result['creation_date']);
+  $result['creation_date'] = date("d.m.Y \\u\\m h:i:s", $result['creation_date']);
 
 
   if ($sqlResult) {
@@ -375,6 +357,7 @@ function getGroupTodos($conn, $groupname){
             todo.creation_date,
             p.niveau,
             todo.website_url,
+            u.id AS 'uid',
             u.username,
             u.firstname,
             u.surname,

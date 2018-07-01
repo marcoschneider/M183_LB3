@@ -75,25 +75,10 @@ $groups = getAllGroups($conn);
             Passwort:
             <input id="password" class="field-login" type="password" name="password-reg">
           </label>
-          <input class="login-button" type="submit" name="submit" value="Registrieren"/>
           <input id="register-button" class="login-button" type="button" value="Registrieren" />
           <a class="register-button" href="login.php">Anmelden</a>
         </form>
         <div class="clearer"></div>
-        <?php
-/*          if (isset($_POST['submit'])) {
-            if (count($errors) != 0) {
-              errorMessage($errors);
-            }
-          }
-        if (isset($_POST['submit'])){
-          if($registerError != ""){
-            errorMessage($registerError);
-          }elseif($registerSuccess != ""){
-            successMessage($registerSuccess);
-          }
-        }
-        */?>
       </div>
     </div>
     <div class="footer-login col-12">

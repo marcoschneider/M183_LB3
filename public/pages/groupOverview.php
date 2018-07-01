@@ -24,9 +24,14 @@ $resultStatus = countTodoStatus($conn, $uid);
             </div>
             <div class="action-links-wrapper">
               <a class="overview-action-links" href="?pages=edit-todo&id=<?= $result['id'] ?>">
-                <i class="fa fa-pencil-square-o fa-lg"></i>
+                <i class="fas fa-edit"></i>
+              </a>
+              <a id="delete-group-todo" class="overview-action-links">
+                <i class="fas fa-trash"></i>
               </a>
             </div>
+            <input id="user-id" type="hidden" value="<?= $result['uid']?>"/>
+            <input id="todo-id" type="hidden" value="<?= $result['id']?>"/>
             <div class="importance">
               <p class="group-informations"><?= $result['niveau'] ?></p>
               <p class="group-informations">Erstellt von: <span><?= $result['username'] ?></span></p>

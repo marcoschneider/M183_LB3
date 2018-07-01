@@ -9,6 +9,9 @@ VALUES
   ('Typo3','typo'),
   ('Agenturleitung','agl');
 
+INSERT INTO group_log_state(state_name) VALUES
+  ('info'),('pending'),('aproved'),('declined');
+
 INSERT INTO user
   (firstname, surname, username, password)
 VALUES
