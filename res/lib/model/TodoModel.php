@@ -20,4 +20,29 @@ class TodoModel {
 
   }
 
+  public function getLastGroupTodo($uid) {
+
+    $output = [];
+
+    $sql = "
+      SELECT
+       id 
+      FROM m133_todo_app_beta.todo 
+      WHERE fk_user = " . $uid . "
+        ORDER BY id 
+      DESC LIMIT 1;
+    ";
+
+    $result = $this->conn->query($sql);
+
+    if ($result) {
+      while ($row = $result->fetch_assoc()) {
+        $output[] = $row;
+      }
+      return $output;
+    }else{
+      return false;
+    }
+  }
+
 }

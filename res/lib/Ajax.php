@@ -100,9 +100,9 @@ class Ajax
 
 $userModel = new UserModel($conn, $uid);
 $userController = new UserController($userModel);
-$groupLogModel = new GroupLogModel($userModel);
-$groupLogController = new GroupLogController($groupLogModel);
 $todoModel = new TodoModel($userModel);
+$groupLogModel = new GroupLogModel($userModel, $todoModel);
+$groupLogController = new GroupLogController($groupLogModel);
 
 $ajax = new Ajax($userModel, $userController, $groupLogModel, $groupLogController, $todoModel);
 $ajax->getRequest();

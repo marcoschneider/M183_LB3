@@ -128,6 +128,9 @@ function savePendingGroupLogs() {
     },
     success: function (res) {
       console.log(res);
+      if (res === true) {
+        toastr.success("Das Todo wurde zur Löschung beantragt");
+      }
     }
   });
 }

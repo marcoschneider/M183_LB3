@@ -3,15 +3,21 @@
   class GroupLogModel{
 
     private $userModel;
+    private $todoModel;
 
     private $conn;
 
-    public function __construct(UserModel $userModel) {
+    public function __construct(UserModel $userModel, TodoModel $todoModel) {
       $this->userModel = $userModel;
+      $this->todoModel = $todoModel;
+
       $this->conn = $this->userModel->conn;
     }
 
     public function insertTodoConfirmationLog($message, $todoID, $logState, $creatorID) {
+
+      $lastGroupId = $this->todoModel->getLastGroupTodo($this->userModel->uid);
+
       if ($creatorID != $this->userModel->uid) {
         $sql = "
         INSERT INTO group_log
@@ -23,7 +29,7 @@
           " . $this->userModel->uid . ",
           " . $todoID . ",
           " . $creatorID . "
-        ) 
+        )
       ";
 
         $result = $this->conn->query($sql);
@@ -34,24 +40,23 @@
           return $result;
         }
       }
-
     }
 
     public function insertGroupLog($message, $todoID, $logState, $creatorID) {
 
       if ($creatorID != $this->userModel->uid) {
         $sql = "
-        INSERT INTO group_log
-        (message, fk_group_log_state, fk_user, fk_todo, fk_user_creator)
-        VALUES
-        (
-          '" . $message . "',
-          " . $logState . ",
-          " . $this->userModel->uid . ",
-          " . $todoID . ",
-          " . $creatorID . "
-        ) 
-      ";
+          INSERT INTO group_log
+            (message, fk_group_log_state, fk_user, fk_todo, fk_user_creator)
+          VALUES
+            (
+              '" . $message . "',
+              " . $logState . ",
+              " . $this->userModel->uid . ",
+              " . $todoID . ",
+              " . $creatorID . "
+            ) 
+        ";
 
         $result = $this->conn->query($sql);
 
