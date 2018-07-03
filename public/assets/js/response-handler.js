@@ -52,7 +52,10 @@ class ResponseHandler{
         output += `<td>${this.res[i].message}</td>`;
         output += `<td>${this.res[i].title}</td>`;
         output += `<td>${this.res[i].username}</td>`;
-        output += `<td><button id="confirm-delete-group-todo" class="button-default">Bestätigen</button></td>`;
+        output += `<td>
+                    <button id="confirm-delete-group-todo" class="button-default">Bestätigen</button>
+                    <input type="hidden" id="todo-id" value="${this.res[i].todoID}"/>
+                    </td>`;
         output += '</tr>';
       }
       tableBody.innerHTML = output;

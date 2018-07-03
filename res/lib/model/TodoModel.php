@@ -16,8 +16,19 @@ class TodoModel {
     $this->conn = $userModel->conn;
   }
 
-  public function deleteGroupTodo() {
+  public function deleteGroupTodo($todoID) {
+    $sql = "
+      DELETE FROM todo
+      WHERE id = " . $todoID . "
+    ";
 
+    $result = $this->conn->query($sql);
+
+    if ($result) {
+      return 'deletedTodo';
+    }else{
+      return $this->conn->error;
+    }
   }
 
   public function getLastGroupTodo($uid) {

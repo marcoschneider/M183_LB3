@@ -36,7 +36,7 @@
     <header class="row">
       <div class="col-12">
         <div class="brand-logo">
-          <img class="logo" src="../assets/img/logo.svg"/>
+          <img class="logo" src="../assets/img/vectorpaint.svg"/>
         </div>
       </div>
     </header>

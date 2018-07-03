@@ -29,16 +29,20 @@ $(function(){
     register_user();
   });
 
-  $('#update-link-submit').on("click", function () {
+  $(document).on("click", '#update-link-submit', function () {
     editLink();
   });
 
-  $('#group-log-trigger').on("click", function () {
+  $(document).on("click", '#group-log-trigger', function () {
     saveInfoGroupLogs();
   });
 
-  $('#delete-group-todo').on("click", function () {
-    savePendingGroupLogs();
+  $(document).on("click", "#delete-group-todo", function () {
+    insertLogAfterDelete();
+  });
+
+  $(document).on("click", "#confirm-delete-group-todo", function () {
+    confirmDeleteGroupTodo();
   });
 
 });
@@ -110,7 +114,7 @@ function saveInfoGroupLogs() {
   });
 }
 
-function savePendingGroupLogs() {
+function insertLogAfterDelete() {
 
   var todoID = $('#todo-id').val();
   var uid = $('#user-id').val();
@@ -130,6 +134,8 @@ function savePendingGroupLogs() {
       console.log(res);
       if (res === true) {
         toastr.success("Das Todo wurde zur Löschung beantragt");
+      }else if(res === 'deletedTodo'){
+        window.location.replace("/../?pages=group-overview");
       }
     }
   });
@@ -161,9 +167,30 @@ function showPendingGroupLogs() {
     success: function (res) {
       handler = new ResponseHandler(res);
       handler.showPendingGroupLogs();
-      console.log(res);
     }
   })
+}
+
+function confirmDeleteGroupTodo() {
+
+  var todoID = $('#todo-id').val();
+
+  $.ajax({
+    url: ajaxUrl,
+    type: 'POST',
+    data: {
+      jsonData: JSON.stringify({
+        trigger: 'deleteGroupTodo',
+        idOfTodo: todoID
+      })
+    },
+    success: function (res) {
+      console.log(res);
+      if (res === true) {
+        showPendingLogsTimeout(50);
+      }
+    }
+  });
 }
 
 function changeUserdata() {
@@ -182,7 +209,7 @@ function changeUserdata() {
     })},
     success: function (res) {
       if (res === true) {
-        timeout(50);
+        getUserdataTimeout(50);
         toastr.success("Die Benutzerdaten wurden aktualisiert");
       }else{
         for (var i = 0; i < res.length; i++) {
@@ -269,8 +296,14 @@ function customSelect(elementID) {
   });
 }
 
-function timeout($timeout) {
+function getUserdataTimeout($timeout) {
   setTimeout(function () {
     getUserdata();
+  }, $timeout);
+}
+
+function showPendingLogsTimeout($timeout) {
+  setTimeout(function () {
+    showPendingGroupLogs();
   }, $timeout);
 }

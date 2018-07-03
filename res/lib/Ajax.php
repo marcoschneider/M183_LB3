@@ -78,10 +78,13 @@ class Ajax
         $result = $this->groupLogModel->insertGroupLog($action->message, $action->todoID, 1, $action->uid);
         break;
       case 'insertLogAfterDelete':
-        $result = $this->groupLogModel->insertTodoConfirmationLog($action->message, $action->todoID, 2, $action->uid);
+        $result = $this->groupLogModel->insertLogAfterDelete($action->message, $action->todoID, 2, $action->uid);
         break;
       case 'getInfoGroupLog':
         $result = $this->groupLogModel->getInfoGroupLog();
+        break;
+      case 'deleteGroupTodo':
+        $result = $this->todoModel->deleteGroupTodo($action->idOfTodo);
         break;
       case 'getPendingGroupLogs':
         $result = $this->groupLogModel->getPendingGroupLogs();

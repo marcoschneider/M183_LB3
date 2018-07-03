@@ -14,7 +14,7 @@
       $this->conn = $this->userModel->conn;
     }
 
-    public function insertTodoConfirmationLog($message, $todoID, $logState, $creatorID) {
+    public function insertLogAfterDelete($message, $todoID, $logState, $creatorID) {
 
       $lastGroupId = $this->todoModel->getLastGroupTodo($this->userModel->uid);
 
@@ -37,8 +37,11 @@
         if ($result) {
           return true;
         }else{
-          return $result;
+          return $this->conn->error;
         }
+      }else{
+        $result = $this->todoModel->deleteGroupTodo($todoID);
+        return $result;
       }
     }
 
@@ -79,6 +82,7 @@
           uc.username as 'todoCreator',
           gl.message,
           u.username,
+          t.id AS 'todoID',
           t.title
         FROM group_log gl
           INNER JOIN todo t on gl.fk_todo = t.id
@@ -109,6 +113,7 @@
         SELECT
           gl.message,
           u.username,
+          t.id AS 'todoID',
           t.title
         FROM group_log gl
           INNER JOIN todo t on gl.fk_todo = t.id

@@ -52,7 +52,9 @@ $username = $_SESSION['kernel']['userdata']['username'];
             <a class="button-default" href="?pages=logout"><i class="fas fa-sign-out-alt fa-2x"></i></a>
           </div>
           <div class="col brand-logo">
-            <a href="?pages=support-links "><img class="logo" src="public/assets/img/logo.svg"/></a>
+            <a href="?pages=support-links ">
+              <img class="logo" src="public/assets/img/vectorpaint.svg"/>
+            </a>
           </div>
           <div class="col valign-wrapper flex-end">
             <a class="button-default white-text right" href="?pages=userdata" ><i class="fas fa-user"></i><?= $username?></a>

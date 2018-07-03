@@ -77,4 +77,5 @@ CREATE TABLE group_log(
   FOREIGN KEY (fk_user) REFERENCES user(id),
   FOREIGN KEY (fk_todo) REFERENCES todo(id),
   FOREIGN KEY (fk_group_log_state) REFERENCES group_log_state(id)
+  ON DELETE CASCADE
 );
