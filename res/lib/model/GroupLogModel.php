@@ -106,7 +106,7 @@
       }
     }
 
-    public function getPendingGroupLogs() {
+    public function getPendingGroupLog() {
       $output = [];
 
       $sql = "

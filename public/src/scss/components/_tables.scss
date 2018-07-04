@@ -20,3 +20,26 @@
     }
   }
 }
+
+
+#color-legend-table{
+  border-collapse: collapse;
+  margin-top: 10px;
+
+  /*thead td{
+    font-weight: bold;
+  }*/
+
+  tbody td{
+    padding: 8px;
+
+    .color-legend-square{
+      width: 10px;
+      height: 10px;
+    }
+
+    .orange{
+      background-color: #f39c12;
+    }
+  }
+}

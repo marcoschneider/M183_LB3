@@ -35,6 +35,7 @@
       <table id="group-log-pending-table">
         <thead>
         <tr>
+          <td>Todo ID</td>
           <td>Status Nachricht</td>
           <td>Todo Titel</td>
           <td>Angefordert von</td>

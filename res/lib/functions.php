@@ -206,8 +206,6 @@ function addTodo($conn, $values, $uid)
 
   $timestamp = time();
 
-  var_dump($timestamp);
-
   $sql = " INSERT INTO `todo` (
               `problem`,
               `fixed_date`,
@@ -362,11 +360,13 @@ function getGroupTodos($conn, $groupname){
             u.firstname,
             u.surname,
             todo.todo_status,
-            g.group_name
+            g.group_name,
+            gl.fk_group_log_state
           FROM m133_todo_app_beta.todo
             INNER JOIN user u ON(u.id = todo.fk_user)
             INNER JOIN priority p ON (todo.fk_priority = p.id)
             INNER JOIN `group` g on (todo.fk_group = g.id)
+            LEFT JOIN group_log gl on todo.id = gl.fk_todo
           WHERE g.group_name = '" . $groupname . "'
           ORDER BY p.id ASC";
 

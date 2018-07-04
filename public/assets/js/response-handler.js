@@ -49,6 +49,7 @@ class ResponseHandler{
     if (this.res.length !== 0) {
       for (var i = 0; i < this.res.length; i++) {
         output += '<tr>';
+        output += `<td>${this.res[i].todoID}</td>`;
         output += `<td>${this.res[i].message}</td>`;
         output += `<td>${this.res[i].title}</td>`;
         output += `<td>${this.res[i].username}</td>`;

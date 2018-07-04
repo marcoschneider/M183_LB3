@@ -16,6 +16,18 @@ $(function(){
     showPendingGroupLogs();
   }
 
+  var todoLogState = $('.todo-log-status');
+  var actionLinkWrapper = document.getElementsByClassName('action-links-wrapper');
+  todoLogState.each(function (i) {
+    switch (todoLogState[i].value) {
+      case '2':
+        todoLogState[i].parentNode.style = "background: #f39c12";
+        console.log(todoLogState[i].parentNode);
+        console.log(actionLinkWrapper[i]);
+        break;
+    }
+  });
+
   //Event listeners
   $('#update-userdata').on("click", function () {
     changeUserdata();
@@ -37,8 +49,8 @@ $(function(){
     saveInfoGroupLogs();
   });
 
-  $(document).on("click", "#delete-group-todo", function () {
-    insertLogAfterDelete();
+  $('[data-trigger]').on("click", function (event) {
+    insertLogAfterDelete(event);
   });
 
   $(document).on("click", "#confirm-delete-group-todo", function () {
@@ -114,10 +126,10 @@ function saveInfoGroupLogs() {
   });
 }
 
-function insertLogAfterDelete() {
+function insertLogAfterDelete(event) {
 
-  var todoID = $('#todo-id').val();
-  var uid = $('#user-id').val();
+  var todoID = event.target.parentNode.getAttribute('id');
+  var uid = event.target.parentNode.getAttribute('data-uid');
 
   $.ajax({
     url: ajaxUrl,
@@ -134,6 +146,9 @@ function insertLogAfterDelete() {
       console.log(res);
       if (res === true) {
         toastr.success("Das Todo wurde zur Löschung beantragt");
+        setTimeout(function () {
+          window.location.replace("/../?pages=group-overview");
+        }, 2000);
       }else if(res === 'deletedTodo'){
         window.location.replace("/../?pages=group-overview");
       }
@@ -186,7 +201,7 @@ function confirmDeleteGroupTodo() {
     },
     success: function (res) {
       console.log(res);
-      if (res === true) {
+      if (res === 'deletedTodo') {
         showPendingLogsTimeout(50);
       }
     }

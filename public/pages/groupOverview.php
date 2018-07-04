@@ -2,6 +2,7 @@
 
 $arrayResult = getGroupTodos($conn, $groupname);
 $resultStatus = countTodoStatus($conn, $uid);
+
 ?>
 <div class="container">
   <div class="row">
@@ -26,17 +27,16 @@ $resultStatus = countTodoStatus($conn, $uid);
               <a class="overview-action-links" href="?pages=edit-todo&id=<?= $result['id'] ?>">
                 <i class="fas fa-edit"></i>
               </a>
-              <a id="delete-group-todo" class="overview-action-links">
+              <a  id="<?= $result['id']?>" data-uid="<?= $result['uid']?>" data-trigger="delete-group-todo" class="overview-action-links">
                 <i class="fas fa-trash"></i>
               </a>
             </div>
-            <input id="user-id" type="hidden" value="<?= $result['uid']?>"/>
-            <input id="todo-id" type="hidden" value="<?= $result['id']?>"/>
             <div class="importance">
               <p class="group-informations"><?= $result['niveau'] ?></p>
               <p class="group-informations">Erstellt von: <span><?= $result['username'] ?></span></p>
             </div>
           </a>
+          <input class="todo-log-status" type="hidden" value="<?= $result['fk_group_log_state']?>"/>
           <div class="clearer"></div>
         </div>
         <?php
@@ -46,5 +46,25 @@ $resultStatus = countTodoStatus($conn, $uid);
     }
 
     ?>
+  </div>
+  <div class="space"></div>
+  <div class="row">
+    <div class="col-8">
+      <h2>Farben Legende</h2>
+      <table id="color-legend-table">
+        <thead>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="color-legend-square orange"></div></td>
+            <td>Das Todo wurde zur Löschung angefordert</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
