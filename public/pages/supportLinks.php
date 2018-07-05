@@ -30,7 +30,7 @@ if (isset($_POST['submit']) || isset($_POST['update-link'])){
   }
 }
 
-$result = getLinks($conn, $uid);
+$links = getLinks($conn, $uid);
 
 //Delete form validation
 if(isset($_POST['delete-link-submit'])) {
@@ -49,9 +49,9 @@ if(isset($_POST['delete-link-submit'])) {
       <h2 class="space">Wichtie Links</h2>
       <div class="support-links">
         <?php
-        if($result != false){
+        if($links != false){
             $ul = '<ul>';
-            foreach ($result as $link) {
+            foreach ($links as $link) {
               $ul .= '<li><a target="_blank" href="' . $link['link_url'] . '">' . $link['link_name'] . '<span class="link-id">' . $link['id'] . '</span></a></li>';
             }
             $ul .= '</ul>';
@@ -118,22 +118,18 @@ if(isset($_POST['delete-link-submit'])) {
         <?php
         if (isset($_POST['delete-link-submit'])){
           if (empty($errors)){
-            foreach($result as $link){
+            foreach($links as $link){
               if($values['link-to-delete'] === $link['id']){
                 $link_id = $values['link-to-delete'];
+
                 $resultDelete = deleteLink($conn, $uid, $link_id);
                 if ($resultDelete === true) {
                   redirect("?pages=support-links");
                 }else{
                   $errors['delete-link-query'] = $resultDelete;
                 }
-              }else{
-                $errors['link-to-delete'] = "Link mit der ID: " . $link_id . " existiert nicht";
               }
             }
-            echo '<div class="space">';
-              errorMessage($errors);
-            echo '</div>';
           }else{
             echo '<div class="space">';
               errorMessage($errors);

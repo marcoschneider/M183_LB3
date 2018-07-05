@@ -54,7 +54,6 @@ $(function(){
   });
 
   $(document).on("click", '.confirm-delete-group-todo', function (event) {
-    console.log(event.target.className);
     if (event.target.className === 'button-default confirm-delete-group-todo') {
       confirmDeleteGroupTodo(event);
     }
@@ -89,9 +88,6 @@ function editLink() {
 
       $('#update-link-trigger').replaceWith(updateInputSubmit);
       $('#add-link').append(hiddenLinkIdInput);
-    }else{
-      var error = "<div class='failbox'>Dieser Link existiert nicht</div>";
-      $('#update-edit-link-form').append(error);
     }
   });
 }

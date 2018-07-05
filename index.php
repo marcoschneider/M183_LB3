@@ -8,7 +8,6 @@ session_start();
 //import configs and import lib
 require 'res/config.inc.php';
 require LIBRARY_PATH.'/functions.php';
-require LIBRARY_PATH.'/model/UserModel.php';
 
 $conn = Config::getDb();
 
