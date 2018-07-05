@@ -31,6 +31,21 @@ class TodoModel {
     }
   }
 
+  public function declineDeleteGroupTodo($todoID) {
+    $sql = "
+      DELETE FROM group_log
+      WHERE fk_todo = " . $todoID . "
+    ";
+
+    $result = $this->conn->query($sql);
+
+    if ($result) {
+      return true;
+    }else{
+      return $this->conn->error;
+    }
+  }
+
   public function getLastGroupTodo($uid) {
 
     $output = [];

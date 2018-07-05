@@ -21,7 +21,6 @@ $(function(){
     switch (todoLogState[i].value) {
       case '2':
         todoLogState[i].parentNode.style = "background: #f39c12";
-        console.log(todoLogState[i]);
         todoLogState[i].previousElementSibling.previousElementSibling.remove();
         break;
     }
@@ -48,12 +47,23 @@ $(function(){
     saveInfoGroupLogs();
   });
 
-  $('[data-trigger]').on("click", function (event) {
-    insertLogAfterDelete(event);
+  $('.todo-wrapper').on("click", function (event) {
+    if (event.target.className === 'fas fa-trash') {
+      insertLogAfterDelete(event);
+    }
   });
 
-  $(document).on("click", "#confirm-delete-group-todo", function () {
-    confirmDeleteGroupTodo();
+  $(document).on("click", '.confirm-delete-group-todo', function (event) {
+    console.log(event.target.className);
+    if (event.target.className === 'button-default confirm-delete-group-todo') {
+      confirmDeleteGroupTodo(event);
+    }
+  });
+
+  $(document).on("click", '.decline-delete-group-todo', function (event) {
+    if (event.target.className === '') {
+      declineDeleteGroupTodo(event);
+    }
   });
 
 });
@@ -130,8 +140,6 @@ function insertLogAfterDelete(event) {
   var todoID = event.target.parentNode.getAttribute('id');
   var uid = event.target.parentNode.getAttribute('data-uid');
 
-  console.log(todoID, uid);
-
   $.ajax({
     url: ajaxUrl,
     type: 'POST',
@@ -144,7 +152,6 @@ function insertLogAfterDelete(event) {
       })
     },
     success: function (res) {
-      console.log(res);
       if (res === true) {
         toastr.success("Das Todo wurde zur Löschung beantragt");
         setTimeout(function () {
@@ -187,9 +194,9 @@ function showPendingGroupLogs() {
   })
 }
 
-function confirmDeleteGroupTodo() {
+function confirmDeleteGroupTodo(event) {
 
-  var todoID = $('#todo-id').val();
+  var todoID = event.target.parentNode.lastElementChild.value;
 
   $.ajax({
     url: ajaxUrl,
@@ -201,8 +208,27 @@ function confirmDeleteGroupTodo() {
       })
     },
     success: function (res) {
-      console.log(res);
       if (res === 'deletedTodo') {
+        showPendingLogsTimeout(50);
+      }
+    }
+  });
+}
+
+function declineDeleteGroupTodo(event) {
+  var todoID = event.target.parentNode.lastElementChild.value;
+
+  $.ajax({
+    url: ajaxUrl,
+    type: 'POST',
+    data: {
+      jsonData: JSON.stringify({
+        trigger: 'declineDeleteTodo',
+        idOfTodo: todoID
+      })
+    },
+    success: function (res) {
+      if (res === true) {
         showPendingLogsTimeout(50);
       }
     }

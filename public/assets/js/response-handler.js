@@ -53,9 +53,11 @@ class ResponseHandler{
         output += `<td>${this.res[i].message}</td>`;
         output += `<td>${this.res[i].title}</td>`;
         output += `<td>${this.res[i].username}</td>`;
-        output += `<td>
-                    <button id="confirm-delete-group-todo" class="button-default">Bestätigen</button>
-                    <input type="hidden" id="todo-id" value="${this.res[i].todoID}"/>
+        output += `<td class="log-table-actions">
+                    <button class="button-default confirm-delete-group-todo">Bestätigen</button>
+                    <div class="space"></div>
+                    <button class="button-default do-not-delete">Abbrechen</button>
+                    <input type="hidden" class="group-log-table-todo-id" value="${this.res[i].todoID}"/>
                     </td>`;
         output += '</tr>';
       }

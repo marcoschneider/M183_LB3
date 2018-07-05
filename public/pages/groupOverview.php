@@ -27,7 +27,7 @@ $resultStatus = countTodoStatus($conn, $uid);
               <a class="overview-action-links" href="?pages=edit-todo&id=<?= $result['id'] ?>">
                 <i class="fas fa-edit"></i>
               </a>
-              <a  id="<?= $result['id']?>" data-uid="<?= $result['uid']?>" data-trigger="delete-group-todo" class="overview-action-links">
+              <a  id="<?= $result['id']?>" data-uid="<?= $result['uid']?>" class="overview-action-links delete-group-todo">
                 <i class="fas fa-trash"></i>
               </a>
             </div>
