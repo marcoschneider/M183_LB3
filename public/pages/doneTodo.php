@@ -16,7 +16,7 @@ if(isset($_GET['pages']) && $_GET['pages'] === 'done-todo') {
 }
 
 if (isset($getId) && $getId != '') {
-  $doneTodoResponse = doneTodo($conn, $uid, $getId);
+  $doneTodoResponse = doneTodo($conn, 2, $uid, $getId);
   if ($doneTodoResponse === true) {
     redirect('?pages=todo-overview');
   }else {

@@ -81,7 +81,9 @@ if(isset($_POST['delete-link-submit'])) {
         if (count($errors) <= 0) {
           $updateResult = updateLink($conn, $values, $uid);
           if ($updateResult === true) {
-            redirect('?pages=support-links');
+            ?> <script type="text/javascript">
+              window.location.replace("?pages=support-links");
+            </script><?php
           }else{
             $errors['message'] = $updateResult;
           }
@@ -123,8 +125,11 @@ if(isset($_POST['delete-link-submit'])) {
                 $link_id = $values['link-to-delete'];
 
                 $resultDelete = deleteLink($conn, $uid, $link_id);
+
                 if ($resultDelete === true) {
-                  redirect("?pages=support-links");
+                  ?> <script type="text/javascript">
+                    window.location.replace("?pages=support-links");
+                  </script><?php
                 }else{
                   $errors['delete-link-query'] = $resultDelete;
                 }
@@ -151,11 +156,6 @@ if(isset($_POST['delete-link-submit'])) {
         <div class="space"></div>
         <button id="update-link-submit" type="button" class="button-default">Link bearbeiten</button>
       </form>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
-
     </div>
   </div>
 </div>

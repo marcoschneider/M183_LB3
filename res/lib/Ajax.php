@@ -88,6 +88,7 @@ class Ajax
         break;
       case 'declineDeleteTodo':
         $result = $this->todoModel->declineDeleteGroupTodo($action->idOfTodo);
+        break;
       case 'getPendingGroupLogs':
         $result = $this->groupLogModel->getPendingGroupLog();
         break;

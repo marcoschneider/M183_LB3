@@ -56,7 +56,7 @@ class ResponseHandler{
         output += `<td class="log-table-actions">
                     <button class="button-default confirm-delete-group-todo">Bestätigen</button>
                     <div class="space"></div>
-                    <button class="button-default do-not-delete">Abbrechen</button>
+                    <button class="button-default do-not-delete decline-delete-group-todo">Abbrechen</button>
                     <input type="hidden" class="group-log-table-todo-id" value="${this.res[i].todoID}"/>
                     </td>`;
         output += '</tr>';

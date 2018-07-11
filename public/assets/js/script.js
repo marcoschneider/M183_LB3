@@ -60,7 +60,7 @@ $(function(){
   });
 
   $(document).on("click", '.decline-delete-group-todo', function (event) {
-    if (event.target.className === '') {
+    if (event.target.className === 'button-default do-not-delete decline-delete-group-todo') {
       declineDeleteGroupTodo(event);
     }
   });

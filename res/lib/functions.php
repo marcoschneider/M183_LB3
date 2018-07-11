@@ -7,6 +7,9 @@
  * @param $page
  */
 
+/**
+ * @author vsefa
+ */
 // redirect user to page
 function redirect($page)
 {
@@ -81,42 +84,9 @@ function sqlErrors($mysqli_errno) {
   return $mysqli_custom_error;
 }
 
-
-//insert registration in DB
 /**
- * @param $name
- * @param $surname
- * @param $conn
- * @param $username_reg
- * @param $password_reg
- * @return bool
- */
-function insertRegister($name, $surname, $team, $conn, $username_reg, $password_reg)
-{
-
-  $sql = "
-  INSERT INTO `user` 
-    (`firstname`, `surname`, `password`, `username` , `fk_group`) 
-  VALUES  (
-    '" . $name . "',
-    '" . $surname . "',
-    '" . hash("sha256", $password_reg) . "',
-    '" . $username_reg . "',
-    '" . $team . "'
-  )";
-
-  $registerResult = mysqli_query($conn, $sql) or die(mysqli_errno($conn));
-
-  if ($registerResult) {
-    return true;
-  } else {
-    return $registerResult;
-  }
-}
-
-
-//insert user edit in database
-/**
+ * Updates User Credentials.
+ *
  * @param $conn
  * @param $uid
  * @param $newPassword
@@ -135,7 +105,12 @@ function updateUserCredentials($conn, $uid, $newPassword)
   }
 }
 
-
+/**
+ * Gets all groups.
+ *
+ * @param $conn
+ * @return array|bool|mysqli_result
+ */
 function getAllGroups($conn) {
   $sql = "
     SELECT
@@ -161,7 +136,12 @@ function getAllGroups($conn) {
   }
 }
 
-
+/**
+ * Gets all projects.
+ *
+ * @param $conn
+ * @return array|bool|mysqli_result
+ */
 function getAllProjects($conn) {
   $sql = "
     SELECT 
@@ -187,6 +167,8 @@ function getAllProjects($conn) {
 }
 
 /**
+ * Inserts Todo into DB.
+ *
  * @param $conn
  * @param $values
  * @param $uid
@@ -195,8 +177,6 @@ function getAllProjects($conn) {
  * @internal param $date
  * @internal param $id
  */
-
-//insert To-do into DB
 function addTodo($conn, $values, $uid)
 {
 
@@ -240,6 +220,8 @@ function addTodo($conn, $values, $uid)
 }
 
 /**
+ * Deletes eigentodo.
+ *
  * @param $conn
  * @param $uid
  * @param $getId
@@ -259,6 +241,8 @@ function deleteTodo($conn, $uid, $getId)
 }
 
 /**
+ * Updates Edit in Database.
+ *
  * @param $conn
  * @param $values
  * @param $getId
@@ -272,6 +256,8 @@ function saveEdit($conn, $values, $getId, $uid)
 
   $values['project'] = (int)$values['project'];
   $values['todo-type'] = (int)$values['todo-type'];
+
+  var_dump($values);
 
   $sql = "
     UPDATE todo
@@ -298,6 +284,8 @@ function saveEdit($conn, $values, $getId, $uid)
 
 
 /**
+ * Gets all tododetails.
+ *
  * @param $conn
  * @param $getId
  * @return array|bool
@@ -347,6 +335,15 @@ function getTodoDetails($conn, $getId)
   }
 }
 
+/**
+ * @author maschneider
+ *
+ * Gets all group todos.
+ *
+ * @param $conn
+ * @param $groupname
+ * @return array|bool|mysqli_result
+ */
 function getGroupTodos($conn, $groupname){
   $sql = "SELECT
             todo.id,
@@ -392,6 +389,14 @@ function getGroupTodos($conn, $groupname){
   }
 }
 
+/**
+ * Deletes Group todo.
+ *
+ * @param $conn
+ * @param $todoID
+ * @param $uid
+ * @return bool|mysqli_result
+ */
 function deleteGroupTodos($conn, $todoID, $uid) {
   $sql = "
     DELETE FROM todo
@@ -409,6 +414,8 @@ function deleteGroupTodos($conn, $todoID, $uid) {
 }
 
 /**
+ * Gets all todos.
+ *
  * @param $conn
  * @param $uid
  * @return array|bool
@@ -457,6 +464,14 @@ function getTodos($conn, $uid)
   }
 }
 
+/**
+ * Deletes Link with id.
+ *
+ * @param $conn
+ * @param $uid
+ * @param $link_id
+ * @return bool|mysqli_result
+ */
 function deleteLink($conn, $uid, $link_id){
 
   $uid = (int)$uid;
@@ -478,6 +493,14 @@ function deleteLink($conn, $uid, $link_id){
 
 }
 
+/**
+ * Updates Link with id and values.
+ *
+ * @param $conn
+ * @param $values
+ * @param $uid
+ * @return bool|mysqli_result
+ */
 function updateLink($conn, $values, $uid) {
   $uid = (int)$uid;
 
@@ -502,6 +525,8 @@ function updateLink($conn, $values, $uid) {
 }
 
 /**
+ * Adds link.
+ *
  * @param $conn
  * @param $values
  * @param $uid
@@ -532,6 +557,8 @@ function addLink($conn, $values, $uid)
 }
 
 /**
+ * Gets all links.
+ *
  * @param $conn
  * @param $uid
  * @return array|bool
@@ -560,18 +587,20 @@ function getLinks($conn, $uid)
 }
 
 /**
+ * Changes status of todo.
+ *
  * @param $conn
  * @param $uid§
  * @param $getId
  * @return bool
  */
-function doneTodo($conn, $uid, $getId)
+function doneTodo($conn, $todoStatus, $uid, $getId)
 {
 
   $sql = "UPDATE
             `todo` 
          SET
-            `todo_status` = 0
+            `todo_status` = " . $todoStatus . "
          WHERE `todo`.`id` = '" . $getId . "' AND fk_user = '" . $uid . "'";
 
   $updateTodoStatus = mysqli_query($conn, $sql) or die(mysqli_error($conn));
@@ -580,31 +609,6 @@ function doneTodo($conn, $uid, $getId)
     return true;
   } else {
     return $updateTodoStatus;
-  }
-}
-
-/**
- * @param $conn
- * @param $uid
- * @param $getId
- * @return bool
- */
-function updateTodoStatus($conn, $uid, $getId)
-{
-
-  $sql = "
-  UPDATE
-    `todo`
-  SET
-    `todo_status` = 1
-  WHERE `todo`.`id` = '" . $getId . "' AND fk_user = '" . $uid . "'";
-
-  $updateTodoStatus = mysqli_query($conn, $sql);
-
-  if ($updateTodoStatus) {
-    return true;
-  } else {
-    return false;
   }
 }
 
