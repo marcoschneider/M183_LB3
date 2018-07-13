@@ -11,7 +11,6 @@ require_once 'model/UserModel.php';
 require_once 'model/GroupLogModel.php';
 require_once 'model/TodoModel.php';
 require_once 'controller/UserController.php';
-require_once 'controller/GroupLogController.php';
 
 session_start();
 $conn = Config::getDb();
@@ -32,15 +31,13 @@ class Ajax
   private $userModel;
   private $userController;
   private $groupLogModel;
-  private $groupLogController;
   private $todoModel;
 
   public function __construct(UserModel $userModel, UserController $userController,
-                              GroupLogModel $groupLogModel, GroupLogController $groupLogController,
+                              GroupLogModel $groupLogModel,
                               TodoModel $todoModel) {
     $this->userModel = $userModel;
     $this->userController = $userController;
-    $this->groupLogController = $groupLogController;
     $this->groupLogModel = $groupLogModel;
     $this->todoModel = $todoModel;
 
@@ -122,9 +119,8 @@ $userModel = new UserModel($conn, $uid);
 $userController = new UserController($userModel);
 $todoModel = new TodoModel($userModel);
 $groupLogModel = new GroupLogModel($userModel, $todoModel);
-$groupLogController = new GroupLogController($groupLogModel);
 
-$ajax = new Ajax($userModel, $userController, $groupLogModel, $groupLogController, $todoModel);
+$ajax = new Ajax($userModel, $userController, $groupLogModel, $todoModel);
 $ajax->getRequest();
 
 ?>
