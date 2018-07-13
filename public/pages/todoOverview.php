@@ -2,7 +2,6 @@
 
 $todos = getTodos($conn, $uid);
 $resultStatus = countTodoStatus($conn, $uid);
-
 ?>
 <div class="container">
   <div class="row">

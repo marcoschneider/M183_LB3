@@ -13,6 +13,8 @@ $getId = $_GET['id'];
 //Gets todo Details
 $projects = getAllProjects($conn);
 $todo = getTodoDetails($conn, $getId);
+$priorities = getAllPriorities($conn);
+
 //Loop through returned Array
 if (isset($_GET['id']) && $_GET['id'] != '') {
   $result = $todo;
@@ -100,36 +102,21 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
         <div class="space-with-border"></div>
         <fieldset class="fieldset">
           <?php
-          echo (isset($errors['niveau']) && in_array($errors['niveau'], $errors))
-            ? '<legend class="legend text-error">Wichtigkeit*</legend>'
-            : '<legend class="legend">Wichtigkeit*</legend>';
-          ?>
-          <label>
-            <input type="radio" name="niveau" value="1" <?php
-            echo (!empty($result['fk_priority']) && $result['fk_priority'] == '1')
-              ? 'checked'
-              : '';
-            ?>>
-            High
-          </label>
-          <br>
-          <label>
-            <input type="radio" name="niveau" value="2" <?php
-            echo (!empty($result['fk_priority']) && $result['fk_priority'] == '2')
-              ? 'checked'
-              : '';
-            ?>>
-            Normal
-          </label>
-          <br>
-          <label>
-            <input type="radio" name="niveau" value="3" <?php
-            echo (!empty($result['fk_priority']) && $result['fk_priority'] == '3')
-              ? 'checked'
-              : '';
-            ?>>
-            Low
-          </label>
+            echo (isset($errors['niveau']) && in_array($errors['niveau'], $errors))
+              ? '<legend class="legend text-error">Wichtigkeit*</legend>'
+              : '<legend class="legend">Wichtigkeit*</legend>';
+
+            foreach($priorities as $priority) { ?>
+              <label>
+                <input type="radio" name="niveau" value="<?= $priority['id'];?>"<?php
+                if (isset($result['fk_priority']) && $priority['id'] === $result['fk_priority']) {
+                  echo 'checked';
+                }
+                ?>/>
+              </label>
+            <?= $priority['niveau'] ?>
+            <br>
+          <?php } ?>
         </fieldset>
         <div class="space-with-border"></div>
         <label>

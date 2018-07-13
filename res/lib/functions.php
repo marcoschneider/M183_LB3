@@ -166,6 +166,29 @@ function getAllProjects($conn) {
   }
 }
 
+function getAllPriorities($conn) {
+  $sql = "
+    SELECT 
+      id,
+      niveau
+    FROM priority
+  ";
+
+  $values = [];
+
+  $mysqli_result = mysqli_query($conn, $sql) or die(mysqli_error($conn));
+
+  while($result = mysqli_fetch_assoc($mysqli_result)){
+    $values[] = $result;
+  }
+
+  if ($mysqli_result){
+    return $values;
+  }else{
+    return $mysqli_result;
+  }
+}
+
 /**
  * Inserts Todo into DB.
  *
@@ -256,8 +279,6 @@ function saveEdit($conn, $values, $getId, $uid)
 
   $values['project'] = (int)$values['project'];
   $values['todo-type'] = (int)$values['todo-type'];
-
-  var_dump($values);
 
   $sql = "
     UPDATE todo
@@ -691,20 +712,7 @@ $values = array();
 
   //Überprüft ob der Newsletter versendet werden soll oder nicht.
   if (isset($formValues['niveau'])){
-    switch ($formValues['niveau']){
-      case  '1':
-        $niveau = $formValues['niveau'];
-        $values['niveau'] = (int)$niveau;
-        break;
-      case '2':
-        $niveau = $formValues['niveau'];
-        $values['niveau'] = (int)$niveau;
-        break;
-      case '3':
-        $niveau = $formValues['niveau'];
-        $values['niveau'] = (int)$niveau;
-        break;
-    }
+    $values['niveau'] = (int)$formValues['niveau'];
   } else {
     $errors['niveau'] = "Bitte geben Sie ein Niveau der Aufgabe an.";
   }

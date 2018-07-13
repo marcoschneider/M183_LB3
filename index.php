@@ -6,6 +6,7 @@ error_reporting(E_ALL & ~E_NOTICE);
 session_start();
 
 //import configs and import lib
+require 'res/lib/router/Route.php';
 require 'res/config.inc.php';
 require LIBRARY_PATH.'/functions.php';
 
@@ -63,8 +64,8 @@ $username = $_SESSION['kernel']['userdata']['username'];
           <nav class="menu">
             <?php
             $links = array(
-              'Favorite Links' => '?pages=support-links',
-              'Aufgabenübersicht' => '?pages=todo-overview',
+              'Favorite Links' => 'support-links',
+              'Aufgabenübersicht' => 'todo-overview',
               'Gruppenübersicht' => '?pages=group-overview',
               'Gruppen Log'  => '?pages=group-log'
             );
@@ -79,31 +80,52 @@ $username = $_SESSION['kernel']['userdata']['username'];
     </header>
     <div class="tooltip-wrapper">
       <div class="tooltip valign-wrapper">
-        <a class="tap-target" href="?pages=create-todo"><i class="tap-target-done-overview fas fa-plus-circle fa-5x" aria-hidden="true"></i></a>
-        <!--<span class="tooltiptext tooltip-create-todo">Todo erstellen</span>-->
+        <a class="tap-target" href="create-todo"><i class="tap-target-done-overview fas fa-plus-circle fa-5x" aria-hidden="true"></i></a>
       </div>
       <div class="tooltip valign-wrapper">
         <a class="tap-target" href="?pages=done-overview"><i class="tap-target-create-todo fas fa-check-circle fa-5x" aria-hidden="true"></i></a>
-        <!--<span class="tooltiptext tooltip-done-overview">Erledigte Todos</span>-->
       </div>
     </div>
     <div class="container-wrapper">
       <?php
 
+        Route::add('/todo-overview',function() use ($conn, $uid){
+          include('public/pages/todoOverview.php');
+        },'get');
+
+        Route::add('/support-links',function() use ($conn, $uid){
+          include('public/pages/supportLinks.php');
+        },'get');
+
+        Route::add('/support-links/add',function() use ($conn, $uid){
+          include('public/includes/linkValidation.php');
+        },'post');
+
+        Route::add('/support-links/delete',function() use ($conn, $uid){
+          include('public/includes/linkValidation.php');
+        },'post');
+
+        Route::add('/create-todo',function() use ($conn, $uid){
+          include('public/pages/createTodo.php');
+        },'get');
+
+        Route::add('/create-todo',function() use ($conn, $uid){
+          include('public/pages/createTodo.php');
+        },'post');
+
+        Route::run('/');
+
         if (isset($_GET['pages'])){
           switch ($_GET['pages']){
-            case 'support-links':
-              include 'public/pages/supportLinks.php';
-              break;
             case 'create-todo':
               include 'public/pages/createTodo.php';
               break;
             case 'delete-todo':
               include 'public/pages/deleteTodo.php';
               break;
-            case 'todo-overview':
+            /*case 'todo-overview':
               include 'public/pages/todoOverview.php';
-              break;
+              break;*/
             case 'todo-details':
               include 'public/pages/todoDetails.php';
               break;
@@ -141,8 +163,6 @@ $username = $_SESSION['kernel']['userdata']['username'];
               break;
           }
 
-        }else{
-          echo 'Die Seite kann nicht angezeigt werden.';
         }
 
       ?>
