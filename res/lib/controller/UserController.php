@@ -19,6 +19,14 @@ class UserController
     $this->conn = $this->userModel->conn;
   }
 
+  /**
+   * @author maschneider
+   *
+   * @param $username
+   * @param $pass
+   *
+   * @return bool|string
+   */
   public function authUser($username, $pass)
   {
     $this->userModel->setUsername($username);
@@ -47,6 +55,17 @@ class UserController
     }
   }
 
+  /**
+   * @author maschneider
+   *
+   * @param $firstname
+   * @param $surname
+   * @param $username
+   * @param $pass
+   * @param $fk_group
+   *
+   * @return array|bool
+   */
   public function registerUser($firstname, $surname, $username, $pass, $fk_group) {
 
     $value = [];

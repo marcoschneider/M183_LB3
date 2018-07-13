@@ -16,6 +16,13 @@ class TodoModel {
     $this->conn = $userModel->conn;
   }
 
+  /**
+   * @author maschneider
+   *
+   * @param $todoID
+   *
+   * @return string
+   */
   public function deleteGroupTodo($todoID) {
     $sql = "
       DELETE FROM todo
@@ -31,6 +38,13 @@ class TodoModel {
     }
   }
 
+  /**
+   * @author maschneider
+   *
+   * @param $todoID
+   *
+   * @return bool
+   */
   public function declineDeleteGroupTodo($todoID) {
     $sql = "
       DELETE FROM group_log
@@ -46,6 +60,13 @@ class TodoModel {
     }
   }
 
+  /**
+   * @author maschneider
+   *
+   * @param $uid
+   *
+   * @return array|bool
+   */
   public function getLastGroupTodo($uid) {
 
     $output = [];

@@ -49,6 +49,9 @@ class Ajax
     $this->uid = $this->userModel->uid;
   }
 
+  /**
+   * @author maschneider
+   */
   public function getRequest()
   {
     header('Content-Type: application/json');
@@ -59,6 +62,12 @@ class Ajax
     }
   }
 
+  /**
+   * @param $trigger
+   * @param $action
+   *
+   * @author maschneider
+   */
   private function handleRequest($trigger, $action) {
     $result = '';
     switch ($trigger) {
@@ -96,6 +105,11 @@ class Ajax
     $this->sendResponse($result);
   }
 
+  /**
+   * @param $result
+   *
+   * @author maschneider
+   */
   private function sendResponse($result) {
     if (isset($result)) {
       echo json_encode($result);

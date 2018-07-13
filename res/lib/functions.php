@@ -8,15 +8,20 @@
  */
 
 /**
+ * Redirects user to page.
+ *
  * @author vsefa
  */
-// redirect user to page
 function redirect($page)
 {
   header("Location: " . $page);
 }
 
-
+/**
+ * Outputs error messages to user.
+ *
+ * @author vsefa
+ */
 function errorMessage($message)
 {
   if (is_array($message)) {
@@ -36,7 +41,11 @@ function errorMessage($message)
   }
 }
 
-
+/**
+ * Outputs success messages to user.
+ *
+ * @author vsefa
+ */
 function successMessage($message)
 {
   if (is_array($message)) {
@@ -55,7 +64,11 @@ function successMessage($message)
   }
 }
 
-
+/**
+ * Outputs info messages to user.
+ *
+ * @author vsefa
+ */
 function infoMessage($message, $colSize)
 {
   if (is_array($message)) {
@@ -73,19 +86,10 @@ function infoMessage($message, $colSize)
   }
 }
 
-
-function sqlErrors($mysqli_errno) {
-  switch ($mysqli_errno){
-    case '1062':
-      $mysqli_custom_error = "Diesen Benutzernamen gibt es bereits";
-      break;
-  }
-
-  return $mysqli_custom_error;
-}
-
 /**
  * Updates User Credentials.
+ *
+ * @author vsefa
  *
  * @param $conn
  * @param $uid
@@ -107,6 +111,8 @@ function updateUserCredentials($conn, $uid, $newPassword)
 
 /**
  * Gets all groups.
+ *
+ * @author vsefa
  *
  * @param $conn
  * @return array|bool|mysqli_result
@@ -139,6 +145,8 @@ function getAllGroups($conn) {
 /**
  * Gets all projects.
  *
+ * @author vsefa
+ *
  * @param $conn
  * @return array|bool|mysqli_result
  */
@@ -168,6 +176,8 @@ function getAllProjects($conn) {
 
 /**
  * Inserts Todo into DB.
+ *
+ * @author vsefa
  *
  * @param $conn
  * @param $values
@@ -222,6 +232,8 @@ function addTodo($conn, $values, $uid)
 /**
  * Deletes eigentodo.
  *
+ * @author vsefa
+ *
  * @param $conn
  * @param $uid
  * @param $getId
@@ -243,6 +255,8 @@ function deleteTodo($conn, $uid, $getId)
 /**
  * Updates Edit in Database.
  *
+ * @author vsefa
+ *
  * @param $conn
  * @param $values
  * @param $getId
@@ -256,8 +270,6 @@ function saveEdit($conn, $values, $getId, $uid)
 
   $values['project'] = (int)$values['project'];
   $values['todo-type'] = (int)$values['todo-type'];
-
-  var_dump($values);
 
   $sql = "
     UPDATE todo
@@ -285,6 +297,8 @@ function saveEdit($conn, $values, $getId, $uid)
 
 /**
  * Gets all tododetails.
+ *
+ * @author maschneider
  *
  * @param $conn
  * @param $getId
@@ -392,6 +406,8 @@ function getGroupTodos($conn, $groupname){
 /**
  * Deletes Group todo.
  *
+ * @author vsefa
+ *
  * @param $conn
  * @param $todoID
  * @param $uid
@@ -415,6 +431,8 @@ function deleteGroupTodos($conn, $todoID, $uid) {
 
 /**
  * Gets all todos.
+ *
+ * @author maschneider
  *
  * @param $conn
  * @param $uid
@@ -467,6 +485,8 @@ function getTodos($conn, $uid)
 /**
  * Deletes Link with id.
  *
+ * @author vsefa
+ *
  * @param $conn
  * @param $uid
  * @param $link_id
@@ -495,6 +515,8 @@ function deleteLink($conn, $uid, $link_id){
 
 /**
  * Updates Link with id and values.
+ *
+ * @author vsefa
  *
  * @param $conn
  * @param $values
@@ -526,6 +548,8 @@ function updateLink($conn, $values, $uid) {
 
 /**
  * Adds link.
+ *
+ * @author vsefa
  *
  * @param $conn
  * @param $values
@@ -559,6 +583,8 @@ function addLink($conn, $values, $uid)
 /**
  * Gets all links.
  *
+ * @author vsefa
+ *
  * @param $conn
  * @param $uid
  * @return array|bool
@@ -589,6 +615,8 @@ function getLinks($conn, $uid)
 /**
  * Changes status of todo.
  *
+ * @author vsefa
+ *
  * @param $conn
  * @param $uid§
  * @param $getId
@@ -613,6 +641,8 @@ function doneTodo($conn, $todoStatus, $uid, $getId)
 }
 
 /**
+ * @author maschneider
+ *
  * @param $conn
  * @param $uid
  * @return array|bool
@@ -642,8 +672,11 @@ function countTodoStatus($conn, $uid)
   }
 }
 
-//function for Navigation
 /**
+ * Creates Menu.
+ *
+ * @author vsefa
+ *
  * @param $links
  * @return string
  */
@@ -658,6 +691,8 @@ function createMenu($links)
 }
 
 /**
+ * @author maschneider
+ *
  * @param $formValues
  * @param $conn
  *

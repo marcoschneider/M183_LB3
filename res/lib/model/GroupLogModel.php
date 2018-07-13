@@ -14,9 +14,17 @@
       $this->conn = $this->userModel->conn;
     }
 
+    /**
+     * @author maschneider
+     *
+     * @param $message
+     * @param $todoID
+     * @param $logState
+     * @param $creatorID
+     *
+     * @return bool|string
+     */
     public function insertLogAfterDelete($message, $todoID, $logState, $creatorID) {
-
-      $lastGroupId = $this->todoModel->getLastGroupTodo($this->userModel->uid);
 
       if ($creatorID != $this->userModel->uid) {
         $sql = "
@@ -45,6 +53,16 @@
       }
     }
 
+    /**
+     * @author maschneider
+     *
+     * @param $message
+     * @param $todoID
+     * @param $logState
+     * @param $creatorID
+     *
+     * @return bool
+     */
     public function insertGroupLog($message, $todoID, $logState, $creatorID) {
 
       if ($creatorID != $this->userModel->uid) {
@@ -72,6 +90,11 @@
       return false;
     }
 
+    /**
+     * @author maschneider
+     *
+     * @return array
+     */
     public function getInfoGroupLog() {
 
       $output = [];
@@ -106,6 +129,11 @@
       }
     }
 
+    /**
+     * @author maschneider
+     *
+     * @return array
+     */
     public function getPendingGroupLog() {
       $output = [];
 

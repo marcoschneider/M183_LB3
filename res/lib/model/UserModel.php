@@ -21,6 +21,11 @@ class UserModel
     }
   }
 
+  /**
+   * @author maschneider
+   *
+   * @return mixed
+   */
   public function getUserdata() {
     $sql = "
     SELECT 
@@ -47,6 +52,15 @@ class UserModel
     }
   }
 
+  /**
+   * @author maschneider
+   *
+   * @param $firstname
+   * @param $surname
+   * @param $username
+   *
+   * @return array|bool
+   */
   public function updateUserdata($firstname, $surname, $username) {
     $errors = [];
 
@@ -91,21 +105,41 @@ class UserModel
     }
   }
 
+  /**
+   * @author maschneider
+   *
+   * @return mixed
+   */
   public function getUsername() {
     $userdata = $this->getUserdata();
     return $userdata['username'];
   }
 
+  /**
+   * @author maschneider
+   *
+   * @return mixed
+   */
   public function getFirstname() {
     $userdata = $this->getUserdata();
     return $userdata['firstname'];
   }
 
+  /**
+   * @author maschneider
+   *
+   * @return mixed
+   */
   public function getSurname() {
     $userdata = $this->getUserdata();
     return $userdata['surname'];
   }
 
+  /**
+   * @author maschneider
+   *
+   * @return mixed
+   */
   public function setUsername($username) {
     $this->username = $username;
   }
