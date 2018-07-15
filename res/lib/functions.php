@@ -611,8 +611,10 @@ function getLinks($conn, $uid)
  * Changes status of todo.
  *
  * @param $conn
- * @param $uid§
+ * @param $todoStatus
+ * @param $uid
  * @param $getId
+ *
  * @return bool
  */
 function doneTodo($conn, $todoStatus, $uid, $getId)

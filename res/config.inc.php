@@ -30,11 +30,11 @@ class Config{
 
   public static function styles() {
     $sheets = [
-      "bower_components/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css",
-      "bower_components/bootstrap/dist/css/bootstrap-grid.min.css",
-      "node_modules/toastr/build/toastr.min.css",
-      "bower_components/normalize.css/normalize.css",
-      "public/assets/css/sco.styles.css",
+      "/bower_components/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css",
+      "/bower_components/bootstrap/dist/css/bootstrap-grid.min.css",
+      "/node_modules/toastr/build/toastr.min.css",
+      "/bower_components/normalize.css/normalize.css",
+      "/public/assets/css/sco.styles.css",
     ];
 
     foreach($sheets as $sheet) {
@@ -44,11 +44,11 @@ class Config{
 
   public static function scripts() {
     $scripts = [
-      "bower_components/js-sha256/build/sha256.min.js",
-      "node_modules/toastr/build/toastr.min.js",
-      "public/assets/js/script.js",
-      "public/assets/js/response-handler.js",
-      "public/assets/js/menubar.js",
+      "/bower_components/js-sha256/build/sha256.min.js",
+      "/node_modules/toastr/build/toastr.min.js",
+      "/public/assets/js/script.js",
+      "/public/assets/js/response-handler.js",
+      "/public/assets/js/menubar.js",
     ];
 
     foreach($scripts as $script) {

@@ -8,15 +8,14 @@
 error_reporting(E_ALL);
 
 $result = [];
-$getId = $_GET['id'];
 
 //Gets todo Details
 $projects = getAllProjects($conn);
-$todo = getTodoDetails($conn, $getId);
+$todo = getTodoDetails($conn, $getID);
 $priorities = getAllPriorities($conn);
 
 //Loop through returned Array
-if (isset($_GET['id']) && $_GET['id'] != '') {
+if (isset($getID) && $getID != '') {
   $result = $todo;
 }
 
@@ -27,7 +26,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
     <div class="col-6 space">
       <h2>Aufgabe bearbeiten</h2>
       <div class="space"></div>
-      <form class="form" method="POST" action="">
+      <form class="form" method="POST" action="/edit-todo/<?= $getID?>">
         <?php
         //Validate form and insert results into db
         if(isset($_POST['submit'])){
@@ -36,9 +35,9 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
           $errors = $values['errors'];
 
           if (count($errors) === 0){
-            $updateTodo = saveEdit($conn, $values, $getId, $uid);
+            $updateTodo = saveEdit($conn, $values, $getID, $uid);
             if($updateTodo === true){
-              redirect('?pages=todo-overview');
+              redirect('/todo-overview');
               die();
             }else{
               errorMessage("Das Todo konnte nicht aktualisiert werden");
@@ -168,7 +167,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
           </label>
         </p>
         <div class="space">
-          <input type="hidden" id="todo-id" value="<?= $_GET['id']?>"/>
+          <input type="hidden" id="todo-id" value="<?= $getID?>"/>
           <input type="hidden" id="user-id" value="<?= $result['uid']?>"/>
           <input id="group-log-trigger" type="submit" name="submit" class="button-default" value="Todo speichern">
         </div>
