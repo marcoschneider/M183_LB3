@@ -1,28 +1,30 @@
 <?php
   $projects = getAllProjects($conn);
+  $priorities = getAllPriorities($conn);
 ?>
 
   <div class="row container">
-    <?php
-      if (isset($_POST['submit'])){
-        $POST = $_POST;
-        $values = checkForm($POST, $conn);
-        $errors = $values['errors'];
-
-        if (count($errors) === 0){
-          $addTodo = addTodo($conn, $values, $uid);
-          if($addTodo === true){
-            redirect('?pages=todo-overview');
-          }else{
-            $errors['message'] = "<b>Fehlermedlung: </b>" . $addTodo;
-          }
-        }
-      }
-    ?>
     <div class="col-7 space">
       <h2>Aufgabe erstellen</h2>
       <div class="space"></div>
-      <form class="form" method="POST" action="">
+      <?php
+        if (isset($_POST['submit'])){
+          $POST = $_POST;
+
+          $values = checkForm($POST, $conn);
+          $errors = $values['errors'];
+
+          if (count($errors) === 0){
+            $addTodo = addTodo($conn, $values, $uid);
+            if($addTodo === true){
+              redirect('todo-overview');
+            }else{
+              $errors['message'] = "<b>Fehlermedlung: </b>" . $addTodo;
+            }
+          }
+        }
+      ?>
+      <form class="form" method="POST" action="/create-todo">
         <label>
           <?php
           echo (isset($errors['project']))
@@ -80,36 +82,21 @@
         <div class="space-with-border"></div>
         <fieldset class="fieldset">
           <?php
-            echo (isset($errors['niveau']) && in_array($errors['niveau'], $errors))
-              ? '<legend class="legend text-error">Wichtigkeit*</legend>'
-              : '<legend class="legend">Wichtigkeit*</legend>';
-          ?>
-          <label>
-            <input type="radio" name="niveau" value="1" <?php
-            echo (!empty($_POST['niveau']) && $_POST['niveau'] == '1')
-              ? 'checked'
-              : '';
-            ?>>
-            High
-          </label>
-          <br>
-          <label>
-            <input type="radio" name="niveau" value="2" <?php
-            echo (!empty($_POST['niveau']) && $_POST['niveau'] == '2')
-              ? 'checked'
-              : '';
-            ?>>
-            Normal
-          </label>
-          <br>
-          <label>
-            <input type="radio" name="niveau" value="3" <?php
-            echo (!empty($_POST['niveau']) && $_POST['niveau'] == '3')
-              ? 'checked'
-              : '';
-            ?>>
-            Low
-          </label>
+          echo (isset($errors['niveau']) && in_array($errors['niveau'], $errors))
+            ? '<legend class="legend text-error">Wichtigkeit*</legend>'
+            : '<legend class="legend">Wichtigkeit*</legend>';
+
+          foreach($priorities as $priority) { ?>
+            <label>
+              <input type="radio" name="niveau" value="<?= $priority['id'] ?>"<?php
+              if (isset($_POST['niveau']) && $priority['id'] === $_POST['niveau']) {
+                echo 'checked';
+              }
+              ?>/>
+            </label>
+            <?= $priority['niveau'] ?>
+            <br>
+          <?php } ?>
         </fieldset>
         <div class="space-with-border"></div>
         <label>
@@ -128,7 +115,7 @@
               }else{
                 echo '--Bitte wählen--';
               }
-              ?>
+            ?>
             </p>
             <ul data-name="todo-type" class="dropdown-list">
               <li data-list-value="1">Eigentodo</li>
@@ -158,13 +145,13 @@
       </form>
     </div>
     <?php
-      if(isset($_POST['submit'])){
-        if(count($errors) != 0){
-          echo '<div class="col-5 col-s12">';
-            errorMessage($errors);
-          echo '</div>';
-        }
+    if(isset($_POST['submit'])){
+      if(count($errors) != 0){
+        echo '<div class="col-5 col-s12">';
+        errorMessage($errors);
+        echo '</div>';
       }
+    }
     ?>
   </div>
   <div class="clearer"></div>

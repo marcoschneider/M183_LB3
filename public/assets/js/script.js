@@ -8,10 +8,10 @@ $(function(){
   customSelect('#todo-type-edit');
   customSelect('#project');
 
-  if (document.URL === 'http://m133.test/?pages=userdata') {
+  if (document.URL === 'http://m133.test/user') {
     getUserdata();
   }
-  if (document.URL === 'http://m133.test/?pages=group-log'){
+  if (document.URL === 'http://m133.test/group-log'){
     showInfoGroupLogs();
     showPendingGroupLogs();
   }
@@ -151,10 +151,10 @@ function insertLogAfterDelete(event) {
       if (res === true) {
         toastr.success("Das Todo wurde zur Löschung beantragt");
         setTimeout(function () {
-          window.location.replace("/../?pages=group-overview");
+          window.location.replace("/group-overview");
         }, 1000);
       }else if(res === 'deletedTodo'){
-        window.location.replace("/../?pages=group-overview");
+        window.location.replace("/group-overview");
       }
     }
   });
@@ -274,7 +274,7 @@ function auth_user() {
     })},
     success: function (res) {
       if (res === true) {
-        window.location.replace("/../?pages=todo-overview");
+        window.location.replace("/todo-overview");
       }else{
         toastr.error(res);
       }

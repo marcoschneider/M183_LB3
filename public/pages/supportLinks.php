@@ -41,7 +41,6 @@ if(isset($_POST['delete-link-submit'])) {
     $errors['link-to-delete'] = "Bitte die ID des zu löschenden Links eingeben";
   }
 }
-
 ?>
 <div class="container">
   <div class="row">
@@ -66,33 +65,31 @@ if(isset($_POST['delete-link-submit'])) {
     <div class="col-5">
       <h2 id="add-link-title" class="space">Link hinzufügen</h2>
       <?php
-      if (isset($_POST['submit'])){
-        if (count($errors) <= 0){
-          $insertResult = addLink($conn, $values, $uid);
-          if($insertResult === true) {
-            redirect('?pages=support-links');
+        if (isset($_POST['submit'])){
+          if (count($errors) <= 0){
+            $insertResult = addLink($conn, $_POST, $uid);
+            if($insertResult === true) {
+              redirect('/support-links');
+            }else{
+              $errors['message'] = $insertResult;
+            }
           }else{
-            $errors['message'] = $insertResult;
+            errorMessage($errors);
           }
-        }else{
-          errorMessage($errors);
-        }
-      }elseif (isset($_POST['update-link'])) {
-        if (count($errors) <= 0) {
-          $updateResult = updateLink($conn, $values, $uid);
-          if ($updateResult === true) {
-            ?> <script type="text/javascript">
-              window.location.replace("?pages=support-links");
-            </script><?php
+        }elseif (isset($_POST['update-link'])) {
+          if (count($errors) <= 0) {
+            $updateResult = updateLink($conn, $values, $uid);
+            if ($updateResult === true) {
+              redirect('/support-links');
+            }else{
+              $errors['message'] = $updateResult;
+            }
           }else{
-            $errors['message'] = $updateResult;
+            errorMessage($errors);
           }
-        }else{
-          errorMessage($errors);
         }
-      }
       ?>
-      <form id="add-link" class="form" method="POST" action="">
+      <form id="add-link" class="form" method="POST" action="/support-links">
         <label>
           Name des Links*:
           <input id="name-link" type="text" name="link_name" class="form_control" value="<?php
@@ -117,7 +114,7 @@ if(isset($_POST['delete-link-submit'])) {
     </div>
     <div class="col-3">
       <h2 class="space">Link löschen/bearbeiten</h2>
-        <?php
+      <?php
         if (isset($_POST['delete-link-submit'])){
           if (empty($errors)){
             foreach($links as $link){
@@ -127,9 +124,7 @@ if(isset($_POST['delete-link-submit'])) {
                 $resultDelete = deleteLink($conn, $uid, $link_id);
 
                 if ($resultDelete === true) {
-                  ?> <script type="text/javascript">
-                    window.location.replace("?pages=support-links");
-                  </script><?php
+                  redirect('/support-links');
                 }else{
                   $errors['delete-link-query'] = $resultDelete;
                 }
@@ -137,12 +132,12 @@ if(isset($_POST['delete-link-submit'])) {
             }
           }else{
             echo '<div class="space">';
-              errorMessage($errors);
+            errorMessage($errors);
             echo '</div>';
           }
         }
-        ?>
-      <form id="update-edit-link-form" class="form" method="POST" action="">
+      ?>
+      <form id="update-edit-link-form" class="form" method="POST" action="/support-links">
         <label>
           ID des Links*:
           <input id="link-to-update" type="text" name="link_id" class="form_control" value="<?php

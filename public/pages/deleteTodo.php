@@ -6,14 +6,12 @@
  * Time: 22:57
  */
 
-$getId = (int)$_GET['id'];
-
 $errors = [];
 $success = [];
 
-if(isset($getId) && $getId != ''){
-  if (deleteTodo($conn, $uid, $getId) === true) {
-    redirect('?pages=done-overview');
+if(isset($getID) && $getID != ''){
+  if (deleteTodo($conn, $uid, $getID) === true) {
+    redirect('/done-overview');
   }
 }else{
   infoMessage("Dieses Todo konnte nicht gelöscht werden.", 6);

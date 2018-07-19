@@ -6,19 +6,14 @@
  * Time: 22:57
  */
 
-$getId = (int)$_GET['id'];
-
 $errors = [];
 $success = [];
 
-if(isset($_GET['pages']) && $_GET['pages'] === 'done-todo') {
-  redirect('?pages=done-overview');
-}
+if (isset($getID) && $getID != '') {
 
-if (isset($getId) && $getId != '') {
-  $doneTodoResponse = doneTodo($conn, 2, $uid, $getId);
+  $doneTodoResponse = doneTodo($conn, 0, $uid, $getID);
   if ($doneTodoResponse === true) {
-    redirect('?pages=todo-overview');
+    redirect('/todo-overview');
   }else {
     errorMessage($doneTodoResponse);
   }
