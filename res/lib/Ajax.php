@@ -98,6 +98,9 @@ class Ajax
       case 'getPendingGroupLogs':
         $result = $this->groupLogModel->getPendingGroupLog();
         break;
+      case 'checkPassword':
+        $result = $this->userModel->updatePassword($action->currentPassword, $action->newPassword, $action->repeatPassword);
+        break;
     }
     $this->sendResponse($result);
   }

@@ -57,7 +57,7 @@ $username = $_SESSION['kernel']['userdata']['username'];
             </a>
           </div>
           <div class="col valign-wrapper flex-end">
-            <a class="button-default white-text right" href="/user/<?= $username;?>" ><i class="fas fa-user"></i><?= $username?></a>
+            <a class="button-default white-text right" href="/user" ><i class="fas fa-user"></i><?= $username?></a>
           </div>
         </div>
         <div class="row">

@@ -47,6 +47,10 @@ $(function(){
     saveInfoGroupLogs();
   });
 
+  $('#changePassword').on("click", function () {
+    checkPassword();
+  });
+
   $('.todo-wrapper').on("click", function (event) {
     if (event.target.className === 'fas fa-trash') {
       insertLogAfterDelete(event);
@@ -229,6 +233,36 @@ function declineDeleteGroupTodo(event) {
       }
     }
   });
+}
+
+function checkPassword() {
+
+  var currentPassword = $('#currentPassword').val();
+  var newPassword = $('#newPassword').val();
+  var repeatPassword = $('#repeatPassword').val();
+
+  currentPassword = sha256(currentPassword);
+  newPassword = sha256(newPassword);
+  repeatPassword = sha256(repeatPassword);
+
+  $.ajax({
+    url: ajaxUrl,
+    type: 'POST',
+    data: {
+      jsonData: JSON.stringify({
+        trigger: 'checkPassword',
+        currentPassword: currentPassword,
+        newPassword: newPassword,
+        repeatPassword: repeatPassword
+      })},
+    success: function (res) {
+      if (res === true) {
+        toastr.success("Die Benutzerdaten wurden aktualisiert");
+      }else{
+        toastr.error(res);
+      }
+    }
+  })
 }
 
 function changeUserdata() {

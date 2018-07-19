@@ -105,6 +105,74 @@ class UserModel
     }
   }
 
+  public function checkForChangePassword($currentPassword, $newPassword, $repeatNewPassword) {
+
+    $value = [];
+    $errors = [];
+
+    if(isset($currentPassword) && $currentPassword != 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'){
+      $value['currentPassword'] = htmlspecialchars($currentPassword);
+    }else{
+      $errors[] = 'Bitte das Feld aktuelles Passwort ausfüllen';
+    }
+
+    if(isset($newPassword) && $newPassword != 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'){
+      $value['newPassword'] = htmlspecialchars($newPassword);
+    }else{
+      $errors[] = 'Bitte das Feld neues Passwort ausfüllen';
+    }
+
+    if(isset($repeatNewPassword) && $repeatNewPassword != 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'){
+      if ($newPassword === $repeatNewPassword) {
+        $value['repeatNewPassword'] = htmlspecialchars($repeatNewPassword);
+      }else{
+        $errors[] = 'Passwörter stimmen nicht überein';
+      }
+    }else{
+      $errors[] = 'Bitte das Feld neues Passwort wiederholen ausfüllen';
+    }
+
+    if (count($errors) === 0) {
+      $sql = "
+        SELECT
+          username
+        FROM user
+        WHERE `password` = '" . $currentPassword . "' AND id = '" . $this->uid . "'
+      ";
+
+      $result = $this->conn->query($sql);
+
+      if ($result->num_rows > 0) {
+        return true;
+      }else{
+        return false;
+      }
+
+    }else{
+      return $errors;
+    }
+  }
+
+  public function updatePassword($currentPassword, $newPassword, $repeatPassword) {
+    if ($this->checkForChangePassword($currentPassword, $newPassword, $repeatPassword)) {
+      $sql = "
+        UPDATE `user`
+        SET `password` = '" . $repeatPassword . "'
+        WHERE `password` = '" . $currentPassword . "' AND id = " . $this->uid . "
+      ";
+
+      $result = $this->conn->query($sql);
+
+      if ($result) {
+        return true;
+      }
+    }else{
+      $error = 'Das aktuelle Passwort stimmt nicht mit deiner Eingabe überein';
+      return $error;
+    }
+    return false;
+  }
+
   /**
    * @author maschneider
    *

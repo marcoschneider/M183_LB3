@@ -41,24 +41,6 @@ if(isset($_POST['submitPassword'])){
     </p>
   </div>
   <div class="col-6">
-    <?php
-      if(isset($_POST['submit'])) {
-        if (count($errors) === 0) {
-          $userdataResponse = updateUserdata($conn, $uid, $values);
-          if ($userdataResponse === true) {
-            redirect("?pages=userdata");
-            $_SESSION['kernel']['userdata']['firstname'] = $values['name'];
-            $_SESSION['kernel']['userdata']['surname'] = $values['surname'];
-            $_SESSION['kernel']['userdata']['username'] = $values['username'];
-            successMessage("Deine Benutzerdaten wurden aktualisiert");
-          }else{
-            errorMessage("Diesen Benutzername gibt es bereits");
-          }
-        } else {
-          errorMessage($errors);
-        }
-      }
-    ?>
     <h1 class="">Benutzerdaten</h1>
     <div class="user-data-wrapper ">
       <form class="col-12" method="post" action="">
@@ -101,27 +83,28 @@ if(isset($_POST['submitPassword'])){
         <div>
           <p><b>Akutelles Passwort*:</b></p>
           <label>
-            <input class="input-userdata" type="password" name="password" value="">
+            <input id="currentPassword" class="input-userdata" type="password" name="password" value="">
           </label>
         </div>
         <div>
           <p><b>Neues Passwort*:</b></p>
           <label>
-            <input class="input-userdata" type="password" name="new_password" value="">
+            <input id="newPassword" class="input-userdata" type="password" name="new_password" value="">
           </label>
         </div>
         <div>
           <p><b>Neues Passwort wiederholen*:</b></p>
           <label>
-            <input class="input-userdata" type="password" name="repeat_password" value="">
+            <input id="repeatPassword" class="input-userdata" type="password" name="repeat_password" value="">
           </label>
         </div>
         <div class="space">
-          <input class="button-default" type="submit" name="submitPassword" value="Neues Passwort setzten">
+          <input id="changePassword" class="button-default" type="button" value="Neues Passwort setzten">
         </div>
         <p>*Pflichtfelder</p>
       </form>
       <div class="clearer"></div>
     </div>
+    <div id="output-error"></div>
   </div>
 </div>
