@@ -481,7 +481,7 @@ function getTodos($conn, $uid)
              INNER JOIN project pr on todo.fk_project = pr.id
              INNER JOIN `group` g on todo.fk_group = g.id
             WHERE u.id ='" . $uid . "'
-            ORDER BY todo.fk_priority ASC, todo.creation_date DESC";
+            ORDER BY todo.fk_priority DESC, todo.creation_date DESC";
 
   $sqlResult = mysqli_query($conn, $sql) or die(mysqli_error($conn));
 

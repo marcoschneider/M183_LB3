@@ -53,7 +53,7 @@ $username = $_SESSION['kernel']['userdata']['username'];
           </div>
           <div class="col brand-logo">
             <a href="?pages=support-links ">
-              <img class="logo" src="/public/assets/img/vectorpaint.svg"/>
+              <img class="logo" src="/public/assets/img/logo.svg"/>
             </a>
           </div>
           <div class="col valign-wrapper flex-end">
