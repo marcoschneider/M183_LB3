@@ -346,7 +346,7 @@ function getTodoDetails($conn, $getId)
      pr.id AS 'project_id',
      g.id AS 'group_id',
      g.group_name
-    FROM m133_todo_app_beta.todo
+    FROM m133_todo_app.todo
      INNER JOIN user u ON(u.id = todo.fk_user)
      INNER JOIN priority p ON (todo.fk_priority = p.id)
      INNER JOIN project pr ON (todo.fk_project = pr.id)
@@ -396,7 +396,7 @@ function getGroupTodos($conn, $groupname){
             todo.todo_status,
             g.group_name,
             gl.fk_group_log_state
-          FROM m133_todo_app_beta.todo
+          FROM m133_todo_app.todo
             INNER JOIN user u ON(u.id = todo.fk_user)
             INNER JOIN priority p ON (todo.fk_priority = p.id)
             INNER JOIN `group` g on (todo.fk_group = g.id)
@@ -475,7 +475,7 @@ function getTodos($conn, $uid)
              pr.project_name,
              g.group_name,
              g.group_short
-            FROM m133_todo_app_beta.todo
+            FROM m133_todo_app.todo
              INNER JOIN user u ON(u.id = todo.fk_user)
              INNER JOIN priority p ON (todo.fk_priority = p.id)
              INNER JOIN project pr on todo.fk_project = pr.id
@@ -674,8 +674,8 @@ function doneTodo($conn, $todoStatus, $uid, $getId)
  */
 function countTodoStatus($conn, $uid)
 {
-  $countedTodos = "SELECT count(*) AS 'countedStatus' FROM m133_todo_app_beta.todo WHERE todo_status = 1 AND fk_user = '" . $uid . "'";
-  $countedDone = "SELECT count(*) AS 'countedStatus' FROM m133_todo_app_beta.todo WHERE todo_status = 0 AND fk_user = '" . $uid . "'";
+  $countedTodos = "SELECT count(*) AS 'countedStatus' FROM m133_todo_app.todo WHERE todo_status = 1 AND fk_user = '" . $uid . "'";
+  $countedDone = "SELECT count(*) AS 'countedStatus' FROM m133_todo_app.todo WHERE todo_status = 0 AND fk_user = '" . $uid . "'";
 
   $countedTask = mysqli_query($conn, $countedTodos);
   $countedDone = mysqli_query($conn, $countedDone);

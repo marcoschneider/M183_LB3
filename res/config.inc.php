@@ -15,7 +15,7 @@ class Config{
     $host = "localhost";
     $user = "root";
     $pass = "toor";
-    $db = "m133_todo_app_beta";
+    $db = "m133_todo_app";
 
     $mysqli = new mysqli($host, $user, $pass, $db);
 
