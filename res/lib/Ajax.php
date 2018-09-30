@@ -5,6 +5,9 @@
  * Date: 16.06.2018
  * Time: 11:24
  */
+require_once 'SessionManager.php';
+
+SessionManager::sessionStart("ajax_session");
 
 require_once './../config.inc.php';
 require_once 'model/UserModel.php';
@@ -12,10 +15,9 @@ require_once 'model/GroupLogModel.php';
 require_once 'model/TodoModel.php';
 require_once 'controller/UserController.php';
 
-session_start();
 $conn = Config::getDb();
-$username = '';
-$uid = '';
+$username = null;
+$uid = null;
 if(isset($_SESSION['kernel']['userdata']['username'])){
   $username = $_SESSION['kernel']['userdata']['username'];
   $uid = $_SESSION['kernel']['userdata']['id'];

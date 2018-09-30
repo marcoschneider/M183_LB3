@@ -105,24 +105,24 @@ class UserModel
     }
   }
 
-  public function checkForChangePassword($currentPassword, $newPassword, $repeatNewPassword) {
+  private function checkForChangePassword($currentPassword, $newPassword, $repeatNewPassword) {
 
     $value = [];
     $errors = [];
 
-    if(isset($currentPassword) && $currentPassword != 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'){
+    if(isset($currentPassword) && $currentPassword != hash("sha256", '')){
       $value['currentPassword'] = htmlspecialchars($currentPassword);
     }else{
       $errors[] = 'Bitte das Feld aktuelles Passwort ausfüllen';
     }
 
-    if(isset($newPassword) && $newPassword != 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'){
+    if(isset($newPassword) && $newPassword != hash("sha256", '')){
       $value['newPassword'] = htmlspecialchars($newPassword);
     }else{
       $errors[] = 'Bitte das Feld neues Passwort ausfüllen';
     }
 
-    if(isset($repeatNewPassword) && $repeatNewPassword != 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'){
+    if(isset($repeatNewPassword) && $repeatNewPassword != hash("sha256", '')){
       if ($newPassword === $repeatNewPassword) {
         $value['repeatNewPassword'] = htmlspecialchars($repeatNewPassword);
       }else{

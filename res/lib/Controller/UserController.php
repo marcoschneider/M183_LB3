@@ -29,11 +29,11 @@ class UserController
    */
   public function authUser($username, $pass)
   {
-    $this->userModel->setUsername($username);
+    $this->userModel->setUsername(htmlspecialchars($username));
 
-    if ($username != '' && strlen($pass) == 64) {
+    if ($username != '' && $pass != hash('sha256', "")) {
       $escUsername = mysqli_real_escape_string($this->conn, $username);
-      $escPass = mysqli_real_escape_string($this->conn, $pass);
+      $escPass = mysqli_real_escape_string($this->conn, htmlspecialchars($pass));
     } else {
       $error = "Bitte alle felder ausfüllen";
     }

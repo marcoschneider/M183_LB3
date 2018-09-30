@@ -28,7 +28,7 @@ $groups = getAllGroups($conn);
   <body>
     <header class="row col-12">
       <div class="brand-logo">
-        <img class="logo" src="../assets/img/vectorpaint.svg"/>
+        <img class="logo" src="../assets/img/logo.svg"/>
       </div>
     </header>
     <div class="content-wrapper">

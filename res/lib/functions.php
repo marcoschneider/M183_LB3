@@ -346,7 +346,7 @@ function getTodoDetails($conn, $getId)
      pr.id AS 'project_id',
      g.id AS 'group_id',
      g.group_name
-    FROM m133_todo_app.todo
+    FROM m133_todo_app_beta.todo
      INNER JOIN user u ON(u.id = todo.fk_user)
      INNER JOIN priority p ON (todo.fk_priority = p.id)
      INNER JOIN project pr ON (todo.fk_project = pr.id)
@@ -381,7 +381,7 @@ function getTodoDetails($conn, $getId)
  * @param $groupname
  * @return array|bool|mysqli_result
  */
-function getGroupTodos($conn, $groupname){
+function getGroupTodos($conn, $groupname) {
   $sql = "SELECT
             todo.id,
             todo.title,
@@ -396,7 +396,7 @@ function getGroupTodos($conn, $groupname){
             todo.todo_status,
             g.group_name,
             gl.fk_group_log_state
-          FROM m133_todo_app.todo
+          FROM m133_todo_app_beta.todo
             INNER JOIN user u ON(u.id = todo.fk_user)
             INNER JOIN priority p ON (todo.fk_priority = p.id)
             INNER JOIN `group` g on (todo.fk_group = g.id)
@@ -438,7 +438,7 @@ function getGroupTodos($conn, $groupname){
  */
 function deleteGroupTodos($conn, $todoID, $uid) {
   $sql = "
-    DELETE FROM todo
+    DELETE FROM m133_todo_app_beta.todo
     WHERE todo.id = ".$todoID." AND todo.fk_user = ".$uid."
   ";
 
@@ -475,7 +475,7 @@ function getTodos($conn, $uid)
              pr.project_name,
              g.group_name,
              g.group_short
-            FROM m133_todo_app.todo
+            FROM m133_todo_app_beta.todo
              INNER JOIN user u ON(u.id = todo.fk_user)
              INNER JOIN priority p ON (todo.fk_priority = p.id)
              INNER JOIN project pr on todo.fk_project = pr.id
@@ -549,6 +549,10 @@ function deleteLink($conn, $uid, $link_id){
 function updateLink($conn, $values, $uid) {
   $uid = (int)$uid;
 
+  $values['link'] = htmlspecialchars($values['link']);
+  $values['link_name'] = htmlspecialchars($values['link_name']);
+  $values['link_id'] = htmlspecialchars($values['link_id']);
+
   $sql = "
     UPDATE link
     SET 
@@ -583,6 +587,9 @@ function addLink($conn, $values, $uid)
 {
 
   $uid = (int)$uid;
+
+  $values['link'] = htmlspecialchars($values['link']);
+  $values['link_name'] = htmlspecialchars($values['link_name']);
 
   $sql = "INSERT INTO `link`(
                   `link_url`,
@@ -674,8 +681,8 @@ function doneTodo($conn, $todoStatus, $uid, $getId)
  */
 function countTodoStatus($conn, $uid)
 {
-  $countedTodos = "SELECT count(*) AS 'countedStatus' FROM m133_todo_app.todo WHERE todo_status = 1 AND fk_user = '" . $uid . "'";
-  $countedDone = "SELECT count(*) AS 'countedStatus' FROM m133_todo_app.todo WHERE todo_status = 0 AND fk_user = '" . $uid . "'";
+  $countedTodos = "SELECT count(*) AS 'countedStatus' FROM m133_todo_app_beta.todo WHERE todo_status = 1 AND fk_user = '" . $uid . "'";
+  $countedDone = "SELECT count(*) AS 'countedStatus' FROM m133_todo_app_beta.todo WHERE todo_status = 0 AND fk_user = '" . $uid . "'";
 
   $countedTask = mysqli_query($conn, $countedTodos);
   $countedDone = mysqli_query($conn, $countedDone);
@@ -741,7 +748,6 @@ $values = array();
     $errors['title'] = "Bitte einen Titel eingeben";
   }
 
-  //Überprüft ob das Feld ausgefüllt ist.
   if(isset($formValues['problem']) && $formValues['problem'] != ''){
     $description = mysqli_real_escape_string($conn, $formValues['problem']);
     $values['problem'] = $description;
@@ -749,7 +755,6 @@ $values = array();
     $errors['problem'] = "Feld Beschreibung darf nicht leer sein";
   }
 
-  //Überprüft ob der Newsletter versendet werden soll oder nicht.
   if (isset($formValues['niveau'])){
     $values['niveau'] = (int)$formValues['niveau'];
   } else {

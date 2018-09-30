@@ -49,7 +49,7 @@ $resultStatus = countTodoStatus($conn, $uid);
   <div class="space"></div>
   <div class="row">
     <div class="col-8">
-      <h2>Farben Legende</h2>
+      <h2>Todo farben Legende</h2>
       <table id="color-legend-table">
         <thead>
           <tr>

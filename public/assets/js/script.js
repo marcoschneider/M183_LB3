@@ -1,8 +1,8 @@
 var ajaxUrl = "/res/lib/Ajax.php";
 var handler;
+var body = $('body');
 
 $(function(){
-
   customSelect('#dropdown-register');
   customSelect('#todo-type-create');
   customSelect('#todo-type-edit');
@@ -307,11 +307,15 @@ function auth_user() {
       password: pass,
     })},
     success: function (res) {
+      console.log(res);
       if (res === true) {
         window.location.replace("/todo-overview");
       }else{
         toastr.error(res);
       }
+    },
+    error: function (res) {
+      console.log(body.append(res.responseText));
     }
   });
 }
