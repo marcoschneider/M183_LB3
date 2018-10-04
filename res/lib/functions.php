@@ -7,13 +7,21 @@
  * @param $page
  */
 
-// redirect user to page
+/**
+ * Redirects user to page.
+ *
+ * @author vsefa
+ */
 function redirect($page)
 {
   header("Location: " . $page);
 }
 
-
+/**
+ * Outputs error messages to user.
+ *
+ * @author vsefa
+ */
 function errorMessage($message)
 {
   if (is_array($message)) {
@@ -33,7 +41,11 @@ function errorMessage($message)
   }
 }
 
-
+/**
+ * Outputs success messages to user.
+ *
+ * @author vsefa
+ */
 function successMessage($message)
 {
   if (is_array($message)) {
@@ -52,7 +64,11 @@ function successMessage($message)
   }
 }
 
-
+/**
+ * Outputs info messages to user.
+ *
+ * @author vsefa
+ */
 function infoMessage($message, $colSize)
 {
   if (is_array($message)) {
@@ -70,53 +86,11 @@ function infoMessage($message, $colSize)
   }
 }
 
-
-function sqlErrors($mysqli_errno) {
-  switch ($mysqli_errno){
-    case '1062':
-      $mysqli_custom_error = "Diesen Benutzernamen gibt es bereits";
-      break;
-  }
-
-  return $mysqli_custom_error;
-}
-
-
-//insert registration in DB
 /**
- * @param $name
- * @param $surname
- * @param $conn
- * @param $username_reg
- * @param $password_reg
- * @return bool
- */
-function insertRegister($name, $surname, $team, $conn, $username_reg, $password_reg)
-{
-
-  $sql = "
-  INSERT INTO `user` 
-    (`firstname`, `surname`, `password`, `username` , `fk_group`) 
-  VALUES  (
-    '" . $name . "',
-    '" . $surname . "',
-    '" . hash("sha256", $password_reg) . "',
-    '" . $username_reg . "',
-    '" . $team . "'
-  )";
-
-  $registerResult = mysqli_query($conn, $sql) or die(mysqli_errno($conn));
-
-  if ($registerResult) {
-    return true;
-  } else {
-    return $registerResult;
-  }
-}
-
-
-//insert user edit in database
-/**
+ * Updates User Credentials.
+ *
+ * @author vsefa
+ *
  * @param $conn
  * @param $uid
  * @param $newPassword
@@ -135,7 +109,14 @@ function updateUserCredentials($conn, $uid, $newPassword)
   }
 }
 
-
+/**
+ * Gets all groups.
+ *
+ * @author vsefa
+ *
+ * @param $conn
+ * @return array|bool|mysqli_result
+ */
 function getAllGroups($conn) {
   $sql = "
     SELECT
@@ -143,6 +124,7 @@ function getAllGroups($conn) {
       group_name,
       group_short
     FROM `group`
+    WHERE group_short != 'self-todo'
   ";
 
   $values = [];
@@ -160,7 +142,14 @@ function getAllGroups($conn) {
   }
 }
 
-
+/**
+ * Gets all projects.
+ *
+ * @author vsefa
+ *
+ * @param $conn
+ * @return array|bool|mysqli_result
+ */
 function getAllProjects($conn) {
   $sql = "
     SELECT 
@@ -185,91 +174,34 @@ function getAllProjects($conn) {
   }
 }
 
-//insert user edit in database
-/**
- * @param $conn
- * @param $uid
- * @param $values
- * @return bool
- */
-function updateUserdata($conn, $uid, $values)
-{
-  $sql = "UPDATE `user` SET `name` = '" . $values['name'] . "', `surname` = '" . $values['surname'] . "', `username` = '" . $values['username'] . "' WHERE id = '" . $uid . "'";
-
-  $updateResult = mysqli_query($conn, $sql);
-
-
-  if ($updateResult) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-//get Ajax ID
-/**
- * @param $conn
- * @param $username
- * @return array|null|string
- */
-function getUid($conn, $username)
-{
-
+function getAllPriorities($conn) {
   $sql = "
     SELECT 
-      u.id,
-      firstname,
-      surname,
-      username, 
-      g.id AS 'group_id',
-      g.group_name,
-      g.group_short
-    FROM `user` u
-      INNER JOIN user_group ug ON ug.fk_user =  u.id
-      INNER JOIN `group` g on ug.fk_group = g.id
-    WHERE 
-      username = '" . $username . "'
-    AND g.group_short != 'self-todo'";
+      id,
+      niveau
+    FROM priority
+  ";
 
-  $sqlResult = mysqli_query($conn, $sql) or die(mysqli_error($conn));
+  $values = [];
 
-  $result = mysqli_fetch_array($sqlResult, MYSQLI_ASSOC);
+  $mysqli_result = mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
-  if ($sqlResult) {
-    return $result;
+  while($result = mysqli_fetch_assoc($mysqli_result)){
+    $values[] = $result;
+  }
+
+  if ($mysqli_result){
+    return $values;
   }else{
-    return $sqlResult;
+    return $mysqli_result;
   }
 }
 
-
-// authenticate user
 /**
- * @param $conn
- * @param $username
- * @param $password
- * @return bool
- */
-function auth_user($conn, $username, $password)
-{
-
-  $escUser = mysqli_real_escape_string($conn, $username);
-  $escPass = mysqli_real_escape_string($conn, $password);
-
-  //Checks if username and password matches post
-  $sql = "SELECT id FROM user WHERE `username`='" . $escUser . "' AND `password`='" . $escPass . "'";
-
-  $result = mysqli_query($conn, $sql);
-
-  if (mysqli_num_rows($result) > 0) {
-    return true;
-  } else {
-    return mysqli_error($conn);
-  }
-}
-
-
-/**
+ * Inserts Todo into DB.
+ *
+ * @author vsefa
+ *
  * @param $conn
  * @param $values
  * @param $uid
@@ -278,8 +210,6 @@ function auth_user($conn, $username, $password)
  * @internal param $date
  * @internal param $id
  */
-
-//insert To-do into DB
 function addTodo($conn, $values, $uid)
 {
 
@@ -323,6 +253,10 @@ function addTodo($conn, $values, $uid)
 }
 
 /**
+ * Deletes eigentodo.
+ *
+ * @author vsefa
+ *
  * @param $conn
  * @param $uid
  * @param $getId
@@ -342,6 +276,10 @@ function deleteTodo($conn, $uid, $getId)
 }
 
 /**
+ * Updates Edit in Database.
+ *
+ * @author vsefa
+ *
  * @param $conn
  * @param $values
  * @param $getId
@@ -381,6 +319,10 @@ function saveEdit($conn, $values, $getId, $uid)
 
 
 /**
+ * Gets all tododetails.
+ *
+ * @author maschneider
+ *
  * @param $conn
  * @param $getId
  * @return array|bool
@@ -398,12 +340,13 @@ function getTodoDetails($conn, $getId)
      todo.last_edit,
      todo.fk_priority,
      todo.website_url,
+     u.id AS 'uid',
      p.niveau,
      pr.project_name,
      pr.id AS 'project_id',
      g.id AS 'group_id',
      g.group_name
-    FROM m133_todo_app_beta.todo
+    FROM todo
      INNER JOIN user u ON(u.id = todo.fk_user)
      INNER JOIN priority p ON (todo.fk_priority = p.id)
      INNER JOIN project pr ON (todo.fk_project = pr.id)
@@ -419,7 +362,7 @@ function getTodoDetails($conn, $getId)
   $result['fixed_date_edit'] = $result['fixed_date'] != 0 ? date("d.m.Y", $result['fixed_date']) : $result['fixed_date']  ;
   $result['fixed_date'] = $result['fixed_date'] != 0 ? date("d.m.Y", $result['fixed_date']) : $result['fixed_date'];
   $result['last_edit'] = $result['last_edit'] != null ? date("d.m.Y \\u\\m H:i", $result['last_edit']) : $result['last_edit'];
-  $result['creation_date'] = date("d.m.Y \\u\\m H:i", $result['creation_date']);
+  $result['creation_date'] = date("d.m.Y \\u\\m h:i:s", $result['creation_date']);
 
 
   if ($sqlResult) {
@@ -429,7 +372,16 @@ function getTodoDetails($conn, $getId)
   }
 }
 
-function getGroupTodos($conn, $groupname){
+/**
+ * @author maschneider
+ *
+ * Gets all group todos.
+ *
+ * @param $conn
+ * @param $groupname
+ * @return array|bool|mysqli_result
+ */
+function getGroupTodos($conn, $groupname) {
   $sql = "SELECT
             todo.id,
             todo.title,
@@ -437,15 +389,18 @@ function getGroupTodos($conn, $groupname){
             todo.creation_date,
             p.niveau,
             todo.website_url,
+            u.id AS 'uid',
             u.username,
             u.firstname,
             u.surname,
             todo.todo_status,
-            g.group_name
-          FROM m133_todo_app_beta.todo
+            g.group_name,
+            gl.fk_group_log_state
+          FROM todo
             INNER JOIN user u ON(u.id = todo.fk_user)
             INNER JOIN priority p ON (todo.fk_priority = p.id)
             INNER JOIN `group` g on (todo.fk_group = g.id)
+            LEFT JOIN group_log gl on todo.id = gl.fk_todo
           WHERE g.group_name = '" . $groupname . "'
           ORDER BY p.id ASC";
 
@@ -471,6 +426,16 @@ function getGroupTodos($conn, $groupname){
   }
 }
 
+/**
+ * Deletes Group todo.
+ *
+ * @author vsefa
+ *
+ * @param $conn
+ * @param $todoID
+ * @param $uid
+ * @return bool|mysqli_result
+ */
 function deleteGroupTodos($conn, $todoID, $uid) {
   $sql = "
     DELETE FROM todo
@@ -488,6 +453,10 @@ function deleteGroupTodos($conn, $todoID, $uid) {
 }
 
 /**
+ * Gets all todos.
+ *
+ * @author maschneider
+ *
  * @param $conn
  * @param $uid
  * @return array|bool
@@ -506,13 +475,13 @@ function getTodos($conn, $uid)
              pr.project_name,
              g.group_name,
              g.group_short
-            FROM m133_todo_app_beta.todo
+            FROM todo
              INNER JOIN user u ON(u.id = todo.fk_user)
              INNER JOIN priority p ON (todo.fk_priority = p.id)
              INNER JOIN project pr on todo.fk_project = pr.id
              INNER JOIN `group` g on todo.fk_group = g.id
             WHERE u.id ='" . $uid . "'
-            ORDER BY todo.fk_priority ASC, todo.creation_date DESC";
+            ORDER BY todo.fk_priority DESC, todo.creation_date DESC";
 
   $sqlResult = mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
@@ -536,6 +505,16 @@ function getTodos($conn, $uid)
   }
 }
 
+/**
+ * Deletes Link with id.
+ *
+ * @author vsefa
+ *
+ * @param $conn
+ * @param $uid
+ * @param $link_id
+ * @return bool|mysqli_result
+ */
 function deleteLink($conn, $uid, $link_id){
 
   $uid = (int)$uid;
@@ -557,8 +536,22 @@ function deleteLink($conn, $uid, $link_id){
 
 }
 
+/**
+ * Updates Link with id and values.
+ *
+ * @author vsefa
+ *
+ * @param $conn
+ * @param $values
+ * @param $uid
+ * @return bool|mysqli_result
+ */
 function updateLink($conn, $values, $uid) {
   $uid = (int)$uid;
+
+  $values['link'] = htmlspecialchars($values['link']);
+  $values['link_name'] = htmlspecialchars($values['link_name']);
+  $values['link_id'] = htmlspecialchars($values['link_id']);
 
   $sql = "
     UPDATE link
@@ -581,6 +574,10 @@ function updateLink($conn, $values, $uid) {
 }
 
 /**
+ * Adds link.
+ *
+ * @author vsefa
+ *
  * @param $conn
  * @param $values
  * @param $uid
@@ -590,6 +587,9 @@ function addLink($conn, $values, $uid)
 {
 
   $uid = (int)$uid;
+
+  $values['link'] = htmlspecialchars($values['link']);
+  $values['link_name'] = htmlspecialchars($values['link_name']);
 
   $sql = "INSERT INTO `link`(
                   `link_url`,
@@ -611,6 +611,10 @@ function addLink($conn, $values, $uid)
 }
 
 /**
+ * Gets all links.
+ *
+ * @author vsefa
+ *
  * @param $conn
  * @param $uid
  * @return array|bool
@@ -639,18 +643,24 @@ function getLinks($conn, $uid)
 }
 
 /**
+ * Changes status of todo.
+ *
+ * @author vsefa
+ *
  * @param $conn
- * @param $uid§
+ * @param $todoStatus
+ * @param $uid
  * @param $getId
+ *
  * @return bool
  */
-function doneTodo($conn, $uid, $getId)
+function doneTodo($conn, $todoStatus, $uid, $getId)
 {
 
   $sql = "UPDATE
             `todo` 
          SET
-            `todo_status` = 0
+            `todo_status` = " . $todoStatus . "
          WHERE `todo`.`id` = '" . $getId . "' AND fk_user = '" . $uid . "'";
 
   $updateTodoStatus = mysqli_query($conn, $sql) or die(mysqli_error($conn));
@@ -663,39 +673,16 @@ function doneTodo($conn, $uid, $getId)
 }
 
 /**
- * @param $conn
- * @param $uid
- * @param $getId
- * @return bool
- */
-function updateTodoStatus($conn, $uid, $getId)
-{
-
-  $sql = "
-  UPDATE
-    `todo`
-  SET
-    `todo_status` = 1
-  WHERE `todo`.`id` = '" . $getId . "' AND fk_user = '" . $uid . "'";
-
-  $updateTodoStatus = mysqli_query($conn, $sql);
-
-  if ($updateTodoStatus) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-/**
+ * @author maschneider
+ *
  * @param $conn
  * @param $uid
  * @return array|bool
  */
 function countTodoStatus($conn, $uid)
 {
-  $countedTodos = "SELECT count(*) AS 'countedStatus' FROM m133_todo_app_beta.todo WHERE todo_status = 1 AND fk_user = '" . $uid . "'";
-  $countedDone = "SELECT count(*) AS 'countedStatus' FROM m133_todo_app_beta.todo WHERE todo_status = 0 AND fk_user = '" . $uid . "'";
+  $countedTodos = "SELECT count(*) AS 'countedStatus' FROM todo WHERE todo_status = 1 AND fk_user = '" . $uid . "'";
+  $countedDone = "SELECT count(*) AS 'countedStatus' FROM todo WHERE todo_status = 0 AND fk_user = '" . $uid . "'";
 
   $countedTask = mysqli_query($conn, $countedTodos);
   $countedDone = mysqli_query($conn, $countedDone);
@@ -717,8 +704,11 @@ function countTodoStatus($conn, $uid)
   }
 }
 
-//function for Navigation
 /**
+ * Creates Menu.
+ *
+ * @author vsefa
+ *
  * @param $links
  * @return string
  */
@@ -733,6 +723,8 @@ function createMenu($links)
 }
 
 /**
+ * @author maschneider
+ *
  * @param $formValues
  * @param $conn
  *
@@ -756,7 +748,6 @@ $values = array();
     $errors['title'] = "Bitte einen Titel eingeben";
   }
 
-  //Überprüft ob das Feld ausgefüllt ist.
   if(isset($formValues['problem']) && $formValues['problem'] != ''){
     $description = mysqli_real_escape_string($conn, $formValues['problem']);
     $values['problem'] = $description;
@@ -764,22 +755,8 @@ $values = array();
     $errors['problem'] = "Feld Beschreibung darf nicht leer sein";
   }
 
-  //Überprüft ob der Newsletter versendet werden soll oder nicht.
   if (isset($formValues['niveau'])){
-    switch ($formValues['niveau']){
-      case  '1':
-        $niveau = $formValues['niveau'];
-        $values['niveau'] = (int)$niveau;
-        break;
-      case '2':
-        $niveau = $formValues['niveau'];
-        $values['niveau'] = (int)$niveau;
-        break;
-      case '3':
-        $niveau = $formValues['niveau'];
-        $values['niveau'] = (int)$niveau;
-        break;
-    }
+    $values['niveau'] = (int)$formValues['niveau'];
   } else {
     $errors['niveau'] = "Bitte geben Sie ein Niveau der Aufgabe an.";
   }

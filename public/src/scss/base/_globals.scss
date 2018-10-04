@@ -43,7 +43,7 @@ html,body{
     cursor: pointer;
     border-radius: 5px;
     transition: background 0.5s, border 1s;
-
+    box-shadow: inset 6.5em 0 0 0 var(--hover);
 
     &:hover{
       background-color: $second-primary-color;
@@ -53,6 +53,10 @@ html,body{
     .fa-user{
       margin-right: 5px;
     }
+  }
+
+  .do-not-delete{
+    background-color: #c0392b;
   }
 
   .space{

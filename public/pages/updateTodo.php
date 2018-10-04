@@ -6,19 +6,13 @@
  * Time: 22:57
  */
 
-$getId = (int)$_GET['id'];
-
 $errors = [];
 $success = [];
 
-if(isset($_GET['pages']) && $_GET['pages'] === 'done-todo') {
-  redirect('?pages=done-overview');
-}
-
-if (isset($getId) && $getId != '') {
-  $updateResponse = updateTodoStatus($conn, $uid, $getId);
+if (isset($getID) && $getID != '') {
+  $updateResponse = doneTodo($conn, 1, $uid, $getID);
   if ($updateResponse === true) {
-    redirect('?pages=done-overview');
+    redirect('/done-overview');
   }
 } else {
   infoMessage("Dieses Todo konnte nicht in die History gespeichert werden.", 6);

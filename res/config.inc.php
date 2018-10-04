@@ -15,7 +15,7 @@ class Config{
     $host = "localhost";
     $user = "root";
     $pass = "toor";
-    $db = "m133_todo_app_beta";
+    $db = "m133_todo_app";
 
     $mysqli = new mysqli($host, $user, $pass, $db);
 
@@ -29,26 +29,26 @@ class Config{
   }
 
   public static function styles() {
-    $scripts = [
-      "public/assets/js/script.js",
-      "public/assets/js/response-handler.js",
-      "public/assets/js/cargame.js",
-      "public/assets/js/menubar.js",
-      "bower_components/toastr/toastr.js"
+    $sheets = [
+      "/bower_components/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css",
+      "/bower_components/bootstrap/dist/css/bootstrap-grid.min.css",
+      "/node_modules/toastr/build/toastr.min.css",
+      "/bower_components/normalize.css/normalize.css",
+      "/public/assets/css/sco.styles.css",
     ];
 
-    foreach($scripts as $script) {
-      echo '<script type="text/javascript" src="' . $script . '"></script>';
+    foreach($sheets as $sheet) {
+      echo '<link rel="stylesheet" href="' . $sheet . '"/>';
     }
   }
 
   public static function scripts() {
     $scripts = [
-      "public/assets/js/script.js",
-      "public/assets/js/response-handler.js",
-      "public/assets/js/cargame.js",
-      "public/assets/js/menubar.js",
-      "bower_components/toastr/toastr.js"
+      "/bower_components/js-sha256/build/sha256.min.js",
+      "/node_modules/toastr/build/toastr.min.js",
+      "/public/assets/js/script.js",
+      "/public/assets/js/response-handler.js",
+      "/public/assets/js/menubar.js",
     ];
 
     foreach($scripts as $script) {

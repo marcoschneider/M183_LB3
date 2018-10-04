@@ -1,9 +1,7 @@
 <?php
 
-$getId = $_GET['id'];
-
-if (isset($getId) && $getId != '') {
-  $result = getTodoDetails($conn, $getId);
+if (isset($getID) && $getID != '') {
+  $result = getTodoDetails($conn, $getID);
 }
 
 ?>

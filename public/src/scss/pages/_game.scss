@@ -1,5 +1,28 @@
 #game-field{
   width: 100%;
-  height: 100%;
-  background-color: grey;
+  height: 500px;
+  background-color: #ecf0f1;
+  position: relative;
+
+  #car{
+    width: 60px;
+    position: absolute;
+    top: 100px;
+    left: 100px;
+
+    img{
+      width: 100%;
+    }
+  }
+
+  #parking-spot{
+    position: absolute;
+    right: 50px;
+    bottom: 100px;
+    width: 80px;
+    height: 150px;
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+  }
 }
