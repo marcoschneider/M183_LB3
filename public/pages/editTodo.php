@@ -26,7 +26,7 @@ if (isset($getID) && $getID != '') {
     <div class="col-6 space">
       <h2>Aufgabe bearbeiten</h2>
       <div class="space"></div>
-      <form class="form" method="POST" action="/edit-todo/<?= $getID?>">
+      <form class="form" method="POST" action="<?= $urlPrefix?>/edit-todo/<?= $getID?>">
         <?php
         //Validate form and insert results into db
         if(isset($_POST['submit'])){

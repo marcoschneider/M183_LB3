@@ -11,6 +11,7 @@ require 'res/lib/router/Route.php';
 require LIBRARY_PATH.'/functions.php';
 
 $conn = Config::getDb();
+$urlPrefix = Config::getURLPrefix();
 
 //Manages redirect to login page if not logged in.
 if(!$_SESSION['loggedin']) {
@@ -38,8 +39,8 @@ $username = $_SESSION['kernel']['userdata']['username'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="Content-Type" content="text/html" lang="de"/>
-    <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="/node_modules/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="<?= $urlPrefix?>/bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="<?= $urlPrefix?>/node_modules/ckeditor/ckeditor.js"></script>
     <title>Todo Web App</title>
   </head>
 	<body>
@@ -47,25 +48,25 @@ $username = $_SESSION['kernel']['userdata']['username'];
       <div class="container-fluid">
         <div class="row">
           <div class="col valign-wrapper">
-            <a class="button-default" href="logout"><i class="fas fa-sign-out-alt fa-2x"></i></a>
+            <a class="button-default" href="<?= $urlPrefix?>/logout"><i class="fas fa-sign-out-alt fa-2x"></i></a>
           </div>
           <div class="col brand-logo">
             <a href="?pages=support-links ">
-              <img class="logo" src="/public/assets/img/logo.svg"/>
+              <img class="logo" src="<?= $urlPrefix?>/public/assets/img/logo.svg"/>
             </a>
           </div>
           <div class="col valign-wrapper flex-end">
-            <a class="button-default white-text right" href="/user" ><i class="fas fa-user"></i><?= $username?></a>
+            <a class="button-default white-text right" href="<?= $urlPrefix?>/user" ><i class="fas fa-user"></i><?= $username?></a>
           </div>
         </div>
         <div class="row">
           <nav class="menu">
             <?php
             $links = array(
-              'Favorite Links' => '/support-links',
-              'Aufgabenübersicht' => '/todo-overview',
-              'Gruppenübersicht' => '/group-overview',
-              'Gruppen Log'  => '/group-log'
+              'Favorite Links' => $urlPrefix .'/support-links',
+              'Aufgabenübersicht' => $urlPrefix .'/todo-overview',
+              'Gruppenübersicht' => $urlPrefix .'/group-overview',
+              'Gruppen Log'  => $urlPrefix .'/group-log'
             );
 
             $navigation =  createMenu($links);
@@ -78,10 +79,10 @@ $username = $_SESSION['kernel']['userdata']['username'];
     </header>
     <div class="tooltip-wrapper">
       <div class="tooltip valign-wrapper">
-        <a class="tap-target" href="/create-todo"><i class="tap-target-done-overview fas fa-plus-circle fa-5x" aria-hidden="true"></i></a>
+        <a class="tap-target" href="<?= $urlPrefix?>/create-todo"><i class="tap-target-done-overview fas fa-plus-circle fa-5x" aria-hidden="true"></i></a>
       </div>
       <div class="tooltip valign-wrapper">
-        <a class="tap-target" href="/done-overview"><i class="tap-target-create-todo fas fa-check-circle fa-5x" aria-hidden="true"></i></a>
+        <a class="tap-target" href="<?= $urlPrefix?>/done-overview"><i class="tap-target-create-todo fas fa-check-circle fa-5x" aria-hidden="true"></i></a>
       </div>
     </div>
     <div class="container-wrapper">
@@ -166,7 +167,7 @@ $username = $_SESSION['kernel']['userdata']['username'];
         include('public/pages/deleteTodo.php');
       },'post');
 
-      Route::run('/');
+      Route::run('/M133_LB3');
 
       ?>
     </div>

@@ -1,4 +1,5 @@
-var ajaxUrl = "/res/lib/Ajax.php";
+var urlPrefix = '/M133_LB3';
+var ajaxUrl = urlPrefix+"/res/lib/Ajax.php";
 var handler;
 var body = $('body');
 
@@ -8,10 +9,10 @@ $(function(){
   customSelect('#todo-type-edit');
   customSelect('#project');
 
-  if (document.URL === 'http://m133.test/user') {
+  if (document.URL === 'http://' + window.location.hostname + urlPrefix + '/user') {
     getUserdata();
   }
-  if (document.URL === 'http://m133.test/group-log'){
+  if (document.URL === 'http://' + window.location.hostname + urlPrefix + '/group-log'){
     showInfoGroupLogs();
     showPendingGroupLogs();
   }
@@ -309,7 +310,7 @@ function auth_user() {
     success: function (res) {
       console.log(res);
       if (res === true) {
-        window.location.replace("/todo-overview");
+        window.location.replace("/M133_LB3/todo-overview");
       }else{
         toastr.error(res);
       }

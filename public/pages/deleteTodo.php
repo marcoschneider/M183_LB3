@@ -11,7 +11,7 @@ $success = [];
 
 if(isset($getID) && $getID != ''){
   if (deleteTodo($conn, $uid, $getID) === true) {
-    redirect('/done-overview');
+    redirect('/M133_LB3/done-overview');
   }
 }else{
   infoMessage("Dieses Todo konnte nicht gelöscht werden.", 6);

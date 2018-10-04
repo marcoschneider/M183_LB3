@@ -24,7 +24,7 @@
           }
         }
       ?>
-      <form class="form" method="POST" action="/create-todo">
+      <form class="form" method="POST" action="<?= $urlPrefix?>/create-todo">
         <label>
           <?php
           echo (isset($errors['project']))

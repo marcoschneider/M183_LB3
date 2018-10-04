@@ -16,7 +16,7 @@ $conn = Config::getDb();
 
 // redirect if logged in already
 if (isset($_SESSION['loggedin'])) {
-  redirect('../../?pages=todo-overview');
+  redirect('/M133_LB3/todo-overview');
 }
 ?>
 

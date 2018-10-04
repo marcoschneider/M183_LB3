@@ -29,6 +29,9 @@ class Config{
   }
 
   public static function styles() {
+
+    $urlPrefix = self::getURLPrefix();
+
     $sheets = [
       "/bower_components/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css",
       "/bower_components/bootstrap/dist/css/bootstrap-grid.min.css",
@@ -37,12 +40,23 @@ class Config{
       "/public/assets/css/sco.styles.css",
     ];
 
+    $sheets = [
+      $urlPrefix . "/bower_components/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css",
+      $urlPrefix . "/bower_components/bootstrap/dist/css/bootstrap-grid.min.css",
+      $urlPrefix . "/node_modules/toastr/build/toastr.min.css",
+      $urlPrefix . "/bower_components/normalize.css/normalize.css",
+      $urlPrefix . "/public/assets/css/sco.styles.css",
+    ];
+
     foreach($sheets as $sheet) {
       echo '<link rel="stylesheet" href="' . $sheet . '"/>';
     }
   }
 
   public static function scripts() {
+
+    $urlPrefix = self::getURLPrefix();
+
     $scripts = [
       "/bower_components/js-sha256/build/sha256.min.js",
       "/node_modules/toastr/build/toastr.min.js",
@@ -51,8 +65,20 @@ class Config{
       "/public/assets/js/menubar.js",
     ];
 
+    $scripts = [
+      $urlPrefix . "/bower_components/js-sha256/build/sha256.min.js",
+      $urlPrefix . "/node_modules/toastr/build/toastr.min.js",
+      $urlPrefix . "/public/assets/js/script.js",
+      $urlPrefix . "/public/assets/js/response-handler.js",
+      $urlPrefix . "/public/assets/js/menubar.js",
+    ];
+
     foreach($scripts as $script) {
       echo '<script type="text/javascript" src="' . $script . '"></script>';
     }
+  }
+
+  public static function getURLPrefix() {
+    return '/M133_LB3';
   }
 }

@@ -12,7 +12,7 @@ $success = [];
 if (isset($getID) && $getID != '') {
   $updateResponse = doneTodo($conn, 1, $uid, $getID);
   if ($updateResponse === true) {
-    redirect('/done-overview');
+    redirect('/M133_LB3/done-overview');
   }
 } else {
   infoMessage("Dieses Todo konnte nicht in die History gespeichert werden.", 6);
