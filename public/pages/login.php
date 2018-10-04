@@ -7,13 +7,13 @@
  */
 require '../../res/lib/SessionManager.php';
 
-SessionManager::sessionStart("login_session");
+session_start();
 
 require '../../res/config.inc.php';
 require '../../res/lib/functions.php';
 
 $conn = Config::getDb();
-var_dump($_SESSION);
+
 // redirect if logged in already
 if (isset($_SESSION['loggedin'])) {
   redirect('../../?pages=todo-overview');

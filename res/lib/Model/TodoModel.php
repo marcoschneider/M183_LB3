@@ -74,7 +74,7 @@ class TodoModel {
     $sql = "
       SELECT
        id 
-      FROM m133_todo_app_beta.todo 
+      FROM todo 
       WHERE fk_user = " . $uid . "
         ORDER BY id 
       DESC LIMIT 1;

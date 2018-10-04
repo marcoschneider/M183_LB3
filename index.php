@@ -3,8 +3,7 @@ require 'res/config.inc.php';
 require_once LIBRARY_PATH . "/SessionManager.php";
 
 //starts Session
-SessionManager::sessionStart("index_session");
-var_dump(session_name());
+session_start();
 
 error_reporting(E_ALL & ~E_NOTICE);
 //import configs and import lib
@@ -14,21 +13,18 @@ require LIBRARY_PATH.'/functions.php';
 $conn = Config::getDb();
 
 //Manages redirect to login page if not logged in.
-/*if(!$_SESSION['loggedin']) {
+if(!$_SESSION['loggedin']) {
   redirect("public/pages/login.php");
   die();
-}*/
+}
 
 //SESSION configurations
 $uid = $_SESSION['kernel']['userdata']["id"];
 $groupname = $_SESSION['kernel']['userdata']['group_name'];
 $groupID = $_SESSION['kernel']['userdata']['group_id'];
 $username = $_SESSION['kernel']['userdata']['username'];
-var_dump($_SESSION);
 
 ?>
-
-
 <!DOCTYPE html>
 <html>
   <head>

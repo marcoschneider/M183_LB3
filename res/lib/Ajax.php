@@ -7,7 +7,7 @@
  */
 require_once 'SessionManager.php';
 
-SessionManager::sessionStart("ajax_session");
+session_start();
 
 require_once './../config.inc.php';
 require_once 'model/UserModel.php';
