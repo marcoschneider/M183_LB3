@@ -737,7 +737,7 @@ $values = array();
 
   //Überprüft ob das Feld ausgefüllt ist.
   if(isset($formValues['project']) && $formValues['project'] != '' && $formValues['project'] != '--Bitte wählen--'){
-    $values['project'] = $formValues['project'];
+    $values['project'] = htmlspecialchars($formValues['project']);
   }else{
     $errors['project'] = "Bitte wählen Sie ein Projekt aus";
   }
@@ -749,7 +749,7 @@ $values = array();
   }
 
   if(isset($formValues['problem']) && $formValues['problem'] != ''){
-    $description = mysqli_real_escape_string($conn, $formValues['problem']);
+    $description = $formValues['problem'];
     $values['problem'] = $description;
   }else{
     $errors['problem'] = "Feld Beschreibung darf nicht leer sein";

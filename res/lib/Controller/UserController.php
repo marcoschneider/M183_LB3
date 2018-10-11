@@ -31,8 +31,12 @@ class UserController
   {
     $this->userModel->setUsername(htmlspecialchars($username));
 
+    $escUsername = null;
+    $escPass = null;
+
     if ($username != '' && $pass != hash('sha256', "")) {
-      $escUsername = mysqli_real_escape_string($this->conn, $username);
+      $escUsername = mysqli_real_escape_string($this->conn, htmlspecialchars($username));
+      //Todo: Hier wird mysqli_real_escape_string benutzt um die WebApp von sql injection zu schützen.
       $escPass = mysqli_real_escape_string($this->conn, htmlspecialchars($pass));
     } else {
       $error = "Bitte alle felder ausfüllen";
@@ -68,10 +72,15 @@ class UserController
    */
   public function registerUser($firstname, $surname, $username, $pass, $fk_group) {
 
+    $username = mysqli_real_escape_string($this->conn, $username);
+    //Todo: Hier wird mysqli_real_escape_string benutzt um die WebApp von sql injection zu schützen.
+    $pass = mysqli_real_escape_string($this->conn, $pass);
+
     $value = [];
     $errors = [];
 
     if(isset($firstname) && $firstname != ''){
+      //Todo: Von PHP eingebaute htmlspecialchars Funktion schützt gegen Cross Site Scripting.
       $value['firstname'] = htmlspecialchars($firstname);
     }else{
       $errors[] = 'Vorname wurde nicht ausgefüllt';
