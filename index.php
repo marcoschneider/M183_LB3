@@ -33,7 +33,8 @@ $username = $_SESSION['kernel']['userdata']['username'];
     ?>
     <link rel="icon" type="image/png" sizes="32x32" href="/public/assets/img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/public/assets/img/favicon-16x16.png">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"/>
+    <meta charset="utf-8" lang="de"/>
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>

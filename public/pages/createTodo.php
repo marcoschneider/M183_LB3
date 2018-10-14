@@ -14,6 +14,8 @@
           $values = checkForm($POST, $conn);
           $errors = $values['errors'];
 
+          var_dump($values);
+
           if (count($errors) === 0){
             $addTodo = addTodo($conn, $values, $uid);
             if($addTodo === true){
@@ -58,9 +60,9 @@
           <?php
             echo (isset($errors['title']))
               ? '<p class="text-error">Titel*</p>'
-              : '<p>Titel</p>';
+              : '<p>Titel*</p>';
           ?>
-          <input name="title" class="form_control" value="<?php
+          <input id="todo-title" name="title" class="form_control" value="<?php
           echo (!empty($_POST['title']))
             ? $_POST['title']
             : '';
@@ -76,25 +78,26 @@
           <textarea name="problem" id="edit">
             <?php
               echo (!empty($_POST['problem'])) ? $_POST['problem'] : '';
+            $_POST['problem']
             ?>
           </textarea>
         </label>
         <div class="space-with-border"></div>
-        <fieldset class="fieldset">
+        <fieldset class="fieldset fieldset-radio">
           <?php
           echo (isset($errors['niveau']) && in_array($errors['niveau'], $errors))
             ? '<legend class="legend text-error">Wichtigkeit*</legend>'
             : '<legend class="legend">Wichtigkeit*</legend>';
 
           foreach($priorities as $priority) { ?>
-            <label>
+            <label class="fieldset-container"><?= $priority['niveau'] ?>
               <input type="radio" name="niveau" value="<?= $priority['id'] ?>"<?php
               if (isset($_POST['niveau']) && $priority['id'] === $_POST['niveau']) {
                 echo 'checked';
               }
               ?>/>
+              <span class="checkmark"></span>
             </label>
-            <?= $priority['niveau'] ?>
             <br>
           <?php } ?>
         </fieldset>
@@ -126,7 +129,7 @@
         <div class="space-with-border"></div>
         <label>
           Bis wann muss die Aufbabe erledigt sein? (Optional)
-          <input class="form_control" type="date" name="fixed_date" value="<?php
+          <input id="todo-fixed-date" class="form_control" type="date" name="fixed_date" value="<?php
             echo (!empty($_POST['date'])) ? $_POST['date'] : '';
           ?>">
         </label>
@@ -134,12 +137,15 @@
         <label>
           Webseite: (Optional)
           <br>
-          <input placeholder="http(s)://www.example.com" name="url" class="form_control" value="<?php
+          <input id="todo-url" placeholder="http(s)://www.example.com" name="url" class="form_control" value="<?php
             echo (!empty($_POST['url'])) ? $_POST['url'] : '';
           ?>">
         </label>
         <div class="space">
           <input type="submit" name="submit" class="button-default" value="Todo erstellen">
+        </div>
+        <div class="space">
+          <input id="create-todo" type="button" class="button-default" value="Ajax Todo erstellen">
         </div>
         <p>*Pflichtfelder</p>
       </form>

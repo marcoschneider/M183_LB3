@@ -82,6 +82,9 @@ class Ajax
       case 'registerUser':
         $result = $this->userController->registerUser($action->firstname, $action->surname, $action->username, $action->password, $action->fk_group);
         break;
+      case 'createTodo':
+        $result = $this->todoModel->createTodo($action);
+        break;
       case 'insertLogAfterEdit':
         $result = $this->groupLogModel->insertGroupLog($action->message, $action->todoID, 1, $action->uid);
         break;

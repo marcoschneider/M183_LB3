@@ -48,7 +48,6 @@ class Config{
       "/node_modules/toastr/build/toastr.min.js",
       "/public/assets/js/script.js",
       "/public/assets/js/response-handler.js",
-      "/public/assets/js/ckeditor/plugins/entities/plugin.js",
       "/public/assets/js/menubar.js",
     ];
 

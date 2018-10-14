@@ -3,10 +3,10 @@ var handler;
 var body = $('body');
 
 $(function(){
-  customSelect('#dropdown-register');
-  customSelect('#todo-type-create');
-  customSelect('#todo-type-edit');
-  customSelect('#project');
+  customSelect('#dropdown-register', 'register-project');
+  customSelect('#todo-type-create', 'todo-type');
+  customSelect('#todo-type-edit', 'todo-project');
+  customSelect('#project', 'todo-project');
 
   if (document.URL === 'http://m133.test/user') {
     getUserdata();
@@ -49,6 +49,10 @@ $(function(){
 
   $('#changePassword').on("click", function () {
     checkPassword();
+  });
+
+  $('#create-todo').on("click", function () {
+    createTodo();
   });
 
   $('.todo-wrapper').on("click", function (event) {
@@ -320,6 +324,36 @@ function auth_user() {
   });
 }
 
+function createTodo() {
+
+  var values = [];
+
+  var todoProject = $('#todo-project').val();
+  todoTitle = $('#todo-title').val();
+  todoText = $('#edit').val();
+  todoType = $('#todo-type').val();
+  todoFixeddate = $('#todo-fixed-date').val();
+  todoUrl = $('#todo-url').val();
+
+  console.log(todoProject,todoTitle,todoText,todoType,todoFixeddate,todoUrl);
+
+  $.ajax({
+    url: ajaxUrl,
+    type: 'POST',
+    data: {jsonData: JSON.stringify({
+      trigger: 'createTodo',
+      formValues: values
+    })},
+    success: function (res) {
+      if (res.status === true) {
+        window.location.replace("/todo-overview");
+      }else{
+        toastr.error(res);
+      }
+    }
+  })
+}
+
 function register_user() {
   var firstname = $('#firstname').val();
   var surname = $('#surname').val();
@@ -351,7 +385,11 @@ function register_user() {
   });
 }
 
-function customSelect(elementID) {
+function customCheckbox(elementID) {
+
+}
+
+function customSelect(elementID, inputID) {
 
   $(elementID).on("click", function () {
     $(elementID+" .dropdown-list").slideToggle(250, function () {
@@ -367,7 +405,7 @@ function customSelect(elementID) {
     var liData = $(this).data("list-value");
     var name = $(dropdownLists).data('name');
 
-    liData = liText + "<input id=\"group-in-register\" type=\"hidden\" name='" + name + "' value='" + liData + "'/>";
+    liData = liText + "<input id=" + inputID + " type=\"hidden\" name='" + name + "' value='" + liData + "'/>";
     $(elementID+' p').html(liData);
   });
 }
