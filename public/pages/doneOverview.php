@@ -19,7 +19,7 @@ $resultStatus = countTodoStatus($conn, $uid);
                 <?= trim($result['creation_date']) ?>
               </div>
               <div class="description">
-                <?= strip_tags($result['problem']) ?>
+                <?= strip_tags(htmlspecialchars_decode($result['problem'])) ?>
               </div>
               <div class="action-links-wrapper">
                 <a class="overview-action-links" href="/update-todo/<?= $result['id'] ?>">

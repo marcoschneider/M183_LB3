@@ -30,7 +30,7 @@ if (isset($getID) && $getID != '') {
       ?>
       </div>
       <div class="todoproblem-wrapper">
-        <?= $result['problem'] ?>
+        <?= html_entity_decode($result['problem']) ?>
       </div>
       <div class="detail-output-wrapper">
         <p class="detail-fixed-date">Erstellt am: </p>

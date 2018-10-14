@@ -17,6 +17,10 @@ function redirect($page)
   header("Location: " . $page);
 }
 
+function stripScripttag($html) {
+  return preg_replace('#<script(.*?)>(.*?)</script>#is', '', $html);
+}
+
 /**
  * Outputs error messages to user.
  *
@@ -749,8 +753,7 @@ $values = array();
   }
 
   if(isset($formValues['problem']) && $formValues['problem'] != ''){
-    $description = $formValues['problem'];
-    $values['problem'] = $description;
+    $values['problem'] = htmlspecialchars(stripScripttag($formValues['problem']));
   }else{
     $errors['problem'] = "Feld Beschreibung darf nicht leer sein";
   }

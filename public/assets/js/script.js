@@ -399,6 +399,10 @@ function customSelect(elementID, inputID) {
   });
 
   var dropdownLists = elementID+' .dropdown-list';
+  var selectedText = $(elementID);
+
+  console.log(selectedText);
+
 
   $(dropdownLists+' li').on("click", function () {
     var liText = $(this).text();
