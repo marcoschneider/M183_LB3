@@ -12,10 +12,13 @@ define("LIBRARY_PATH", realpath(basename(__DIR__)) . '/lib');
 class Config{
 
   public static function getDb() {
-    $host = "localhost";
-    $user = "root";
-    $pass = "toor";
-    $db = "m133_todo_app";
+
+    $host = null;
+    $user = null;
+    $pass = null;
+    $db = null;
+
+    require "database.settings.php";
 
     $mysqli = new mysqli($host, $user, $pass, $db);
 
