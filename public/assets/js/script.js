@@ -385,10 +385,6 @@ function register_user() {
   });
 }
 
-function customCheckbox(elementID) {
-
-}
-
 function customSelect(elementID, inputID) {
 
   $(elementID).on("click", function () {
