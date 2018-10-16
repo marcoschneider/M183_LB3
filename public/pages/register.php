@@ -42,13 +42,13 @@ $groups = getAllGroups($conn);
             Nachname:
             <input id="surname" class="field-login" type="text" name="surname" value="">
           </label>
-          <label class="label">
+          <!--<label class="label">
             Dein Team wählen:
           </label>
           <div id="dropdown-register" class="dropdown-trigger">
             <p>
               <?php
-              foreach ($groups as $group){
+/*              foreach ($groups as $group){
                 if (isset($_POST['group']) && $_POST['group'] === $group['id']) {
                   echo $group['group_name'];
                 }else{
@@ -57,16 +57,27 @@ $groups = getAllGroups($conn);
                   break;
                 }
               }
-              ?>
+              */?>
             </p>
             <ul data-name="group" class="dropdown-list">
               <?php
-                foreach ($groups as $group) {
+/*                foreach ($groups as $group) {
                   echo '<li data-list-value="'.$group['id'].'">'.$group['group_name'].'</li>';
                 }
-              ?>
+              */?>
             </ul>
-          </div>
+          </div>-->
+          <label class="label">Dein Team wählen:
+            <select id="group-in-register" class="field-login" name="project">
+              <?php foreach($groups as $group){?>
+                <option value="<?=$group['id']?>"<?php
+                if (isset($_POST['group']) && $_POST['group'] === $group['id']){
+                  echo 'selected';
+                }
+                ?>><?=$group['group_name']?></option>
+              <?php } ?>
+            </select>
+          </label>
           <label class="label">
             Benutzername:
             <input id="username" class="field-login" type="text" name="username-reg" value="">

@@ -48,10 +48,10 @@ $username = $_SESSION['kernel']['userdata']['username'];
       <div class="container-fluid">
         <div class="row">
           <div class="col valign-wrapper">
-            <a class="button-default" href="logout"><i class="fas fa-sign-out-alt fa-2x"></i></a>
+            <a class="button-default" href="/logout"><i class="fas fa-sign-out-alt fa-2x"></i></a>
           </div>
           <div class="col brand-logo">
-            <a href="?pages=support-links ">
+            <a href="/support-links">
               <img class="logo" src="/public/assets/img/logo.svg"/>
             </a>
           </div>

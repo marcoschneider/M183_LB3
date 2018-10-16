@@ -58,7 +58,6 @@ if(isset($_POST['delete-link-submit'])) {
           }else{
             infoMessage("Es wurden keine Links in Ihrer Datenbank gefunden", 12);
           }
-
         ?>
       </div>
     </div>
@@ -93,11 +92,7 @@ if(isset($_POST['delete-link-submit'])) {
       <form id="add-link" class="form" method="POST" action="/support-links">
         <label>
           Name des Links*:
-          <input id="name-link" type="text" name="link_name" class="form_control" value="<?php
-          echo (isset($_POST ['link_name']))
-            ? $_POST['link_name']
-            : '';
-          ?>">
+          <input id="name-link" type="text" name="link_name" class="form_control" value="<?php echo (isset($_POST ['link_name'])) ? $_POST['link_name'] : ''; ?>">
         </label>
         <div class="space-with-border"></div>
         <label>
@@ -125,7 +120,7 @@ if(isset($_POST['delete-link-submit'])) {
                 $resultDelete = deleteLink($conn, $uid, $link_id);
 
                 if ($resultDelete === true) {
-                  header('Location: /support-links');
+                  redirect('/support-links');
                 }else{
                   $errors['delete-link-query'] = $resultDelete;
                 }

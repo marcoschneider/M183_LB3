@@ -5,7 +5,9 @@
  * Date: 07.04.2017
  * Time: 20:41
  */
+
 require '../../res/lib/SessionManager.php';
+require realpath(__DIR__ . '/../../vendor/autoload.php');
 
 session_start();
 
@@ -16,10 +18,10 @@ $conn = Config::getDb();
 
 // redirect if logged in already
 if (isset($_SESSION['loggedin'])) {
-  redirect('../../?pages=todo-overview');
+  redirect($_SERVER['REMOTE_HOST'] . '/todo-overview');
 }
-?>
 
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -49,6 +51,8 @@ if (isset($_SESSION['loggedin'])) {
       <input class="field-login" type="text" name="username" id="fname" autofocus>
       <label class="label" for="pname">Passwort:</label>
       <input class="field-login" type="password" name="password" id="pname">
+      <label class="label" for="2fa-code">Google Authentication</label>
+      <input class="field-login" type="text" name="code" id="2fa-code">
       <input id="login-button" class="login-button" type="button" value="Anmelden"/>
       <a class="register-button" href="register.php">Registrieren</a>
     </form>

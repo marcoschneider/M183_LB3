@@ -3,10 +3,6 @@ var handler;
 var body = $('body');
 
 $(function(){
-  customSelect('#dropdown-register', 'register-project');
-  customSelect('#todo-type-create', 'todo-type');
-  customSelect('#todo-type-edit', 'todo-project');
-  customSelect('#project', 'todo-project');
 
   if (document.URL === 'http://m133.test/user') {
     getUserdata();
@@ -361,9 +357,11 @@ function register_user() {
   var pass = $('#password').val();
   var fk_group = $('#group-in-register').val();
 
+  console.log(fk_group);
+
   pass = sha256(pass);
 
-  $.ajax({
+  /*$.ajax({
     url: ajaxUrl,
     type: 'POST',
     data: {jsonData: JSON.stringify({
@@ -382,32 +380,7 @@ function register_user() {
         handler.error();
       }
     }
-  });
-}
-
-function customSelect(elementID, inputID) {
-
-  $(elementID).on("click", function () {
-    $(elementID+" .dropdown-list").slideToggle(250, function () {
-      $(this).toggleClass("block");
-    });
-    return false;
-  });
-
-  var dropdownLists = elementID+' .dropdown-list';
-  var selectedText = $(elementID);
-
-  console.log(selectedText);
-
-
-  $(dropdownLists+' li').on("click", function () {
-    var liText = $(this).text();
-    var liData = $(this).data("list-value");
-    var name = $(dropdownLists).data('name');
-
-    liData = liText + "<input id=" + inputID + " type=\"hidden\" name='" + name + "' value='" + liData + "'/>";
-    $(elementID+' p').html(liData);
-  });
+  });*/
 }
 
 function getUserdataTimeout($timeout) {

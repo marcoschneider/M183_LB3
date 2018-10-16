@@ -44,7 +44,13 @@ class UserController
 
     if (!isset($error)) {
       //Checks if username and password matches post
-      $sql = "SELECT id FROM user WHERE `username`='" . $escUsername . "' AND `password`='" . $escPass . "'";
+      $sql = "
+      SELECT
+       id 
+      FROM user 
+      WHERE 
+        `username`='" . $escUsername . "' 
+        AND `password`='" . $escPass . "'";
       $result = $this->conn->query($sql);
       if ($result->num_rows > 0) {
         $user = $this->userModel->getUserdata();
@@ -132,10 +138,9 @@ class UserController
         " . $lastUserID . ",
         " . $value['team'] . "
       ), (
-        ".$lastUserID.",
+        " . $lastUserID . ",
         1
-      )  
-      ";
+      )";
 
       $resultGroup = $this->conn->query($sqlGroup);
 
