@@ -9,7 +9,7 @@
 $values = [];
 $errors = [];
 
-//Update form validatio
+//Update form validation
 if (isset($_POST['submit']) || isset($_POST['update-link'])){
   if (isset($_POST['link_name']) && $_POST['link_name'] != '') {
     $link_name = htmlspecialchars(trim($_POST['link_name']));
@@ -69,7 +69,8 @@ if(isset($_POST['delete-link-submit'])) {
           if (count($errors) <= 0){
             $insertResult = addLink($conn, $_POST, $uid);
             if($insertResult === true) {
-              redirect('/support-links');
+              //redirect('/support-links');
+              showToastMessage('success', 'Neuer Link wurde hinzugefügt');
             }else{
               $errors['message'] = $insertResult;
             }
@@ -124,7 +125,7 @@ if(isset($_POST['delete-link-submit'])) {
                 $resultDelete = deleteLink($conn, $uid, $link_id);
 
                 if ($resultDelete === true) {
-                  redirect('/support-links');
+                  header('Location: /support-links');
                 }else{
                   $errors['delete-link-query'] = $resultDelete;
                 }

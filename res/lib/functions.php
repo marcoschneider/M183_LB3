@@ -45,6 +45,13 @@ function errorMessage($message)
   }
 }
 
+function showToastMessage($type, $message) {
+  if ($type === 'success') {
+    return '<script>toastr.success(' . $message . ');</script>';
+  }
+  return '<script>toastr.error(' . $message . ');</script>';
+}
+
 /**
  * Outputs success messages to user.
  *
