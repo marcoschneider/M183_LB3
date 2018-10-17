@@ -5,7 +5,7 @@
  * Date: 16.06.2018
  * Time: 11:24
  */
-require_once 'SessionManager.php';
+require_once 'functions.php';
 
 session_start();
 
@@ -25,7 +25,6 @@ if(isset($_SESSION['kernel']['userdata']['username'])){
 
 class Ajax
 {
-
   private $conn;
   private $uid;
   private $username;

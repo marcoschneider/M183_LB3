@@ -9,18 +9,24 @@
 require '../../res/lib/SessionManager.php';
 require realpath(__DIR__ . '/../../vendor/autoload.php');
 
-session_start();
 
 require '../../res/config.inc.php';
 require '../../res/lib/functions.php';
 
+session_start();
+
 $conn = Config::getDb();
+
+var_dump($_SESSION);
 
 // redirect if logged in already
 if (isset($_SESSION['loggedin'])) {
   redirect($_SERVER['REMOTE_HOST'] . '/todo-overview');
 }
 
+if (isset($_GET['login-error'])) {
+  echo 'Insecure session';
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -51,8 +57,8 @@ if (isset($_SESSION['loggedin'])) {
       <input class="field-login" type="text" name="username" id="fname" autofocus>
       <label class="label" for="pname">Passwort:</label>
       <input class="field-login" type="password" name="password" id="pname">
-      <label class="label" for="2fa-code">Google Authentication</label>
-      <input class="field-login" type="text" name="code" id="2fa-code">
+      <!--<label class="label" for="2fa-code">Google Authentication</label>
+      <input class="field-login" type="text" name="code" id="2fa-code">-->
       <input id="login-button" class="login-button" type="button" value="Anmelden"/>
       <a class="register-button" href="register.php">Registrieren</a>
     </form>

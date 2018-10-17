@@ -2,21 +2,24 @@
 require 'res/config.inc.php';
 require_once LIBRARY_PATH . "/SessionManager.php";
 
-//starts Session
-session_start();
 
 error_reporting(E_ALL & ~E_NOTICE);
 //import configs and import lib
 require 'res/lib/router/Route.php';
 require LIBRARY_PATH.'/functions.php';
 
+//starts secure Session
+session_start();
+
 $conn = Config::getDb();
 
+var_dump($_SESSION);
+
 //Manages redirect to login page if not logged in.
-if(!$_SESSION['loggedin']) {
+/*if(!$_SESSION['loggedin']) {
   redirect("public/pages/login.php");
   die();
-}
+}*/
 
 //SESSION configurations
 $uid = $_SESSION['kernel']['userdata']["id"];

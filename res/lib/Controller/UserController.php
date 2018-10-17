@@ -128,6 +128,7 @@ class UserController
         '" . $value['username-reg'] . "'
       )";
 
+      $this->conn->begin_transaction();
       $result = $this->conn->query($sql);
       $lastUserID = mysqli_insert_id($this->conn);
 
@@ -142,11 +143,14 @@ class UserController
         1
       )";
 
+      $this->conn->begin_transaction();
       $resultGroup = $this->conn->query($sqlGroup);
 
       if ($result && $resultGroup) {
+        $this->conn->commit();
         return true;
       } else {
+        $this->conn->rollback();
         return $result;
       }
     }else{

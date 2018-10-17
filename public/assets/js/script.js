@@ -361,7 +361,7 @@ function register_user() {
 
   pass = sha256(pass);
 
-  /*$.ajax({
+  $.ajax({
     url: ajaxUrl,
     type: 'POST',
     data: {jsonData: JSON.stringify({
@@ -379,8 +379,11 @@ function register_user() {
       }else{
         handler.error();
       }
+    },
+    error: function (res) {
+      console.log(body.append(res.responseText));
     }
-  });*/
+  });
 }
 
 function getUserdataTimeout($timeout) {

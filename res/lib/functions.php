@@ -319,13 +319,45 @@ function saveEdit($conn, $values, $getId, $uid)
     WHERE
       `id` = '" . $getId . "' AND `fk_user` = '" . $uid . "'";
 
+  mysqli_begin_transaction($conn);
   $updateTodo = mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
   if ($updateTodo) {
+    mysqli_commit($conn);
     return true;
   } else {
+    mysqli_rollback($conn);
     return $updateTodo;
   }
+}
+
+function sec_session_start()
+{
+  $session_name = 'm183_sec_session';   // Set a custom session name
+  $secure = TRUE;
+  // This stops JavaScript being able to access the session id.
+  $httponly = true;
+
+  // Forces sessions to only use cookies.
+  if (ini_set('session.use_only_cookies', 1) === FALSE) {
+    header("Location: /public/pages/login.php?login-error");
+    exit();
+  }
+  // Gets current cookies params.
+  $cookieParams = session_get_cookie_params();
+  session_set_cookie_params
+  (
+    $cookieParams["lifetime"],
+    $cookieParams["path"],
+    $cookieParams["domain"],
+    $secure,
+    $httponly
+  );
+
+  // Sets the session name to the one set above.
+  session_name($session_name);
+  session_start();            // Start the PHP session
+  session_regenerate_id(true);    // regenerated the session, delete the old one.
 }
 
 
