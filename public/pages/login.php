@@ -17,8 +17,6 @@ session_start();
 
 $conn = Config::getDb();
 
-var_dump($_SESSION);
-
 // redirect if logged in already
 if (isset($_SESSION['loggedin'])) {
   redirect($_SERVER['REMOTE_HOST'] . '/todo-overview');

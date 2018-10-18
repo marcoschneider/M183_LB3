@@ -13,13 +13,11 @@ session_start();
 
 $conn = Config::getDb();
 
-var_dump($_SESSION);
-
 //Manages redirect to login page if not logged in.
-/*if(!$_SESSION['loggedin']) {
+if(!$_SESSION['loggedin']) {
   redirect("public/pages/login.php");
   die();
-}*/
+}
 
 //SESSION configurations
 $uid = $_SESSION['kernel']['userdata']["id"];
