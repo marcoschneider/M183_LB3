@@ -11,13 +11,13 @@
         if (isset($_POST['submit'])){
           $POST = $_POST;
 
-          $values = checkForm($POST, $conn);
+          $values = validateTodoForm($POST, $conn);
           $errors = $values['errors'];
 
           if (count($errors) === 0){
             $addTodo = addTodo($conn, $values, $uid);
             if($addTodo === true){
-              redirect('todo-overview');
+              //redirect('todo-overview');
             }else{
               $errors['message'] = "<b>Fehlermedlung: </b>" . $addTodo;
             }
@@ -124,9 +124,6 @@
         </label>
         <div class="space">
           <input type="submit" name="submit" class="button-default" value="Todo erstellen">
-        </div>
-        <div class="space">
-          <input id="create-todo" type="button" class="button-default" value="Ajax Todo erstellen">
         </div>
         <p>*Pflichtfelder</p>
       </form>

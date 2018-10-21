@@ -30,7 +30,7 @@ if (isset($getID) && $getID != '') {
         //Validate form and insert results into db
         if(isset($_POST['submit'])){
           $POST = $_POST;
-          $values = checkForm($POST, $conn);
+          $values = validateTodoForm($POST, $conn);
           $errors = $values['errors'];
 
           if (count($errors) === 0){

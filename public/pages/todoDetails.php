@@ -30,7 +30,7 @@ if (isset($getID) && $getID != '') {
       ?>
       </div>
       <div class="todoproblem-wrapper">
-        <?= html_entity_decode($result['problem']) ?>
+        <?= html_entity_decode($result['problem'])?>
       </div>
       <div class="detail-output-wrapper">
         <p class="detail-fixed-date">Erstellt am: </p>
@@ -59,7 +59,6 @@ if (isset($getID) && $getID != '') {
     ?>
       <div class="failbox">
         <p>Die Daten können nicht angezeigt werden. Versuchen Sie es später erneut.
-        <?php var_dump($result) ?>
         </p>
       </div>
     <?php

@@ -18,7 +18,7 @@ require_once 'controller/UserController.php';
 $conn = Config::getDb();
 $username = null;
 $uid = null;
-if(isset($_SESSION['kernel']['userdata']['username'])){
+if(isset($_SESSION['kernel']['userdata']['username'])) {
   $username = $_SESSION['kernel']['userdata']['username'];
   $uid = $_SESSION['kernel']['userdata']['id'];
 }

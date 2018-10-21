@@ -29,7 +29,7 @@ $username = $_SESSION['kernel']['userdata']['username'];
 <!DOCTYPE html>
 <html>
   <head>
-    <?php header('Content-type: text/html; charset=utf-8');
+    <?php header('Content-type: text/html');
     Config::styles();
     ?>
     <link rel="icon" type="image/png" sizes="32x32" href="/public/assets/img/favicon-32x32.png">
@@ -143,6 +143,10 @@ $username = $_SESSION['kernel']['userdata']['username'];
         redirect("public/pages/login.php");
       },'get');
 
+
+      Route::add('/support-links',function() use ($conn, $uid){
+        include('public/pages/supportLinks.php');
+      },'post');
 
       Route::add('/support-links',function() use ($conn, $uid){
         include('public/pages/supportLinks.php');
