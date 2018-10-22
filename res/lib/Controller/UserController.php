@@ -47,7 +47,8 @@ class UserController
     }
     if (!isset($error)) {
       if ($this->userModel->isSecretKeySet()) {
-        $secret = $this->userModel->getSecretKey();
+        $result = $this->userModel->getSecretKey();
+        $secret = $result->fetch_assoc()['secret'];
         if ($this->tfa->verifyCode($secret, $escCode)) {
           //Checks if username and password matches post
           $sql = "
