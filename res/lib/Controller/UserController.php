@@ -11,12 +11,14 @@ class UserController
   private $conn;
   private $uid;
   private $userModel;
+  private $tfa;
 
-  public function __construct(UserModel $userModel)
+  public function __construct(UserModel $userModel, \RobThree\Auth\TwoFactorAuth $tfa)
   {
     $this->userModel = $userModel;
     $this->uid = $this->userModel->uid;
     $this->conn = $this->userModel->conn;
+    $this->tfa = $tfa;
   }
 
   /**
@@ -27,42 +29,54 @@ class UserController
    *
    * @return bool|string
    */
-  public function authUser($username, $pass)
+  public function authUser($username, $pass, $code)
   {
     $this->userModel->setUsername(htmlspecialchars($username));
 
     $escUsername = null;
     $escPass = null;
+    $escCode = null;
 
-    if ($username != '' && $pass != hash('sha256', "")) {
+    if ($username != '' && $pass != hash('sha256', "") && $code != '') {
       $escUsername = mysqli_real_escape_string($this->conn, htmlspecialchars($username));
-      //Todo: Hier wird mysqli_real_escape_string benutzt um die WebApp von sql injection zu schützen.
+      //Todo: Hier wird mysqli_real_escape_string benutzt um die WebApp vor sql injection zu schützen.
       $escPass = mysqli_real_escape_string($this->conn, htmlspecialchars($pass));
+      $escCode = mysqli_real_escape_string($this->conn, htmlspecialchars($code));
     } else {
       $error = "Bitte alle felder ausfüllen";
     }
-
     if (!isset($error)) {
-      //Checks if username and password matches post
-      $sql = "
-      SELECT
-       id 
-      FROM user 
-      WHERE 
-        `username`='" . $escUsername . "' 
-        AND `password`='" . $escPass . "'";
-      $result = $this->conn->query($sql);
-      if ($result->num_rows > 0) {
-        $user = $this->userModel->getUserdata();
-        $_SESSION['loggedin'] = true;
-        $_SESSION['kernel']['userdata'] = $user;
-        return true;
-      } else {
-        return "Benutzername oder Passwort falsch";
+      if ($this->userModel->isSecretKeySet()) {
+        $secret = $this->userModel->getSecretKey();
+        if ($this->tfa->verifyCode($secret, $escCode)) {
+          //Checks if username and password matches post
+          $sql = "
+            SELECT
+             id 
+            FROM user 
+            WHERE 
+              `username`='" . $escUsername . "' 
+              AND `password`='" . $escPass . "'";
+          $result = $this->conn->query($sql);
+          if ($result->num_rows > 0) {
+            $user = $this->userModel->getUserdata();
+            $_SESSION['loggedin'] = TRUE;
+            $_SESSION['kernel']['userdata'] = $user;
+            return TRUE;
+          }
+          else {
+            return "Benutzername oder Passwort falsch";
+          }
+        }else{
+          return 'Die Authenfizierung ist fehlgeschlagen';
+        }
+      }else{
+        $this->userModel->updateSecretKey($_SESSION['2fa-secret']);
       }
-    } else {
+    }else {
       return $error;
     }
+    return 'Something went wrong';
   }
 
   /**

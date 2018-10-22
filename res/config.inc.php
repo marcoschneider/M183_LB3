@@ -12,15 +12,11 @@ define("LIBRARY_PATH", realpath(basename(__DIR__)) . '/lib');
 class Config{
 
   public static function getDb() {
+    $settings['database'] = [];
+    require "settings.local.php";
+    $database = $settings['database'];
 
-    $host = null;
-    $user = null;
-    $pass = null;
-    $db = null;
-
-    require "database.settings.php";
-
-    $mysqli = new mysqli($host, $user, $pass, $db);
+    $mysqli = new mysqli($database['host'], $database['user'], $database['password'], $database['db']);
 
     if($mysqli->connect_errno){
       return $mysqli->connect_error;
@@ -29,6 +25,13 @@ class Config{
     $mysqli->set_charset("utf8");
 
     return $mysqli;
+  }
+
+  public static function getHostname() {
+    $settings = [];
+    require "settings.local.php";
+
+    return $settings['domain'];
   }
 
   public static function styles() {
@@ -40,8 +43,8 @@ class Config{
       "/public/assets/css/sco.styles.css",
     ];
 
-    foreach($sheets as $sheet) {
-      echo '<link rel="stylesheet" href="' . $sheet . '"/>';
+    foreach($sheets as $src) {
+      echo '<link rel="stylesheet" href="' . $src . '"/>';
     }
   }
 
@@ -54,8 +57,8 @@ class Config{
       "/public/assets/js/menubar.js",
     ];
 
-    foreach($scripts as $script) {
-      echo '<script type="text/javascript" src="' . $script . '"></script>';
+    foreach($scripts as $src) {
+      echo '<script type="text/javascript" src="' . $src . '"></script>';
     }
   }
 }

@@ -7,23 +7,35 @@
  */
 
 require '../../res/lib/SessionManager.php';
-require realpath(__DIR__ . '/../../vendor/autoload.php');
-
-
+require '../../res/lib/Logger.php';
 require '../../res/config.inc.php';
 require '../../res/lib/functions.php';
+require '../../vendor/autoload.php';
 
-session_start();
+use RobThree\Auth\TwoFactorAuth;
+use RobThree\Auth\TwoFactorAuthException;
+
+try {
+  $tfa = new TwoFactorAuth();
+  $secret = $tfa->createSecret();
+} catch (TwoFactorAuthException $e) {
+  $logger = new Logger();
+  $logger->setMessage('2FA not available');
+  $logger->save();
+}
+
+//starts secure Session
+session_start([
+  'cookie_lifetime' => 86400,
+]);
+
+$_SESSION['2fa-secret'] = $secret;
 
 $conn = Config::getDb();
 
 // redirect if logged in already
 if (isset($_SESSION['loggedin'])) {
-  redirect($_SERVER['REMOTE_HOST'] . '/todo-overview');
-}
-
-if (isset($_GET['login-error'])) {
-  echo 'Insecure session';
+  redirect(Config::getHostname() . '/todo-overview');
 }
 ?>
 <!DOCTYPE html>
@@ -51,23 +63,27 @@ if (isset($_GET['login-error'])) {
 <div class="content-wrapper">
   <div class="login-wrapper">
     <form class="login-form" method="post" action="">
-      <label class="label" for="fname">Benutzername:</label>
-      <input class="field-login" type="text" name="username" id="fname" autofocus>
-      <label class="label" for="pname">Passwort:</label>
-      <input class="field-login" type="password" name="password" id="pname">
-      <!--<label class="label" for="2fa-code">Google Authentication</label>
-      <input class="field-login" type="text" name="code" id="2fa-code">-->
+      <label id="label-2fa-code" class="label">2FA Code:
+        <input class="field-login" type="text" name="2fa-code" id="2fa-code"/>
+      </label>
+      <div id="fields-user-password">
+        <label class="label" for="fname">Benutzername:</label>
+        <input class="field-login" type="text" name="username" id="fname" autofocus>
+        <label class="label" for="pname">Passwort:</label>
+        <input class="field-login" type="password" name="password" id="pname">
+      </div>
       <input id="login-button" class="login-button" type="button" value="Anmelden"/>
+      <input id="login-button-after-2fa" class="login-button" type="button" value="Anmelden"/>
       <a class="register-button" href="register.php">Registrieren</a>
     </form>
+    <div class="space"></div>
+    <div id="qr-code-container">
+      <p>Scannen Sie diesen Code um die 2 Faktor Authentifizierung zu aktivieren:</p>
+      <div>
+        <img src="<?= $tfa->getQRCodeImageAsDataUri('Todo App', $secret)?>"/>
+      </div>
+    </div>
     <div class="clearer"></div>
-    <?php
-    if (isset($_POST['submit'])) {
-      if (count($errors) != 0) {
-        errorMessage($errors);
-      }
-    }
-    ?>
   </div>
 </div>
 <div class="footer-login">

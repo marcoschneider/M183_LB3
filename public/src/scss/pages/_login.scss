@@ -24,5 +24,19 @@
       background-color: forestgreen;
       margin-top: 2vw;
     }
+
+    #qr-code-container{
+      width: 80%;
+      margin: 0 auto;
+      padding: 15px 20px;
+      div{
+        width: 100%;
+        text-align: center;
+      }
+      p{
+        text-align: center;
+        margin-bottom: 30px;
+      }
+    }
   }
 }

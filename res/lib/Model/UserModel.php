@@ -108,6 +108,31 @@ class UserModel
       return $errors;
     }
   }
+  
+  public function updateSecretKey($key) {
+    $sql = "UPDATE user
+    SET secret = '" . $key . "'
+    WHERE username = '" . $this->username . "'";
+
+    $this->conn->query($sql);
+  }
+
+  public function getSecretKey() {
+    $sql = "SELECT secret
+    FROM user
+    WHERE username = '" . $this->username .  "'";
+
+    $result = $this->conn->query($sql);
+
+    return $result;
+  }
+
+  public function isSecretKeySet() {
+    if ($this->getSecretKey()->num_rows > 0) {
+      return true;
+    }
+    return false;
+  }
 
   private function checkForChangePassword($currentPassword, $newPassword, $repeatNewPassword) {
 

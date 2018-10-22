@@ -9,7 +9,9 @@ require 'res/lib/router/Route.php';
 require LIBRARY_PATH.'/functions.php';
 
 //starts secure Session
-session_start();
+session_start([
+  'cookie_lifetime' => 86400,
+]);
 
 $conn = Config::getDb();
 
@@ -24,8 +26,10 @@ $uid = $_SESSION['kernel']['userdata']["id"];
 $groupname = $_SESSION['kernel']['userdata']['group_name'];
 $groupID = $_SESSION['kernel']['userdata']['group_id'];
 $username = $_SESSION['kernel']['userdata']['username'];
-
 ?>
+<noscript>
+  Bitte aktivieren Sie Javascript, ansonsten können Sie sich nicht anmelden.
+</noscript>
 <!DOCTYPE html>
 <html>
   <head>
