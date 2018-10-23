@@ -41,17 +41,17 @@ $_SESSION['2fa-secret'] = $secret;
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../assets/css/sco.styles.css"/>
+    <link rel="stylesheet" href="<?= Config::getHostname()?>/public/assets/css/sco.styles.css"/>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <link rel="stylesheet" href="../../node_modules/toastr/build/toastr.min.css">
-    <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="../assets/img/favicon-16x16.png">
+    <link rel="stylesheet" href="<?= Config::getHostname()?>/node_modules/toastr/build/toastr.min.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= Config::getHostname()?>/public/assets/img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?= Config::getHostname()?>/public/assets/img/favicon-16x16.png">
     <title>Registrierung</title>
   </head>
   <body>
     <header class="row col-12">
       <div class="brand-logo">
-        <img class="logo" src="../assets/img/logo.svg"/>
+        <img class="logo" src="<?= Config::getHostname()?>/public/assets/img/logo.svg"/>
       </div>
     </header>
     <div class="content-wrapper">
@@ -102,9 +102,9 @@ $_SESSION['2fa-secret'] = $secret;
       <p>&copy Copyright Somedia Production Web Support</p>
     </div>
   </body>
-  <script type="text/javascript" src="../../bower_components/jquery/dist/jquery.min.js"></script>
-  <script type="text/javascript" src="../../bower_components/js-sha256/build/sha256.min.js"></script>
-  <script type="text/javascript" src="../../node_modules/toastr/build/toastr.min.js"></script>
-  <script type="text/javascript" src="../assets/js/response-handler.js"></script>
-  <script type="text/javascript" src="../assets/js/script.js"></script>
+  <script type="text/javascript" src="<?= Config::getHostname()?>/bower_components/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="<?= Config::getHostname()?>/bower_components/js-sha256/build/sha256.min.js"></script>
+  <script type="text/javascript" src="<?= Config::getHostname()?>/node_modules/toastr/build/toastr.min.js"></script>
+  <script type="text/javascript" src="<?= Config::getHostname()?>/public/assets/js/response-handler.js"></script>
+  <script type="text/javascript" src="<?= Config::getHostname()?>/public/assets/js/script.js"></script>
 </html>

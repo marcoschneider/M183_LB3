@@ -44,7 +44,7 @@ class Config{
     ];
 
     foreach($sheets as $src) {
-      echo '<link rel="stylesheet" href="' . $src . '"/>';
+      echo '<link rel="stylesheet" href="' . Config::getHostname() . $src . '"/>';
     }
   }
 
@@ -58,7 +58,7 @@ class Config{
     ];
 
     foreach($scripts as $src) {
-      echo '<script type="text/javascript" src="' . $src . '"></script>';
+      echo '<script type="text/javascript" src="' . Config::getHostname() . $src . '"></script>';
     }
   }
 }

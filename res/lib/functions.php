@@ -7,6 +7,8 @@
  * @param $page
  */
 
+require_once 'res/config.inc.php';
+
 /**
  * Redirects user to page.
  *
@@ -14,7 +16,7 @@
  */
 function redirect($page)
 {
-  header("Location: " . $page);
+  header("Location: " . Config::getHostname() . $page);
 }
 
 function stripScriptTag($html) {
@@ -848,6 +850,8 @@ $values = array();
 }
 
 function validateAddLinkForm($formValues, $conn, $uid) {
+  $values = [];
+  $errors = [];
   if (isset($formValues['addlink']) || isset($formValues['update-link'])){
     if (isset($formValues['link_name']) && $formValues['link_name'] != '') {
       $link_name = htmlspecialchars(trim($formValues['link_name']));
@@ -876,7 +880,7 @@ function validateAddLinkForm($formValues, $conn, $uid) {
           $errors['message'] = $insertResult;
         }
       }else{
-        errorMessage($errors);
+        return $errors;
       }
     }elseif (isset($formValues['update-link'])) {
       if (empty($errors)) {
@@ -891,4 +895,5 @@ function validateAddLinkForm($formValues, $conn, $uid) {
       }
     }
   }
+  return $errors;
 }

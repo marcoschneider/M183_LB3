@@ -11,4 +11,4 @@ $settings = [
   ]
 ];
 
-$settings['domain'] = 'm133.test';
+$settings['domain'] = 'http://localhost/M133_LB3';

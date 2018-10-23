@@ -1,4 +1,4 @@
-let ajaxUrl = "/res/lib/Ajax.php";
+let ajaxUrl = "/M133_LB3/res/lib/Ajax.php";
 let handler;
 let body = $('body');
 
@@ -376,14 +376,4 @@ function showPendingLogsTimeout($timeout) {
   setTimeout(function () {
     showPendingGroupLogs();
   }, $timeout);
-}
-
-function guid() {
-  return "ss-s-s-s-sss".replace(/s/g, s4);
-}
-
-function s4() {
-  return Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1);
 }

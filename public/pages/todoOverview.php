@@ -14,7 +14,7 @@ $resultStatus = countTodoStatus($conn, $uid);
           if($result['todo_status'] === '1' && $result['group_short'] === 'self-todo') {
             ?>
             <div class="todo-wrapper col-sm-12 col-md-6 col-lg-3">
-              <a class="link" href="/todo-details/<?= $result['id'] ?>">
+              <a class="link" href="<?= Config::getHostname()?>/todo-details/<?= $result['id'] ?>">
                 <h3 class="title-todo-wrapper"><?= $result['title'] ?></h3>
                 <div class="date-todo-wrapper">
                   <?= trim($result['creation_date']) ?>
@@ -23,10 +23,10 @@ $resultStatus = countTodoStatus($conn, $uid);
                   <?= strip_tags(htmlspecialchars_decode($result['problem'])) ?>
                 </div>
                 <div class="action-links-wrapper">
-                  <a class="overview-action-links" href="/done-todo/<?= $result['id'] ?>">
+                  <a class="overview-action-links" href="<?= Config::getHostname()?>/done-todo/<?= $result['id'] ?>">
                     <i class="fas fa-check" aria-hidden="true"></i>
                   </a>
-                  <a class="overview-action-links" href="edit-todo/<?= $result['id'] ?>">
+                  <a class="overview-action-links" href="<?= Config::getHostname()?>/edit-todo/<?= $result['id'] ?>">
                     <i class="fas fa-edit"></i>
                   </a>
                 </div>

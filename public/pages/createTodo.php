@@ -24,7 +24,7 @@
           }
         }
       ?>
-      <form class="form" method="POST" action="/create-todo">
+      <form class="form" method="POST" action="<?= Config::getHostname()?>/create-todo">
         <label>
           <?php
           echo (isset($errors['title']))

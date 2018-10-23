@@ -12,7 +12,7 @@ $values = [];
 $errors = [];
 
 //Update form validation
-validateAddLinkForm($_POST, $conn, $uid);
+$errors = validateAddLinkForm($_POST, $conn, $uid);
 
 //Delete form validation
 if(isset($_POST['delete-link-submit'])) {
@@ -57,7 +57,12 @@ if(isset($_POST['delete-link-submit'])) {
     </div>
     <div class="col-5">
       <h2 id="add-link-title" class="space">Link hinzufügen</h2>
-      <form id="add-link" class="form" method="POST" action="/support-links">
+      <?php
+        if(isset($errors)){
+          errorMessage($errors);
+        }
+      ?>
+      <form id="add-link" class="form" method="POST" action="<?= Config::getHostname()?>/support-links">
         <label>
           Name des Links*:
           <input id="name-link" type="text" name="link_name" class="form_control" value="<?php echo (isset($_POST ['link_name'])) ? $_POST['link_name'] : ''; ?>">
@@ -77,7 +82,7 @@ if(isset($_POST['delete-link-submit'])) {
       </form>
     </div>
     <div class="col-3">
-      <h2 class="space">Link löschen/bearbeiten</h2><form id="update-edit-link-form" class="form" method="POST" action="/support-links">
+      <h2 class="space">Link löschen/bearbeiten</h2><form id="update-edit-link-form" class="form" method="POST" action="<?= Config::getHostname()?>/support-links">
         <label>
           ID des Links*:
           <input id="link-to-update" type="text" name="link_id" class="form_control" value="<?php

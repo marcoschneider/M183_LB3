@@ -24,7 +24,7 @@ $resultStatus = countTodoStatus($conn, $uid);
               <?= strip_tags($result['problem']) ?>
             </div>
             <div class="action-links-wrapper">
-              <a class="overview-action-links" href="/edit-todo/<?= $result['id'] ?>">
+              <a class="overview-action-links" href="<?= Config::getHostname()?>/edit-todo/<?= $result['id'] ?>">
                 <i class="fas fa-edit"></i>
               </a>
               <a  id="<?= $result['id']?>" data-uid="<?= $result['uid']?>" class="overview-action-links delete-group-todo">

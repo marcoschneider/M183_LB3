@@ -17,7 +17,7 @@ $conn = Config::getDb();
 
 //Manages redirect to login page if not logged in.
 if(!$_SESSION['loggedin']) {
-  redirect("public/pages/login.php");
+  redirect("/public/pages/login.php");
   die();
 }
 
@@ -36,16 +36,16 @@ $username = $_SESSION['kernel']['userdata']['username'];
     <?php header('Content-type: text/html');
     Config::styles();
     ?>
-    <link rel="icon" type="image/png" sizes="32x32" href="/public/assets/img/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/public/assets/img/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= Config::getHostname()?>/public/assets/img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?= Config::getHostname()?>/public/assets/img/favicon-16x16.png">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"/>
     <meta charset="utf-8" lang="de"/>
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="Content-Type" content="text/html" lang="de"/>
-    <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="/node_modules/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="<?= Config::getHostname()?>/bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="<?= Config::getHostname()?>/node_modules/ckeditor/ckeditor.js"></script>
     <title>Todo Web App</title>
   </head>
 	<body>
@@ -53,25 +53,25 @@ $username = $_SESSION['kernel']['userdata']['username'];
       <div class="container-fluid">
         <div class="row">
           <div class="col valign-wrapper">
-            <a class="button-default" href="/logout"><i class="fas fa-sign-out-alt fa-2x"></i></a>
+            <a class="button-default" href="<?= Config::getHostname()?>/logout"><i class="fas fa-sign-out-alt fa-2x"></i></a>
           </div>
           <div class="col brand-logo">
-            <a href="/support-links">
-              <img class="logo" src="/public/assets/img/logo.svg"/>
+            <a href="<?= Config::getHostname()?>/support-links">
+              <img class="logo" src="<?= Config::getHostname()?>/public/assets/img/logo.svg"/>
             </a>
           </div>
           <div class="col valign-wrapper flex-end">
-            <a class="button-default white-text right" href="/user" ><i class="fas fa-user"></i><?= $username?></a>
+            <a class="button-default white-text right" href="<?= Config::getHostname()?>/user" ><i class="fas fa-user"></i><?= $username?></a>
           </div>
         </div>
         <div class="row">
           <nav class="menu">
             <?php
             $links = array(
-              'Favorite Links' => '/support-links',
-              'Aufgabenübersicht' => '/todo-overview',
-              'Gruppenübersicht' => '/group-overview',
-              'Gruppen Log'  => '/group-log'
+              'Favorite Links' => '' . Config::getHostname() . '/support-links',
+              'Aufgabenübersicht' => '' . Config::getHostname() . '/todo-overview',
+              'Gruppenübersicht' => '' . Config::getHostname() . '/group-overview',
+              'Gruppen Log'  => '' . Config::getHostname() . '/group-log'
             );
 
             $navigation =  createMenu($links);
@@ -84,10 +84,10 @@ $username = $_SESSION['kernel']['userdata']['username'];
     </header>
     <div class="tooltip-wrapper">
       <div class="tooltip valign-wrapper">
-        <a class="tap-target" href="/create-todo"><i class="tap-target-done-overview fas fa-plus-circle fa-5x" aria-hidden="true"></i></a>
+        <a class="tap-target" href="<?= Config::getHostname()?>/create-todo"><i class="tap-target-done-overview fas fa-plus-circle fa-5x" aria-hidden="true"></i></a>
       </div>
       <div class="tooltip valign-wrapper">
-        <a class="tap-target" href="/done-overview"><i class="tap-target-create-todo fas fa-check-circle fa-5x" aria-hidden="true"></i></a>
+        <a class="tap-target" href="<?= Config::getHostname()?>/done-overview"><i class="tap-target-create-todo fas fa-check-circle fa-5x" aria-hidden="true"></i></a>
       </div>
     </div>
     <div class="container-wrapper">
@@ -176,7 +176,7 @@ $username = $_SESSION['kernel']['userdata']['username'];
         include('public/pages/deleteTodo.php');
       },'post');
 
-      Route::run('/');
+      Route::run('/M133_LB3');
 
       ?>
     </div>

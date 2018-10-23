@@ -132,7 +132,7 @@ class UserController
     }
 
     if (count($errors) === 0) {
-      
+
       $sql = "
       INSERT INTO `user` 
         (`firstname`, `surname`, `password`, `username`, `secret`)
