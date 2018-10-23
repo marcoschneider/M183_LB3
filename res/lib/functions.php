@@ -17,6 +17,10 @@ function redirect($page)
   header("Location: " . $page);
 }
 
+function stripScriptTag($html) {
+  return preg_replace('#<script(.*?)>(.*?)</script>#is', '', $html);
+}
+
 /**
  * Outputs error messages to user.
  *
@@ -39,6 +43,13 @@ function errorMessage($message)
     </div>
     <div class="space"></div>';
   }
+}
+
+function showToastMessage($type, $message) {
+  if ($type === 'success') {
+    return '<script>toastr.success(' . $message . ');</script>';
+  }
+  return '<script>toastr.error(' . $message . ');</script>';
 }
 
 /**
@@ -308,13 +319,45 @@ function saveEdit($conn, $values, $getId, $uid)
     WHERE
       `id` = '" . $getId . "' AND `fk_user` = '" . $uid . "'";
 
+  mysqli_begin_transaction($conn);
   $updateTodo = mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
   if ($updateTodo) {
+    mysqli_commit($conn);
     return true;
   } else {
+    mysqli_rollback($conn);
     return $updateTodo;
   }
+}
+
+function sec_session_start()
+{
+  $session_name = 'm183_sec_session';   // Set a custom session name
+  $secure = TRUE;
+  // This stops JavaScript being able to access the session id.
+  $httponly = true;
+
+  // Forces sessions to only use cookies.
+  if (ini_set('session.use_only_cookies', 1) === FALSE) {
+    header("Location: /public/pages/login.php?login-error");
+    exit();
+  }
+  // Gets current cookies params.
+  $cookieParams = session_get_cookie_params();
+  session_set_cookie_params
+  (
+    $cookieParams["lifetime"],
+    $cookieParams["path"],
+    $cookieParams["domain"],
+    $secure,
+    $httponly
+  );
+
+  // Sets the session name to the one set above.
+  session_name($session_name);
+  session_start();            // Start the PHP session
+  session_regenerate_id(true);    // regenerated the session, delete the old one.
 }
 
 
@@ -526,11 +569,14 @@ function deleteLink($conn, $uid, $link_id){
           AND
             id = '" . $link_id . "'";
 
+  mysqli_begin_transaction($conn);
   $deleteLink = mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
   if($deleteLink){
+    mysqli_commit($conn);
     return true;
   }else{
+    mysqli_rollback($conn);
     return $deleteLink;
   }
 
@@ -722,6 +768,15 @@ function createMenu($links)
   return $ul;
 }
 
+function createSupportLinksMenu($links) {
+  $ul = '<ul>';
+  foreach ($links as $link) {
+    $ul .= '<li><a target="_blank" href="' . $link['link_url'] . '">' . $link['link_name'] . '<span class="link-id">' . $link['id'] . '</span></a></li>';
+  }
+  $ul .= '</ul>';
+  echo $ul;
+}
+
 /**
  * @author maschneider
  *
@@ -730,14 +785,14 @@ function createMenu($links)
  *
  * @return array
  */
-function checkForm($formValues, $conn)
+function validateTodoForm($formValues, $conn)
 {
 $errors = array();
 $values = array();
 
   //Überprüft ob das Feld ausgefüllt ist.
   if(isset($formValues['project']) && $formValues['project'] != '' && $formValues['project'] != '--Bitte wählen--'){
-    $values['project'] = $formValues['project'];
+    $values['project'] = htmlspecialchars($formValues['project']);
   }else{
     $errors['project'] = "Bitte wählen Sie ein Projekt aus";
   }
@@ -749,8 +804,8 @@ $values = array();
   }
 
   if(isset($formValues['problem']) && $formValues['problem'] != ''){
-    $description = mysqli_real_escape_string($conn, $formValues['problem']);
-    $values['problem'] = $description;
+    $values['problem'] = htmlspecialchars(stripScriptTag($formValues['problem']));
+    var_dump($values['problem']);
   }else{
     $errors['problem'] = "Feld Beschreibung darf nicht leer sein";
   }
@@ -790,4 +845,50 @@ $values = array();
 
   $values['errors'] = $errors;
   return $values;
+}
+
+function validateAddLinkForm($formValues, $conn, $uid) {
+  if (isset($formValues['addlink']) || isset($formValues['update-link'])){
+    if (isset($formValues['link_name']) && $formValues['link_name'] != '') {
+      $link_name = htmlspecialchars(trim($formValues['link_name']));
+      $values['link_name'] = $link_name;
+    }else{
+      $errors['links_name'] = 'Bitte geben Sie dem Link einen Namen';
+    }
+
+    if (isset($formValues['link_id'])) {
+      $values['link_id'] = htmlspecialchars($formValues['link_id']);
+    }
+
+    if (isset($formValues['link']) && $formValues['link'] != '') {
+      $link = htmlspecialchars(trim($formValues['link']));
+      $values['link'] = $link;
+    }else{
+      $errors['link'] = 'Bitte eine URL hinzufügen';
+    }
+
+    if (isset($formValues['addlink'])){
+      if (empty($errors)){
+        $insertResult = addLink($conn, $formValues, $uid);
+        if($insertResult === true) {
+          redirect('/support-links');
+        }else{
+          $errors['message'] = $insertResult;
+        }
+      }else{
+        errorMessage($errors);
+      }
+    }elseif (isset($formValues['update-link'])) {
+      if (empty($errors)) {
+        $updateResult = updateLink($conn, $values, $uid);
+        if ($updateResult === true) {
+          redirect('/support-links');
+        }else{
+          $errors['message'] = $updateResult;
+        }
+      }else{
+        $errors['has_error'] = TRUE;
+      }
+    }
+  }
 }

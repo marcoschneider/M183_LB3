@@ -11,12 +11,16 @@ class UserController
   private $conn;
   private $uid;
   private $userModel;
+  private $logger;
+  private $tfa;
 
-  public function __construct(UserModel $userModel)
+  public function __construct(UserModel $userModel, \RobThree\Auth\TwoFactorAuth $tfa, Logger $logger)
   {
     $this->userModel = $userModel;
     $this->uid = $this->userModel->uid;
     $this->conn = $this->userModel->conn;
+    $this->tfa = $tfa;
+    $this->logger = $logger;
   }
 
   /**
@@ -27,32 +31,53 @@ class UserController
    *
    * @return bool|string
    */
-  public function authUser($username, $pass)
+  public function authUser($username, $pass, $code)
   {
     $this->userModel->setUsername(htmlspecialchars($username));
 
-    if ($username != '' && $pass != hash('sha256', "")) {
-      $escUsername = mysqli_real_escape_string($this->conn, $username);
+    $escUsername = null;
+    $escPass = null;
+    $escCode = null;
+
+    if ($username != '' && $pass != hash('sha256', "") && $code != '') {
+      $escUsername = mysqli_real_escape_string($this->conn, htmlspecialchars($username));
+      //Todo: Hier wird mysqli_real_escape_string benutzt um die WebApp vor sql injection zu schützen.
       $escPass = mysqli_real_escape_string($this->conn, htmlspecialchars($pass));
+      $escCode = mysqli_real_escape_string($this->conn, htmlspecialchars($code));
     } else {
       $error = "Bitte alle felder ausfüllen";
     }
-
     if (!isset($error)) {
-      //Checks if username and password matches post
-      $sql = "SELECT id FROM user WHERE `username`='" . $escUsername . "' AND `password`='" . $escPass . "'";
-      $result = $this->conn->query($sql);
-      if ($result->num_rows > 0) {
-        $user = $this->userModel->getUserdata();
-        $_SESSION['loggedin'] = true;
-        $_SESSION['kernel']['userdata'] = $user;
-        return true;
-      } else {
-        return "Benutzername oder Passwort falsch";
+      if ($this->userModel->isSecretKeySet()) {
+        $result = $this->userModel->getSecretKey();
+        $secret = $result->fetch_assoc()['secret'];
+        if ($this->tfa->verifyCode($secret, $escCode)) {
+          //Checks if username and password matches post
+          $sql = "
+            SELECT
+             id 
+            FROM user 
+            WHERE 
+              `username`='" . $escUsername . "' 
+              AND `password`='" . $escPass . "'";
+          $result = $this->conn->query($sql);
+          if ($result->num_rows > 0) {
+            $user = $this->userModel->getUserdata();
+            $_SESSION['loggedin'] = TRUE;
+            $_SESSION['kernel']['userdata'] = $user;
+            return TRUE;
+          }
+          else {
+            return "Benutzername oder Passwort falsch";
+          }
+        }else{
+          return 'Die Authenfizierung ist fehlgeschlagen';
+        }
       }
-    } else {
+    }else {
       return $error;
     }
+    return FALSE;
   }
 
   /**
@@ -68,10 +93,15 @@ class UserController
    */
   public function registerUser($firstname, $surname, $username, $pass, $fk_group) {
 
+    $username = mysqli_real_escape_string($this->conn, $username);
+    //Todo: Hier wird mysqli_real_escape_string benutzt um die WebApp von sql injection zu schützen.
+    $pass = mysqli_real_escape_string($this->conn, $pass);
+
     $value = [];
     $errors = [];
 
     if(isset($firstname) && $firstname != ''){
+      //Todo: Von PHP eingebaute htmlspecialchars Funktion schützt gegen Cross Site Scripting.
       $value['firstname'] = htmlspecialchars($firstname);
     }else{
       $errors[] = 'Vorname wurde nicht ausgefüllt';
@@ -102,18 +132,20 @@ class UserController
     }
 
     if (count($errors) === 0) {
-
+      
       $sql = "
       INSERT INTO `user` 
-        (`firstname`, `surname`, `password`, `username`) 
+        (`firstname`, `surname`, `password`, `username`, `secret`)
       VALUES (
         '" . $value['firstname'] . "',
         '" . $value['surname'] . "',
         '" . $value['password-reg'] . "',
-        '" . $value['username-reg'] . "'
+        '" . $value['username-reg'] . "',
+        '" . $_SESSION['2fa-secret'] . "'
       )";
 
       $result = $this->conn->query($sql);
+
       $lastUserID = mysqli_insert_id($this->conn);
 
       $sqlGroup = "
@@ -123,21 +155,22 @@ class UserController
         " . $lastUserID . ",
         " . $value['team'] . "
       ), (
-        ".$lastUserID.",
+        " . $lastUserID . ",
         1
-      )  
-      ";
+      )";
 
       $resultGroup = $this->conn->query($sqlGroup);
 
       if ($result && $resultGroup) {
         return true;
-      } else {
+      }
+      else {
+        $this->logger->setMessage('Benutzer konnte nicht erstellt werden');
+        $this->logger->save();
         return $result;
       }
     }else{
       return $errors;
     }
   }
-
 }

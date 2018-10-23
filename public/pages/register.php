@@ -6,13 +6,36 @@
  * Time: 14:08
  */
 
-//error_reporting(E_ALL & ~E_NOTICE);
-
 require "../../res/config.inc.php";
 require "../../res/lib/functions.php";
+require '../../vendor/autoload.php';
 
 $conn = Config::getDb();
 $groups = getAllGroups($conn);
+
+use RobThree\Auth\TwoFactorAuth;
+use RobThree\Auth\TwoFactorAuthException;
+
+try {
+  $tfa = new TwoFactorAuth();
+  $secret = $tfa->createSecret();
+  $img = $tfa->getQRCodeImageAsDataUri('Todo App', $secret);
+} catch (TwoFactorAuthException $e) {
+  $logger = new Logger();
+  $logger->setMessage('2FA not available');
+  $logger->save();
+
+  $logQRCode = new Logger();
+  $logQRCode->setMessage('Failed loaded QR code' . $e->getMessage());
+  $logQRCode->save();
+}
+
+//starts secure Session
+session_start([
+  'cookie_lifetime' => 86400,
+]);
+
+$_SESSION['2fa-secret'] = $secret;
 ?>
 
 <html>
@@ -42,31 +65,17 @@ $groups = getAllGroups($conn);
             Nachname:
             <input id="surname" class="field-login" type="text" name="surname" value="">
           </label>
-          <label class="label">
-            Dein Team wählen:
+          <label class="label">Dein Team wählen:
+            <select id="group-in-register" class="field-login" name="project">
+              <?php foreach($groups as $group){?>
+                <option value="<?=$group['id']?>"<?php
+                if (isset($_POST['group']) && $_POST['group'] === $group['id']){
+                  echo 'selected';
+                }
+                ?>><?=$group['group_name']?></option>
+              <?php } ?>
+            </select>
           </label>
-          <div id="dropdown-register" class="dropdown-trigger">
-            <p>
-              <?php
-              foreach ($groups as $group){
-                if (isset($_POST['group']) && $_POST['group'] === $group['id']) {
-                  echo $group['group_name'];
-                }else{
-                  echo '--Bitte wählen--';
-                  echo '<input id="group-in-register" type="hidden" value="0"/>';
-                  break;
-                }
-              }
-              ?>
-            </p>
-            <ul data-name="group" class="dropdown-list">
-              <?php
-                foreach ($groups as $group) {
-                  echo '<li data-list-value="'.$group['id'].'">'.$group['group_name'].'</li>';
-                }
-              ?>
-            </ul>
-          </div>
           <label class="label">
             Benutzername:
             <input id="username" class="field-login" type="text" name="username-reg" value="">
@@ -79,6 +88,12 @@ $groups = getAllGroups($conn);
           <a class="register-button" href="login.php">Anmelden</a>
         </form>
         <div class="clearer"></div>
+      </div>
+      <div id="qr-code-container">
+        <p>Scannen Sie diesen Code um die 2 Faktor Authentifizierung zu aktivieren:</p>
+        <div>
+          <img src="<?=$img?>"/>
+        </div>
       </div>
     </div>
     <div class="footer-login col-12">

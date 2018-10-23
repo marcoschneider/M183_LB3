@@ -2,13 +2,16 @@
 require 'res/config.inc.php';
 require_once LIBRARY_PATH . "/SessionManager.php";
 
-//starts Session
-session_start();
 
 error_reporting(E_ALL & ~E_NOTICE);
 //import configs and import lib
 require 'res/lib/router/Route.php';
 require LIBRARY_PATH.'/functions.php';
+
+//starts secure Session
+session_start([
+  'cookie_lifetime' => 86400,
+]);
 
 $conn = Config::getDb();
 $urlPrefix = Config::getURLPrefix();
@@ -24,17 +27,20 @@ $uid = $_SESSION['kernel']['userdata']["id"];
 $groupname = $_SESSION['kernel']['userdata']['group_name'];
 $groupID = $_SESSION['kernel']['userdata']['group_id'];
 $username = $_SESSION['kernel']['userdata']['username'];
-
 ?>
+<noscript>
+  Bitte aktivieren Sie Javascript, ansonsten können Sie sich nicht anmelden.
+</noscript>
 <!DOCTYPE html>
 <html>
   <head>
-    <?php header('Content-type: text/html; charset=utf-8');
+    <?php header('Content-type: text/html');
     Config::styles();
     ?>
     <link rel="icon" type="image/png" sizes="32x32" href="/public/assets/img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/public/assets/img/favicon-16x16.png">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"/>
+    <meta charset="utf-8" lang="de"/>
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -142,6 +148,10 @@ $username = $_SESSION['kernel']['userdata']['username'];
         redirect("public/pages/login.php");
       },'get');
 
+
+      Route::add('/support-links',function() use ($conn, $uid){
+        include('public/pages/supportLinks.php');
+      },'post');
 
       Route::add('/support-links',function() use ($conn, $uid){
         include('public/pages/supportLinks.php');

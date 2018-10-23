@@ -5,27 +5,34 @@
  * Date: 16.06.2018
  * Time: 11:24
  */
+require_once 'functions.php';
 require_once 'SessionManager.php';
 
-session_start();
+//starts secure Session
+session_start([
+  'cookie_lifetime' => 86400,
+]);
 
 require_once './../config.inc.php';
 require_once 'model/UserModel.php';
 require_once 'model/GroupLogModel.php';
 require_once 'model/TodoModel.php';
 require_once 'controller/UserController.php';
+require_once 'Logger.php';
+require_once '../../vendor/autoload.php';
+use RobThree\Auth\TwoFactorAuth;
 
 $conn = Config::getDb();
 $username = null;
 $uid = null;
-if(isset($_SESSION['kernel']['userdata']['username'])){
+if(isset($_SESSION['kernel']['userdata']['username'])) {
   $username = $_SESSION['kernel']['userdata']['username'];
   $uid = $_SESSION['kernel']['userdata']['id'];
 }
+header('HTTP/1.0 403 Forbidden');
 
 class Ajax
 {
-
   private $conn;
   private $uid;
   private $username;
@@ -53,6 +60,7 @@ class Ajax
    */
   public function getRequest()
   {
+    header('HTTP/1.0 200 OK');
     header('Content-Type: application/json');
     if (isset($_REQUEST['jsonData'])) {
       $action = json_decode($_REQUEST['jsonData']);
@@ -77,10 +85,13 @@ class Ajax
         $result = $this->userModel->getUserdata();
         break;
       case 'authUser':
-        $result = $this->userController->authUser($action->username, $action->password);
+        $result = $this->userController->authUser($action->username, $action->password, $action->code);
         break;
       case 'registerUser':
         $result = $this->userController->registerUser($action->firstname, $action->surname, $action->username, $action->password, $action->fk_group);
+        break;
+      case 'createTodo':
+        $result = $this->todoModel->createTodo($action);
         break;
       case 'insertLogAfterEdit':
         $result = $this->groupLogModel->insertGroupLog($action->message, $action->todoID, 1, $action->uid);
@@ -120,8 +131,16 @@ class Ajax
 
 }
 
+$logger = new Logger();
+
+try {
+  $tfa = new TwoFactorAuth();
+} catch (\RobThree\Auth\TwoFactorAuthException $e) {
+  $logger->setMessage("Couldn't create two factor instance in Ajax.php");
+  $logger->save();
+}
 $userModel = new UserModel($conn, $uid);
-$userController = new UserController($userModel);
+$userController = new UserController($userModel, $tfa, $logger);
 $todoModel = new TodoModel($userModel);
 $groupLogModel = new GroupLogModel($userModel, $todoModel);
 

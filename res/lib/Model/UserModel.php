@@ -27,6 +27,7 @@ class UserModel
    * @return mixed
    */
   public function getUserdata() {
+    $this->conn->begin_transaction();
     $sql = "
     SELECT 
       u.id,
@@ -44,6 +45,7 @@ class UserModel
     AND g.group_short != 'self-todo'";
 
     $result = $this->conn->query($sql);
+    $this->conn->commit();
 
     if ($result) {
       return $result->fetch_assoc();
@@ -82,6 +84,7 @@ class UserModel
       $errors[] = "Ein Benutzername muss angegeben werden.";
     }
 
+    $this->conn->begin_transaction();
     $sql = "UPDATE user 
     SET 
       firstname = '" . $firstname . "',
@@ -89,20 +92,46 @@ class UserModel
       username = '" . $username . "'
     WHERE id = '" . $this->uid . "'
     ";
-
     if (count($errors) === 0) {
       $result = $this->conn->query($sql);
       if ($result) {
         $_SESSION['kernel']['userdata']['firstname'] = $firstname;
         $_SESSION['kernel']['userdata']['surname'] = $surname;
         $_SESSION['kernel']['userdata']['username'] = $username;
+        $this->conn->commit();
         return true;
       } else {
+        $this->conn->rollback();
         return $result;
       }
     } else {
       return $errors;
     }
+  }
+  
+  public function updateSecretKey($key) {
+    $sql = "UPDATE user
+    SET secret = '" . $key . "'
+    WHERE username = '" . $this->username . "'";
+
+    $this->conn->query($sql);
+  }
+
+  public function getSecretKey() {
+    $sql = "SELECT secret
+    FROM user
+    WHERE username = '" . $this->username .  "'";
+
+    $result = $this->conn->query($sql);
+
+    return $result;
+  }
+
+  public function isSecretKeySet() {
+    if ($this->getSecretKey()->fetch_assoc()['secret'] != '') {
+      return true;
+    }
+    return false;
   }
 
   private function checkForChangePassword($currentPassword, $newPassword, $repeatNewPassword) {

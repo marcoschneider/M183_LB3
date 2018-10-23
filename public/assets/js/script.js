@@ -4,10 +4,6 @@ var handler;
 var body = $('body');
 
 $(function(){
-  customSelect('#dropdown-register');
-  customSelect('#todo-type-create');
-  customSelect('#todo-type-edit');
-  customSelect('#project');
 
   if (document.URL === 'http://' + window.location.hostname + urlPrefix + '/user') {
     getUserdata();
@@ -17,7 +13,7 @@ $(function(){
     showPendingGroupLogs();
   }
 
-  var todoLogState = $('.todo-log-status');
+  let todoLogState = $('.todo-log-status');
   todoLogState.each(function (i) {
     switch (todoLogState[i].value) {
       case '2':
@@ -27,13 +23,22 @@ $(function(){
     }
   });
 
+  $('#label-2fa-code').hide();
+  $('#login-button-after-2fa').hide();
+
   //Event listeners
   $('#update-userdata').on("click", function () {
     changeUserdata();
   });
 
   $('#login-button').on("click", function () {
-    auth_user();
+    $('#label-2fa-code').show();
+    $('#fields-user-password').hide();
+    $('#login-button').hide();
+    $('#login-button-after-2fa').show();
+    $('#login-button-after-2fa').on("click", function () {
+      auth_user();
+    })
   });
 
   $('#register-button').on("click", function () {
@@ -50,6 +55,10 @@ $(function(){
 
   $('#changePassword').on("click", function () {
     checkPassword();
+  });
+
+  $('#create-todo').on("click", function () {
+    createTodo();
   });
 
   $('.todo-wrapper').on("click", function (event) {
@@ -73,13 +82,13 @@ $(function(){
 });
 
 function editLink() {
-  var supportLinkID = $('.link-id');
-  var linkToUpdate = $('#link-to-update').val();
-  var updateInputSubmit = '<input type="submit" name="update-link" class="button-default" value="Link aktualisieren">';
+  let supportLinkID = $('.link-id');
+  let linkToUpdate = $('#link-to-update').val();
+  let updateInputSubmit = '<input type="submit" name="update-link" class="button-default" value="Link aktualisieren">';
   supportLinkID.each(function (i) {
     if (supportLinkID[i].innerHTML === linkToUpdate) {
 
-      var hiddenLinkIdInput = '<input type="hidden" name="link_id" value="'+linkToUpdate+'">';
+      let hiddenLinkIdInput = '<input type="hidden" name="link_id" value="'+linkToUpdate+'">';
 
       let nameOfLink = $(supportLinkID[i]).parent().text();
       let refOfLink = $(supportLinkID[i]).parent().attr("href");
@@ -116,8 +125,8 @@ function getUserdata() {
 
 function saveInfoGroupLogs() {
 
-  var todoID = $('#todo-id').val();
-  var uid = $('#user-id').val();
+  let todoID = $('#todo-id').val();
+  let uid = $('#user-id').val();
 
   $.ajax({
     url: ajaxUrl,
@@ -138,8 +147,8 @@ function saveInfoGroupLogs() {
 
 function insertLogAfterDelete(event) {
 
-  var todoID = event.target.parentNode.getAttribute('id');
-  var uid = event.target.parentNode.getAttribute('data-uid');
+  let todoID = event.target.parentNode.getAttribute('id');
+  let uid = event.target.parentNode.getAttribute('data-uid');
 
   $.ajax({
     url: ajaxUrl,
@@ -197,7 +206,7 @@ function showPendingGroupLogs() {
 
 function confirmDeleteGroupTodo(event) {
 
-  var todoID = event.target.parentNode.lastElementChild.value;
+  let todoID = event.target.parentNode.lastElementChild.value;
 
   $.ajax({
     url: ajaxUrl,
@@ -217,7 +226,7 @@ function confirmDeleteGroupTodo(event) {
 }
 
 function declineDeleteGroupTodo(event) {
-  var todoID = event.target.parentNode.lastElementChild.value;
+  let todoID = event.target.parentNode.lastElementChild.value;
 
   $.ajax({
     url: ajaxUrl,
@@ -238,9 +247,9 @@ function declineDeleteGroupTodo(event) {
 
 function checkPassword() {
 
-  var currentPassword = $('#currentPassword').val();
-  var newPassword = $('#newPassword').val();
-  var repeatPassword = $('#repeatPassword').val();
+  let currentPassword = $('#currentPassword').val();
+  let newPassword = $('#newPassword').val();
+  let repeatPassword = $('#repeatPassword').val();
 
   currentPassword = sha256(currentPassword);
   newPassword = sha256(newPassword);
@@ -267,9 +276,9 @@ function checkPassword() {
 }
 
 function changeUserdata() {
-  var firstname = $('#input-userdata-firstname').val();
-  var surname = $('#input-userdata-surname').val();
-  var username = $('#input-userdata-username').val();
+  let firstname = $('#input-userdata-firstname').val();
+  let surname = $('#input-userdata-surname').val();
+  let username = $('#input-userdata-username').val();
 
   $.ajax({
     url: ajaxUrl,
@@ -285,7 +294,7 @@ function changeUserdata() {
         getUserdataTimeout(50);
         toastr.success("Die Benutzerdaten wurden aktualisiert");
       }else{
-        for (var i = 0; i < res.length; i++) {
+        for (let i = 0; i < res.length; i++) {
           toastr.error(res[i]);
         }
       }
@@ -295,8 +304,9 @@ function changeUserdata() {
 }
 
 function auth_user() {
-  var username = $('#fname').val();
-  var pass = $('#pname').val();
+  let username = $('#fname').val();
+  let pass = $('#pname').val();
+  let code = $('#2fa-code').val();
   pass = sha256(pass);
 
   $.ajax({
@@ -306,9 +316,9 @@ function auth_user() {
       trigger: 'authUser',
       username: username,
       password: pass,
+      code: code,
     })},
     success: function (res) {
-      console.log(res);
       if (res === true) {
         window.location.replace("/M133_LB3/todo-overview");
       }else{
@@ -322,11 +332,13 @@ function auth_user() {
 }
 
 function register_user() {
-  var firstname = $('#firstname').val();
-  var surname = $('#surname').val();
-  var username = $('#username').val();
-  var pass = $('#password').val();
-  var fk_group = $('#group-in-register').val();
+  let firstname = $('#firstname').val();
+  let surname = $('#surname').val();
+  let username = $('#username').val();
+  let pass = $('#password').val();
+  let fk_group = $('#group-in-register').val();
+
+  console.log(fk_group);
 
   pass = sha256(pass);
 
@@ -348,28 +360,10 @@ function register_user() {
       }else{
         handler.error();
       }
+    },
+    error: function (res) {
+      console.log(body.append(res.responseText));
     }
-  });
-}
-
-function customSelect(elementID) {
-
-  $(elementID).on("click", function () {
-    $(elementID+" .dropdown-list").slideToggle(250, function () {
-      $(this).toggleClass("block");
-    });
-    return false;
-  });
-
-  var dropdownLists = elementID+' .dropdown-list';
-
-  $(dropdownLists+' li').on("click", function () {
-    var liText = $(this).text();
-    var liData = $(this).data("list-value");
-    var name = $(dropdownLists).data('name');
-
-    liData = liText + "<input id=\"group-in-register\" type=\"hidden\" name='" + name + "' value='" + liData + "'/>";
-    $(elementID+' p').html(liData);
   });
 }
 
@@ -383,4 +377,14 @@ function showPendingLogsTimeout($timeout) {
   setTimeout(function () {
     showPendingGroupLogs();
   }, $timeout);
+}
+
+function guid() {
+  return "ss-s-s-s-sss".replace(/s/g, s4);
+}
+
+function s4() {
+  return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
 }

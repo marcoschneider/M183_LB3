@@ -18,7 +18,6 @@ $priorities = getAllPriorities($conn);
 if (isset($getID) && $getID != '') {
   $result = $todo;
 }
-
 ?>
 
 <div class="container">
@@ -31,7 +30,7 @@ if (isset($getID) && $getID != '') {
         //Validate form and insert results into db
         if(isset($_POST['submit'])){
           $POST = $_POST;
-          $values = checkForm($POST, $conn);
+          $values = validateTodoForm($POST, $conn);
           $errors = $values['errors'];
 
           if (count($errors) === 0){
@@ -49,27 +48,24 @@ if (isset($getID) && $getID != '') {
           }
         }
         ?>
-        <p>
-          <label>
-            <?php
-            echo (isset($errors['title']))
-              ? '<p class="text-error">Projektname*</p>'
-              : '<p>Projektname*</p>';
-            ?>
-            <select name="project">
-              <option value="--Bitte wählen--">--Bitte wählen--</option>
-              <?php foreach($projects as $key => $project){?>
-                <option value="<?=$project['id']?>"<?php
-                  if (isset($result['project_id']) && $project['id'] === $result['project_id']){
-                    echo 'selected';
-                  }else if(isset($_POST['project'])){
-                    echo 'selected';
-                  }
-                ?>><?=$project['project_name']?></option>
-              <?php } ?>
-            </select>
-          </label>
-        </p>
+        <label>
+          <?php
+          echo (isset($errors['title']))
+            ? '<p class="text-error">Projektname*</p>'
+            : '<p>Projektname*</p>';
+          ?>
+          <select name="project">
+            <?php foreach($projects as $key => $project){?>
+              <option value="<?=$project['id']?>"<?php
+                if (isset($result['project_id']) && $project['id'] === $result['project_id']){
+                  echo 'selected';
+                }else if(isset($_POST['project'])){
+                  echo 'selected';
+                }
+              ?>><?=$project['project_name']?></option>
+            <?php } ?>
+          </select>
+        </label>
         <div class="space"></div>
         <label>
           <?php
@@ -99,52 +95,39 @@ if (isset($getID) && $getID != '') {
           </label>
         </p>
         <div class="space-with-border"></div>
-        <fieldset class="fieldset">
+        <fieldset class="fieldset fieldset-radio">
           <?php
             echo (isset($errors['niveau']) && in_array($errors['niveau'], $errors))
               ? '<legend class="legend text-error">Wichtigkeit*</legend>'
               : '<legend class="legend">Wichtigkeit*</legend>';
 
             foreach($priorities as $priority) { ?>
-              <label>
+              <label class="fieldset-container"><?= $priority['niveau'] ?>
                 <input type="radio" name="niveau" value="<?= $priority['id'];?>"<?php
                 if (isset($result['fk_priority']) && $priority['id'] === $result['fk_priority']) {
                   echo 'checked';
                 }
                 ?>/>
+                <span class="checkmark"></span>
               </label>
-            <?= $priority['niveau'] ?>
             <br>
           <?php } ?>
         </fieldset>
         <div class="space-with-border"></div>
         <label>
           <?php
-          echo (isset($errors['todo-type']) && in_array($errors['todo-type'], $errors))
-            ? '<legend class="legend text-error">Todo-Zuteilung auswählen*</legend>'
-            : '<legend class="legend">Todo-Zuteilung auswählen*</legend>';
+            echo (isset($errors['todo-type']) && in_array($errors['todo-type'], $errors))
+              ? '<legend class="legend text-error">Todo-Zuteilung auswählen*</legend>'
+              : '<legend class="legend">Todo-Zuteilung auswählen*</legend>';
           ?>
-          <div id="todo-type-edit" class="dropdown-trigger">
-            <p>
-              <?php
-              if(isset($result['group_name']) && $result['group_id'] === "1"){
-                echo 'Eigentodo';
-              }elseif ($result['group_id'] != "1"){
-                echo $result['group_name'];
-              }else{
-                echo '--Bitte wählen--';
-              }
-
-              echo (isset($result['group_id']))
-                ? '<input type="hidden" name="todo-type" value="'.$result['group_id'].'" />'
-                : '';
-              ?>
-            </p>
-            <ul data-name="todo-type" class="dropdown-list">
-              <li data-list-value="1">Eigentodo</li>
-              <li data-list-value="<?= $groupID ?>"><?= $groupname ?></li>
-            </ul>
-          </div>
+          <select name="todo-type">
+            <option value="1" <?php if ($result['group_id'] === '1') {
+              echo 'selected';
+            } ?>>Eigentodo</option>
+            <option value="<?= $groupID?>"<?php if ($result['group_id'] === $groupID) {
+              echo 'selected';
+            } ?>><?= $groupname?></option>
+          </select>
         </label>
         <div class="space-with-border"></div>
         <p>

@@ -16,6 +16,12 @@ class TodoModel {
     $this->conn = $userModel->conn;
   }
 
+  public function createTodo($values) {
+    var_dump($values);
+
+    return $values;
+  }
+
   /**
    * @author maschneider
    *

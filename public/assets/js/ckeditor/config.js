@@ -17,5 +17,7 @@ CKEDITOR.editorConfig = function( config ) {
 
   config.language = 'de';
 
+  config.extraPlugins = 'entities';
+
   config.removeButtons = 'Form,Checkbox,Radio,TextField,Textarea,Select,ImageButton,HiddenField,Button,Templates,Preview,Print,NewPage,Save,Cut,Copy,Paste,PasteText,PasteFromWord,Replace,Scayt,Flash,CreateDiv,BidiRtl,BidiLtr,Language,About';
 };

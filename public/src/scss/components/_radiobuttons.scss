@@ -1,0 +1,57 @@
+//colors
+$color_gallery_approx: #eee;
+$color_celeste_approx: #ccc;
+$color_dodger_blue_approx: #2196f3;
+$white: white;
+
+.fieldset.fieldset-radio{
+
+  .fieldset-container {
+    display: inline-block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    //Instead of the line below you could use @include user-select($select)
+    user-select: none;
+    input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      &:checked ~ .checkmark {
+        background-color: $color_dodger_blue_approx;
+        &:after {
+          display: block;
+        }
+      }
+    }
+    &:hover input ~ .checkmark {
+      background-color: $color_celeste_approx;
+    }
+    .checkmark:after {
+      top: 6px;
+      left: 6px;
+      width: 8px;
+      height: 8px;
+      //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+      border-radius: 50%;
+      background: $white;
+    }
+  }
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: $color_gallery_approx;
+    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+    border-radius: 50%;
+    &:after {
+      content: "";
+      position: absolute;
+      display: none;
+    }
+  }
+}
+

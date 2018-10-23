@@ -5,21 +5,22 @@
  * Date: 07.04.2017
  * Time: 20:41
  */
+
 require '../../res/lib/SessionManager.php';
-
-session_start();
-
+require '../../res/lib/Logger.php';
 require '../../res/config.inc.php';
 require '../../res/lib/functions.php';
+//starts secure Session
 
-$conn = Config::getDb();
+session_start([
+  'cookie_lifetime' => 86400,
+]);
 
 // redirect if logged in already
 if (isset($_SESSION['loggedin'])) {
   redirect('/M133_LB3/todo-overview');
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,21 +46,21 @@ if (isset($_SESSION['loggedin'])) {
 <div class="content-wrapper">
   <div class="login-wrapper">
     <form class="login-form" method="post" action="">
-      <label class="label" for="fname">Benutzername:</label>
-      <input class="field-login" type="text" name="username" id="fname" autofocus>
-      <label class="label" for="pname">Passwort:</label>
-      <input class="field-login" type="password" name="password" id="pname">
+      <label id="label-2fa-code" class="label">2FA Code:
+        <input class="field-login" type="text" name="2fa-code" id="2fa-code"/>
+      </label>
+      <div id="fields-user-password">
+        <label class="label" for="fname">Benutzername:</label>
+        <input class="field-login" type="text" name="username" id="fname" autofocus>
+        <label class="label" for="pname">Passwort:</label>
+        <input class="field-login" type="password" name="password" id="pname">
+      </div>
       <input id="login-button" class="login-button" type="button" value="Anmelden"/>
+      <input id="login-button-after-2fa" class="login-button" type="button" value="Anmelden"/>
       <a class="register-button" href="register.php">Registrieren</a>
     </form>
+    <div class="space"></div>
     <div class="clearer"></div>
-    <?php
-    if (isset($_POST['submit'])) {
-      if (count($errors) != 0) {
-        errorMessage($errors);
-      }
-    }
-    ?>
   </div>
 </div>
 <div class="footer-login">
