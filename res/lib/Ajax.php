@@ -131,15 +131,16 @@ class Ajax
 
 }
 
+$logger = new Logger();
+
 try {
   $tfa = new TwoFactorAuth();
 } catch (\RobThree\Auth\TwoFactorAuthException $e) {
-  $logger = new Logger();
   $logger->setMessage("Couldn't create two factor instance in Ajax.php");
   $logger->save();
 }
 $userModel = new UserModel($conn, $uid);
-$userController = new UserController($userModel, $tfa);
+$userController = new UserController($userModel, $tfa, $logger);
 $todoModel = new TodoModel($userModel);
 $groupLogModel = new GroupLogModel($userModel, $todoModel);
 

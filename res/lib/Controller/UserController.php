@@ -11,14 +11,16 @@ class UserController
   private $conn;
   private $uid;
   private $userModel;
+  private $logger;
   private $tfa;
 
-  public function __construct(UserModel $userModel, \RobThree\Auth\TwoFactorAuth $tfa)
+  public function __construct(UserModel $userModel, \RobThree\Auth\TwoFactorAuth $tfa, Logger $logger)
   {
     $this->userModel = $userModel;
     $this->uid = $this->userModel->uid;
     $this->conn = $this->userModel->conn;
     $this->tfa = $tfa;
+    $this->logger = $logger;
   }
 
   /**
@@ -71,13 +73,11 @@ class UserController
         }else{
           return 'Die Authenfizierung ist fehlgeschlagen';
         }
-      }else{
-        $this->userModel->updateSecretKey($_SESSION['2fa-secret']);
-        return 'Bitte laden Sie die Seite neu!';
       }
     }else {
       return $error;
     }
+    return FALSE;
   }
 
   /**
@@ -132,19 +132,20 @@ class UserController
     }
 
     if (count($errors) === 0) {
-
+      
       $sql = "
       INSERT INTO `user` 
-        (`firstname`, `surname`, `password`, `username`) 
+        (`firstname`, `surname`, `password`, `username`, `secret`)
       VALUES (
         '" . $value['firstname'] . "',
         '" . $value['surname'] . "',
         '" . $value['password-reg'] . "',
-        '" . $value['username-reg'] . "'
+        '" . $value['username-reg'] . "',
+        '" . $_SESSION['2fa-secret'] . "'
       )";
 
-      $this->conn->begin_transaction();
       $result = $this->conn->query($sql);
+
       $lastUserID = mysqli_insert_id($this->conn);
 
       $sqlGroup = "
@@ -158,19 +159,18 @@ class UserController
         1
       )";
 
-      $this->conn->begin_transaction();
       $resultGroup = $this->conn->query($sqlGroup);
 
       if ($result && $resultGroup) {
-        $this->conn->commit();
         return true;
-      } else {
-        $this->conn->rollback();
+      }
+      else {
+        $this->logger->setMessage('Benutzer konnte nicht erstellt werden');
+        $this->logger->save();
         return $result;
       }
     }else{
       return $errors;
     }
   }
-
 }

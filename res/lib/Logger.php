@@ -8,13 +8,16 @@
 
 class Logger {
 
-  private $log = '';
+  private $log;
 
   public function setMessage($message) {
     $this->log = $message;
   }
 
   public function save() {
-    file_put_contents('logs/error_logs.txt', $this->log, FILE_APPEND);
+    $message = date('H:i', time()) . ' ' . $this->log.PHP_EOL;
+
+    $filename = dirname(__DIR__)."/logs/error_log.txt";
+    file_put_contents($filename, $message, FILE_APPEND);
   }
 }

@@ -10,31 +10,11 @@ require '../../res/lib/SessionManager.php';
 require '../../res/lib/Logger.php';
 require '../../res/config.inc.php';
 require '../../res/lib/functions.php';
-require '../../vendor/autoload.php';
-
-use RobThree\Auth\TwoFactorAuth;
-use RobThree\Auth\TwoFactorAuthException;
-
-try {
-  $tfa = new TwoFactorAuth();
-  $secret = $tfa->createSecret();
-  $img = $tfa->getQRCodeImageAsDataUri('Todo App', $secret);
-} catch (TwoFactorAuthException $e) {
-  $logger = new Logger();
-  $logger->setMessage('2FA not available');
-  $logger->save();
-
-  $logQRCode = new Logger();
-  $logQRCode->setMessage('Failed loaded QR code' . $e->getMessage());
-  $logQRCode->save();
-}
-
 //starts secure Session
+
 session_start([
   'cookie_lifetime' => 86400,
 ]);
-
-$_SESSION['2fa-secret'] = $secret;
 
 // redirect if logged in already
 if (isset($_SESSION['loggedin'])) {
@@ -80,12 +60,6 @@ if (isset($_SESSION['loggedin'])) {
       <a class="register-button" href="register.php">Registrieren</a>
     </form>
     <div class="space"></div>
-    <div id="qr-code-container">
-      <p>Scannen Sie diesen Code um die 2 Faktor Authentifizierung zu aktivieren:</p>
-      <div>
-        <img src="<?=$img?>"/>
-      </div>
-    </div>
     <div class="clearer"></div>
   </div>
 </div>
