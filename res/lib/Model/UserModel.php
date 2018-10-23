@@ -128,7 +128,7 @@ class UserModel
   }
 
   public function isSecretKeySet() {
-    if ($this->getSecretKey()->num_rows > 0) {
+    if ($this->getSecretKey()->fetch_assoc()['secret'] != '') {
       return true;
     }
     return false;

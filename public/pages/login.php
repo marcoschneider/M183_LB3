@@ -18,10 +18,15 @@ use RobThree\Auth\TwoFactorAuthException;
 try {
   $tfa = new TwoFactorAuth();
   $secret = $tfa->createSecret();
+  $img = $tfa->getQRCodeImageAsDataUri('Todo App', $secret);
 } catch (TwoFactorAuthException $e) {
   $logger = new Logger();
   $logger->setMessage('2FA not available');
   $logger->save();
+
+  $logQRCode = new Logger();
+  $logQRCode->setMessage('Failed loaded QR code' . $e->getMessage());
+  $logQRCode->save();
 }
 
 //starts secure Session
@@ -30,8 +35,6 @@ session_start([
 ]);
 
 $_SESSION['2fa-secret'] = $secret;
-
-$conn = Config::getDb();
 
 // redirect if logged in already
 if (isset($_SESSION['loggedin'])) {
@@ -80,7 +83,7 @@ if (isset($_SESSION['loggedin'])) {
     <div id="qr-code-container">
       <p>Scannen Sie diesen Code um die 2 Faktor Authentifizierung zu aktivieren:</p>
       <div>
-        <img src="<?= $tfa->getQRCodeImageAsDataUri('Todo App', $secret)?>"/>
+        <img src="<?=$img?>"/>
       </div>
     </div>
     <div class="clearer"></div>

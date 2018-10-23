@@ -73,11 +73,11 @@ class UserController
         }
       }else{
         $this->userModel->updateSecretKey($_SESSION['2fa-secret']);
+        return 'Bitte laden Sie die Seite neu!';
       }
     }else {
       return $error;
     }
-    return 'Something went wrong';
   }
 
   /**
