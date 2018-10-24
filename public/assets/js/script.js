@@ -267,9 +267,15 @@ function checkPassword() {
       })},
     success: function (res) {
       if (res === true) {
-        toastr.success("Die Benutzerdaten wurden aktualisiert");
+        toastr.success("Die Benutzerdaten wurden aktualisiert!");
+        setTimeout(function () {
+          sessionStorage.clear();
+          window.location.replace(urlPrefix+"/public/pages/login.php");
+        }, 2000);
       }else{
-        toastr.error(res);
+        for (let i = 0; i < res.length; i++) {
+          toastr.error(res[i]);
+        }
       }
     }
   })

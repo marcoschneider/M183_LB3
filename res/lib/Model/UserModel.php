@@ -166,7 +166,7 @@ class UserModel
         SELECT
           username
         FROM user
-        WHERE `password` = '" . $currentPassword . "' AND id = '" . $this->uid . "'
+        WHERE `password` = '" . $value['currentPassword'] . "' AND `user`.id = '" . $this->uid . "'
       ";
 
       $result = $this->conn->query($sql);
@@ -174,7 +174,8 @@ class UserModel
       if ($result->num_rows > 0) {
         return true;
       }else{
-        return false;
+        $error[] = 'Das aktuelle Passwort stimmt nicht mit deiner Eingabe überein';
+        return $error;
       }
 
     }else{
@@ -183,7 +184,8 @@ class UserModel
   }
 
   public function updatePassword($currentPassword, $newPassword, $repeatPassword) {
-    if ($this->checkForChangePassword($currentPassword, $newPassword, $repeatPassword)) {
+    $result = $this->checkForChangePassword($currentPassword, $newPassword, $repeatPassword);
+    if ($result === true) {
       $sql = "
         UPDATE `user`
         SET `password` = '" . $repeatPassword . "'
@@ -194,12 +196,12 @@ class UserModel
 
       if ($result) {
         return true;
+      }else{
+        return false;
       }
     }else{
-      $error = 'Das aktuelle Passwort stimmt nicht mit deiner Eingabe überein';
-      return $error;
+      return $result;
     }
-    return false;
   }
 
   /**
