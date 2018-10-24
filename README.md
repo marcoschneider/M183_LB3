@@ -21,12 +21,19 @@ Nun sollte im Root Ordner der App ein neuer Ordner namens _vendor_ und dort sind
 
 Wichtig ist das im _vendor_ Verzeichnis das File _autoload.php_ vorhanden ist.
 
-### NPM
+### NPM & Bower
+#### npm
 Falls Sie npm noch nicht installier haben, wird empfohlen dies noch zu tun. Wie Sie npm installieren wird [hier](https://www.npmjs.com/get-npm) erklärt. Nach der Installation können diesen Befehl ausführen, um die JS Dependencies herunter zu laden:
 ````bash
 cd ~/Path/to/Document Root/M183_LB3/
 npm install
 ````
+
+####bower
+Bower können Sie mit dem folgenden npm Befehl installieren:
+```bash
+npm install -g bower
+```
 
 ## Ohne Composer & NPM
 Im Zipordner sind bereits alles Dependencies vorhanden. Laden Sie den Zip Ordner herunter. Entpacken Sie ihn und ziehen Sie den entzippten Ordner in Ihr Document Root Verzeichnis. Danach kann das Projekt via [localhost/M183_LB3](localhost/M183_LB3) geöffnet werden.
