@@ -3,6 +3,7 @@
 $arrayResult = getGroupTodos($conn, $groupname);
 $resultStatus = countTodoStatus($conn, $uid);
 
+
 ?>
 <div class="container">
   <div class="row">
@@ -15,16 +16,16 @@ $resultStatus = countTodoStatus($conn, $uid);
       foreach($arrayResult as $result) {
         ?>
         <div class="todo-wrapper col-sm-12 col-md-6 col-lg-3">
-          <a class="link" href="<?= $urlPrefix?>/todo-details/<?= $result['id'] ?>">
+          <a class="link" href="<?=Config::getURLPrefix()?>/todo-details/<?= $result['id'] ?>">
             <h3 class="title-todo-wrapper"><?= $result['title'] ?></h3>
             <div class="date-todo-wrapper">
               <?= trim($result['creation_date']) ?>
             </div>
             <div class="description">
-              <?= strip_tags($result['problem']) ?>
+              <?= strip_tags(htmlspecialchars_decode($result['problem'])) ?>
             </div>
             <div class="action-links-wrapper">
-              <a class="overview-action-links" href="<?= $urlPrefix?>/edit-todo/<?= $result['id'] ?>">
+              <a class="overview-action-links" href="<?=Config::getURLPrefix()?>/edit-todo/<?= $result['id'] ?>">
                 <i class="fas fa-edit"></i>
               </a>
               <a  id="<?= $result['id']?>" data-uid="<?= $result['uid']?>" class="overview-action-links delete-group-todo">

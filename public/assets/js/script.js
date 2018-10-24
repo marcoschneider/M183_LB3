@@ -165,10 +165,10 @@ function insertLogAfterDelete(event) {
       if (res === true) {
         toastr.success("Das Todo wurde zur Löschung beantragt");
         setTimeout(function () {
-          window.location.replace("/group-overview");
+          window.location.replace(urlPrefix+"/group-overview");
         }, 1000);
       }else if(res === 'deletedTodo'){
-        window.location.replace("/group-overview");
+        window.location.replace(urlPrefix+"/group-overview");
       }
     }
   });
@@ -320,7 +320,7 @@ function auth_user() {
     })},
     success: function (res) {
       if (res === true) {
-        window.location.replace("/M133_LB3/todo-overview");
+        window.location.replace(urlPrefix+"/todo-overview");
       }else{
         toastr.error(res);
       }

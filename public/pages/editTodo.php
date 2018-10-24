@@ -25,7 +25,7 @@ if (isset($getID) && $getID != '') {
     <div class="col-6 space">
       <h2>Aufgabe bearbeiten</h2>
       <div class="space"></div>
-      <form class="form" method="POST" action="<?= $urlPrefix?>/edit-todo/<?= $getID?>">
+      <form class="form" method="POST" action="<?=Config::getURLPrefix()?>/edit-todo/<?= $getID?>">
         <?php
         //Validate form and insert results into db
         if(isset($_POST['submit'])){
@@ -36,7 +36,7 @@ if (isset($getID) && $getID != '') {
           if (count($errors) === 0){
             $updateTodo = saveEdit($conn, $values, $getID, $uid);
             if($updateTodo === true){
-              redirect('/todo-overview');
+              redirect(Config::getURLPrefix().'/todo-overview');
               die();
             }else{
               errorMessage("Das Todo konnte nicht aktualisiert werden");

@@ -17,14 +17,14 @@
           if (count($errors) === 0){
             $addTodo = addTodo($conn, $values, $uid);
             if($addTodo === true){
-              //redirect('todo-overview');
+              redirect(Config::getURLPrefix().'/todo-overview');
             }else{
               $errors['message'] = "<b>Fehlermedlung: </b>" . $addTodo;
             }
           }
         }
       ?>
-      <form class="form" method="POST" action="<?= $urlPrefix?>/create-todo">
+      <form class="form" method="POST" action="<?=Config::getURLPrefix()?>/create-todo">
         <label>
           <?php
           echo (isset($errors['title']))

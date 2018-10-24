@@ -462,6 +462,14 @@ function getGroupTodos($conn, $groupname) {
     array_push($result, $arrayOutput);
   }
 
+  foreach ($result as $todo) {
+    var_dump($todo);
+    if ($todo['id'] === $todo) {
+
+    }
+  }
+
+
   if ($sqlResult) {
     return $result;
   } else {
@@ -805,7 +813,6 @@ $values = array();
 
   if(isset($formValues['problem']) && $formValues['problem'] != ''){
     $values['problem'] = htmlspecialchars(stripScriptTag($formValues['problem']));
-    var_dump($values['problem']);
   }else{
     $errors['problem'] = "Feld Beschreibung darf nicht leer sein";
   }
