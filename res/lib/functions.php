@@ -452,7 +452,7 @@ function getGroupTodos($conn, $groupname) {
   $result = [];
 
   while ($arrayOutput = mysqli_fetch_array($sqlResult, MYSQLI_ASSOC)) {
-    if(strlen($arrayOutput['problem']) >= 200 ) {
+    if (strlen($arrayOutput['problem']) >= 200) {
       $pos = strpos($arrayOutput['problem'], ' ', 125);
       $arrayOutput['problem'] = substr($arrayOutput['problem'], 0, $pos);
     }
@@ -461,14 +461,6 @@ function getGroupTodos($conn, $groupname) {
 
     array_push($result, $arrayOutput);
   }
-
-  foreach ($result as $todo) {
-    var_dump($todo);
-    if ($todo['id'] === $todo) {
-
-    }
-  }
-
 
   if ($sqlResult) {
     return $result;
