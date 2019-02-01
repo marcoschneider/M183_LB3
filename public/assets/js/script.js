@@ -1,4 +1,4 @@
-var urlPrefix = '/M133_LB3';
+var urlPrefix = '';
 var ajaxUrl = urlPrefix+"/res/lib/Ajax.php";
 var handler;
 var body = $('body');

@@ -10,10 +10,9 @@ $errors = [];
 $success = [];
 
 if (isset($getID) && $getID != '') {
-
   $doneTodoResponse = doneTodo($conn, 0, $uid, $getID);
   if ($doneTodoResponse === true) {
-    redirect('/M133_LB3/todo-overview');
+    redirect(Config::getURLPrefix().'/todo-overview');
   }else {
     errorMessage($doneTodoResponse);
   }

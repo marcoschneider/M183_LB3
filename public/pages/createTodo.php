@@ -17,7 +17,11 @@
           if (count($errors) === 0){
             $addTodo = addTodo($conn, $values, $uid);
             if($addTodo === true){
-              redirect(Config::getURLPrefix().'/todo-overview');
+              if ($values['todo-type'] != 1) {
+                redirect(Config::getURLPrefix().'/group-overview');
+              }else{
+                redirect(Config::getURLPrefix().'/todo-overview');
+              }
             }else{
               $errors['message'] = "<b>Fehlermedlung: </b>" . $addTodo;
             }

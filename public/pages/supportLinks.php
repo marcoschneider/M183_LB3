@@ -15,26 +15,28 @@ $errors = [];
 validateAddLinkForm($_POST, $conn, $uid);
 
 //Delete form validation
-if(isset($_POST['delete-link-submit'])) {
+if ($links) {
+  if(isset($_POST['delete-link-submit'])) {
 
-  if(isset($_POST['link_id']) && $_POST['link_id'] != ""){
-    $link_id = htmlspecialchars(trim($_POST['link_id']));
-    $values['link-to-delete'] = $link_id;
-  }else{
-    $errors['link-to-delete'] = "Bitte die ID des zu löschenden Links eingeben";
-  }
+    if(isset($_POST['link_id']) && $_POST['link_id'] != ""){
+      $link_id = htmlspecialchars(trim($_POST['link_id']));
+      $values['link-to-delete'] = $link_id;
+    }else{
+      $errors['link-to-delete'] = "Bitte die ID des zu löschenden Links eingeben";
+    }
 
-  if (empty($errors)){
-    foreach($links as $link){
-      if($values['link-to-delete'] === $link['id']){
-        $link_id = $values['link-to-delete'];
+    if (empty($errors)){
+      foreach($links as $link){
+        if($values['link-to-delete'] === $link['id']){
+          $link_id = $values['link-to-delete'];
 
-        $resultDelete = deleteLink($conn, $uid, $link_id);
+          $resultDelete = deleteLink($conn, $uid, $link_id);
 
-        if ($resultDelete === true) {
-          redirect('/support-links');
-        }else{
-          $errors['delete-link-query'] = $resultDelete;
+          if ($resultDelete === true) {
+            redirect('/support-links');
+          }else{
+            $errors['delete-link-query'] = $resultDelete;
+          }
         }
       }
     }

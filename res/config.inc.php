@@ -59,6 +59,6 @@ class Config{
   }
 
   public static function getURLPrefix() {
-    return '/M133_LB3';
+    return '';
   }
 }

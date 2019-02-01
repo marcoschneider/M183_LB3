@@ -360,7 +360,6 @@ function sec_session_start()
   session_regenerate_id(true);    // regenerated the session, delete the old one.
 }
 
-
 /**
  * Gets all tododetails.
  *
@@ -502,11 +501,26 @@ function deleteGroupTodos($conn, $todoID, $uid) {
  *
  * @param $conn
  * @param $uid
+ *
+ * @param $request_uri
+ *
  * @return array|bool
  * @internal param $id
  */
-function getTodos($conn, $uid)
+function getTodos($conn, $uid, $request_uri)
 {
+  if ($request_uri === '/todo-overview' || $request_uri === '/done-overview'){
+    $group_id = 1;
+  }
+
+  switch ($request_uri) {
+    case '/todo-overview':
+      $todo_status = '1';
+      break;
+    case '/done-overview':
+      $todo_status = '0';
+  }
+
   $sql = "SELECT
              todo.id,
              todo.title,
@@ -524,21 +538,25 @@ function getTodos($conn, $uid)
              INNER JOIN project pr on todo.fk_project = pr.id
              INNER JOIN `group` g on todo.fk_group = g.id
             WHERE u.id ='" . $uid . "'
+            AND g.id ='" . $group_id . "'
+            AND todo.todo_status ='" . $todo_status . "'
             ORDER BY todo.fk_priority DESC, todo.creation_date DESC";
 
   $sqlResult = mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
   $result = array();
 
-  while ($arrayOutput = mysqli_fetch_array($sqlResult, MYSQLI_ASSOC)) {
-    if(strlen($arrayOutput['problem']) >= 200 ) {
-      $pos = strpos($arrayOutput['problem'], ' ', 125);
-      $arrayOutput['problem'] = substr($arrayOutput['problem'], 0, $pos);
+  if (mysqli_num_rows($sqlResult) > 0) {
+    while ($arrayOutput = mysqli_fetch_array($sqlResult, MYSQLI_ASSOC)) {
+      if(strlen($arrayOutput['problem']) >= 200 ) {
+        $pos = strpos($arrayOutput['problem'], ' ', 125);
+        $arrayOutput['problem'] = substr($arrayOutput['problem'], 0, $pos);
+      }
+
+      $arrayOutput['creation_date'] = date("d.m.Y \\u\\m H:i", $arrayOutput['creation_date']);
+
+      array_push($result, $arrayOutput);
     }
-
-    $arrayOutput['creation_date'] = date("d.m.Y \\u\\m H:i", $arrayOutput['creation_date']);
-
-    array_push($result, $arrayOutput);
   }
 
   if ($result) {

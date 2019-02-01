@@ -26,6 +26,7 @@ $uid = $_SESSION['kernel']['userdata']["id"];
 $groupname = $_SESSION['kernel']['userdata']['group_name'];
 $groupID = $_SESSION['kernel']['userdata']['group_id'];
 $username = $_SESSION['kernel']['userdata']['username'];
+header('Content-type: text/html');
 ?>
 <noscript>
   Bitte aktivieren Sie Javascript, ansonsten können Sie sich nicht anmelden.
@@ -33,9 +34,7 @@ $username = $_SESSION['kernel']['userdata']['username'];
 <!DOCTYPE html>
 <html>
   <head>
-    <?php header('Content-type: text/html');
-    Config::styles();
-    ?>
+    <?php Config::styles();?>
     <link rel="icon" type="image/png" sizes="32x32" href="<?= Config::getURLPrefix()?>/public/assets/img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="<?= Config::getURLPrefix()?>/public/assets/img/favicon-16x16.png">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"/>
@@ -176,7 +175,7 @@ $username = $_SESSION['kernel']['userdata']['username'];
         include('public/pages/deleteTodo.php');
       },'post');
 
-      Route::run('/M133_LB3');
+      Route::run('/');
 
       ?>
     </div>
