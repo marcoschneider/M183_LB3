@@ -70,7 +70,7 @@ if(isset($_POST['submitPassword'])){
         if(isset($_POST['submitPassword'])) {
           if (count($errors) === 0) {
             if (updateUserCredentials($conn, $uid, $values['new_password']) === true) {
-              redirect('?pages=logout');
+              redirect('?view=logout');
             }else{
               errorMessage("Ein Fehler ist aufgetreten");
             }

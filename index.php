@@ -17,7 +17,7 @@ $conn = Config::getDb();
 
 //Manages redirect to login page if not logged in.
 if(!$_SESSION['loggedin']) {
-  redirect("public/pages/login.php");
+  redirect("public/view/login.php");
   die();
 }
 
@@ -93,86 +93,86 @@ header('Content-type: text/html');
       <?php
 
       Route::add('/todo-overview',function() use ($conn, $uid){
-        include('public/pages/todoOverview.php');
+        include('public/view/todoOverview.php');
       },'get');
 
       Route::add('/done-overview',function() use ($conn, $uid){
-        include('public/pages/doneOverview.php');
+        include('public/view/doneOverview.php');
       },'get');
 
       Route::add('/todo-details/([0-9]*)',function($getID) use ($conn, $uid){
-        include('public/pages/todoDetails.php');
+        include('public/view/todoDetails.php');
       },'get');
 
       Route::add('/group-overview',function() use ($conn, $uid, $groupname){
-        include('public/pages/groupOverview.php');
+        include('public/view/groupOverview.php');
       },'get');
 
       Route::add('/group-log',function() {
-        include('public/pages/groupLogs.php');
+        include('public/view/groupLogs.php');
       },'get');
 
       Route::add('/support-links',function() use ($conn, $uid){
-        include('public/pages/supportLinks.php');
+        include('public/view/supportLinks.php');
       },'get');
 
       Route::add('/create-todo',function() use ($conn, $uid, $groupID, $groupname){
-        include('public/pages/createTodo.php');
+        include('public/view/createTodo.php');
       },'get');
 
       Route::add('/edit-todo/([0-9]*)',function($getID) use ($conn, $uid, $groupID, $groupname){
-        include('public/pages/editTodo.php');
+        include('public/view/editTodo.php');
       },'get');
 
       Route::add('/user',function() use ($conn, $uid){
-        include('public/pages/user.php');
+        include('public/view/user.php');
       },'get');
 
       Route::add('/done-todo/([0-9]*)',function($getID) use ($conn, $uid){
-        include('public/pages/doneTodo.php');
+        include('public/view/doneTodo.php');
       },'get');
 
       Route::add('/update-todo/([0-9]*)',function($getID) use ($conn, $uid){
-        include('public/pages/updateTodo.php');
+        include('public/view/updateTodo.php');
       },'get');
 
       Route::add('/delete-todo/([0-9]*)',function($getID) use ($conn, $uid){
-        include('public/pages/deleteTodo.php');
+        include('public/view/deleteTodo.php');
       },'get');
 
       Route::add('/logout',function() {
         session_unset();
         session_destroy();
-        redirect("public/pages/login.php");
+        redirect("public/view/login.php");
       },'get');
 
 
       Route::add('/support-links',function() use ($conn, $uid){
-        include('public/pages/supportLinks.php');
+        include('public/view/supportLinks.php');
       },'post');
 
       Route::add('/support-links',function() use ($conn, $uid){
-        include('public/pages/supportLinks.php');
+        include('public/view/supportLinks.php');
       },'post');
 
       Route::add('/create-todo',function() use ($conn, $uid){
-        include('public/pages/createTodo.php');
+        include('public/view/createTodo.php');
       },'post');
 
       Route::add('/edit-todo/([0-9]*)',function($getID) use ($conn, $uid, $groupID, $groupname){
-        include('public/pages/editTodo.php');
+        include('public/view/editTodo.php');
       },'post');
 
       Route::add('/done-todo/([0-9]*)',function($getID) use ($conn, $uid){
-        include('public/pages/doneTodo.php');
+        include('public/view/doneTodo.php');
       },'post');
 
       Route::add('/update-todo/([0-9]*)',function($getID) use ($conn, $uid){
-        include('public/pages/updateTodo.php');
+        include('public/view/updateTodo.php');
       },'post');
 
       Route::add('/delete-todo/([0-9]*)',function($getID) use ($conn, $uid){
-        include('public/pages/deleteTodo.php');
+        include('public/view/deleteTodo.php');
       },'post');
 
       Route::run('/');
