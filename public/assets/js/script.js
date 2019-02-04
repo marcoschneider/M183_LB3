@@ -270,7 +270,7 @@ function checkPassword() {
         toastr.success("Die Benutzerdaten wurden aktualisiert!");
         setTimeout(function () {
           sessionStorage.clear();
-          window.location.replace(urlPrefix+"/public/pages/login.php");
+          window.location.replace(urlPrefix+"/public/view/login.php");
         }, 2000);
       }else{
         for (let i = 0; i < res.length; i++) {

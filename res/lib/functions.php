@@ -340,7 +340,7 @@ function sec_session_start()
 
   // Forces sessions to only use cookies.
   if (ini_set('session.use_only_cookies', 1) === FALSE) {
-    header("Location: /public/pages/login.php?login-error");
+    header("Location: /public/view/login.php?login-error");
     exit();
   }
   // Gets current cookies params.
