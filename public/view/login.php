@@ -25,7 +25,7 @@ if (isset($_SESSION['loggedin'])) {
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap-grid.min.css"/>
+  <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap-grid.min.css"/>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
   <link rel="stylesheet" href="../../node_modules/toastr/build/toastr.min.css">
   <link rel="stylesheet" href="../assets/css/sco.styles.css"/>
@@ -69,8 +69,8 @@ if (isset($_SESSION['loggedin'])) {
   <p>&copy Copyright Somedia Production Web Support</p>
 </div>
 </body>
-<script type="text/javascript" src="../../bower_components/jquery/dist/jquery.min.js"></script>
-<script type="text/javascript" src="../../bower_components/js-sha256/build/sha256.min.js"></script>
+<script type="text/javascript" src="../../node_modules/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="../../node_modules/js-sha256/build/sha256.min.js"></script>
 <script type="text/javascript" src="../../node_modules/toastr/build/toastr.min.js"></script>
 <script type="text/javascript" src="../assets/js/response-handler.js"></script>
 <script type="text/javascript" src="../assets/js/script.js"></script>

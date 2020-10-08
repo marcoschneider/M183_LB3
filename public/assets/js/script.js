@@ -32,13 +32,13 @@ $(function(){
   });
 
   $('#login-button').on("click", function () {
-    $('#label-2fa-code').show();
-    $('#fields-user-password').hide();
-    $('#login-button').hide();
-    $('#login-button-after-2fa').show();
-    $('#login-button-after-2fa').on("click", function () {
-      auth_user();
-    })
+    // $('#label-2fa-code').show();
+    // $('#fields-user-password').hide();
+    // $('#login-button').hide();
+    // $('#login-button-after-2fa').show();
+    // $('#login-button-after-2fa').on("click", function () {
+    // })
+    auth_user();
   });
 
   $('#register-button').on("click", function () {
@@ -343,8 +343,6 @@ function register_user() {
   let username = $('#username').val();
   let pass = $('#password').val();
   let fk_group = $('#group-in-register').val();
-
-  console.log(fk_group);
 
   pass = sha256(pass);
 

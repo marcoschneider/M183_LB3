@@ -102,8 +102,8 @@ $_SESSION['2fa-secret'] = $secret;
       <p>&copy Copyright Somedia Production Web Support</p>
     </div>
   </body>
-  <script type="text/javascript" src="../../bower_components/jquery/dist/jquery.min.js"></script>
-  <script type="text/javascript" src="../../bower_components/js-sha256/build/sha256.min.js"></script>
+  <script type="text/javascript" src="../../node_modules/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="../../node_modules/js-sha256/build/sha256.min.js"></script>
   <script type="text/javascript" src="../../node_modules/toastr/build/toastr.min.js"></script>
   <script type="text/javascript" src="../assets/js/response-handler.js"></script>
   <script type="text/javascript" src="../assets/js/script.js"></script>

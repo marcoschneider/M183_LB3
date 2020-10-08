@@ -39,7 +39,7 @@ class UserController
     $escPass = null;
     $escCode = null;
 
-    if ($username != '' && $pass != hash('sha256', "") && $code != '') {
+    if ($username != '' && $pass != hash('sha256', "")/* && $code != ''*/) {
       $escUsername = mysqli_real_escape_string($this->conn, htmlspecialchars($username));
       //Todo: Hier wird mysqli_real_escape_string benutzt um die WebApp vor sql injection zu schützen.
       $escPass = mysqli_real_escape_string($this->conn, htmlspecialchars($pass));
@@ -51,28 +51,28 @@ class UserController
       if ($this->userModel->isSecretKeySet()) {
         $result = $this->userModel->getSecretKey();
         $secret = $result->fetch_assoc()['secret'];
-        if ($this->tfa->verifyCode($secret, $escCode)) {
-          //Checks if username and password matches post
-          $sql = "
+        //Checks if username and password matches post
+        $sql = "
             SELECT
              id 
             FROM user 
             WHERE 
               `username`='" . $escUsername . "' 
               AND `password`='" . $escPass . "'";
-          $result = $this->conn->query($sql);
-          if ($result->num_rows > 0) {
-            $user = $this->userModel->getUserdata();
-            $_SESSION['loggedin'] = TRUE;
-            $_SESSION['kernel']['userdata'] = $user;
-            return TRUE;
-          }
-          else {
-            return "Benutzername oder Passwort falsch";
-          }
+        $result = $this->conn->query($sql);
+        if ($result->num_rows > 0) {
+          $user = $this->userModel->getUserdata();
+          $_SESSION['loggedin'] = TRUE;
+          $_SESSION['kernel']['userdata'] = $user;
+          return TRUE;
+        }
+        else {
+          return "Benutzername oder Passwort falsch";
+        }
+        /*if ($this->tfa->verifyCode($secret, $escCode)) {
         }else{
           return 'Die Authenfizierung ist fehlgeschlagen';
-        }
+        }*/
       }
     }else {
       return $error;
@@ -132,7 +132,7 @@ class UserController
     }
 
     if (count($errors) === 0) {
-      
+
       $sql = "
       INSERT INTO `user` 
         (`firstname`, `surname`, `password`, `username`, `secret`)

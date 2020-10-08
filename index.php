@@ -1,33 +1,34 @@
 <?php
-require 'res/config.inc.php';
-require_once LIBRARY_PATH . "/SessionManager.php";
+  require 'res/config.inc.php';
+  require_once LIBRARY_PATH . "/SessionManager.php";
 
 
-error_reporting(E_ALL & ~E_NOTICE);
-//import configs and import lib
-require 'res/lib/router/Route.php';
-require LIBRARY_PATH.'/functions.php';
+  error_reporting(E_ALL & ~E_NOTICE);
+  //import configs and import lib
+  require 'res/lib/router/Route.php';
+  require LIBRARY_PATH.'/functions.php';
 
-//starts secure Session
-session_start([
-  'cookie_lifetime' => 86400,
-]);
+  //starts secure Session
+  session_start([
+    'cookie_lifetime' => 86400,
+  ]);
 
-$conn = Config::getDb();
+  $conn = Config::getDb();
 
-//Manages redirect to login page if not logged in.
-if(!$_SESSION['loggedin']) {
-  redirect("public/view/login.php");
-  die();
-}
+  //Manages redirect to login page if not logged in.
+  if(!$_SESSION['loggedin']) {
+    redirect("public/view/login.php");
+    die();
+  }
 
-//SESSION configurations
-$uid = $_SESSION['kernel']['userdata']["id"];
-$groupname = $_SESSION['kernel']['userdata']['group_name'];
-$groupID = $_SESSION['kernel']['userdata']['group_id'];
-$username = $_SESSION['kernel']['userdata']['username'];
-header('Content-type: text/html');
+  //SESSION configurations
+  $uid = $_SESSION['kernel']['userdata']["id"];
+  $groupname = $_SESSION['kernel']['userdata']['group_name'];
+  $groupID = $_SESSION['kernel']['userdata']['group_id'];
+  $username = $_SESSION['kernel']['userdata']['username'];
+  header('Content-type: text/html');
 ?>
+
 <noscript>
   Bitte aktivieren Sie Javascript, ansonsten können Sie sich nicht anmelden.
 </noscript>
@@ -43,7 +44,7 @@ header('Content-type: text/html');
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="Content-Type" content="text/html" lang="de"/>
-    <script type="text/javascript" src="<?= Config::getURLPrefix()?>/bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="<?= Config::getURLPrefix()?>/node_modules/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="<?= Config::getURLPrefix()?>/node_modules/ckeditor/ckeditor.js"></script>
     <title>Todo Web App</title>
   </head>

@@ -42,9 +42,12 @@ class Ajax
   private $groupLogModel;
   private $todoModel;
 
-  public function __construct(UserModel $userModel, UserController $userController,
-                              GroupLogModel $groupLogModel,
-                              TodoModel $todoModel) {
+  public function __construct(
+    UserModel $userModel,
+    UserController $userController,
+    GroupLogModel $groupLogModel,
+    TodoModel $todoModel
+  ) {
     $this->userModel = $userModel;
     $this->userController = $userController;
     $this->groupLogModel = $groupLogModel;
@@ -139,6 +142,7 @@ try {
   $logger->setMessage("Couldn't create two factor instance in Ajax.php");
   $logger->save();
 }
+
 $userModel = new UserModel($conn, $uid);
 $userController = new UserController($userModel, $tfa, $logger);
 $todoModel = new TodoModel($userModel);

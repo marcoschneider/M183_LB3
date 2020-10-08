@@ -9,7 +9,7 @@
 define("RESOURCE_PATH", realpath(basename(__DIR__)));
 define("LIBRARY_PATH", realpath(basename(__DIR__)) . '/lib');
 
-class Config{
+class Config {
 
   public static function getDb() {
     $host = "localhost";
@@ -31,11 +31,11 @@ class Config{
   public static function styles() {
     $urlPrefix = self::getURLPrefix();
     $sheets = [
-      $urlPrefix."/bower_components/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css",
-      $urlPrefix."/bower_components/bootstrap/dist/css/bootstrap-grid.min.css",
-      $urlPrefix."/node_modules/toastr/build/toastr.min.css",
-      $urlPrefix."/bower_components/normalize.css/normalize.css",
-      $urlPrefix."/public/assets/css/sco.styles.css",
+      $urlPrefix . "/node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+      $urlPrefix . "/node_modules/bootstrap/dist/css/bootstrap-grid.min.css",
+      $urlPrefix . "/node_modules/toastr/build/toastr.min.css",
+      $urlPrefix . "/node_modules/normalize.css/normalize.css",
+      $urlPrefix . "/public/assets/css/sco.styles.css",
     ];
 
     foreach($sheets as $sheet) {
@@ -46,11 +46,11 @@ class Config{
   public static function scripts() {
     $urlPrefix = self::getURLPrefix();
     $scripts = [
-      $urlPrefix."/bower_components/js-sha256/build/sha256.min.js",
-      $urlPrefix."/node_modules/toastr/build/toastr.min.js",
-      $urlPrefix."/public/assets/js/script.js",
-      $urlPrefix."/public/assets/js/response-handler.js",
-      $urlPrefix."/public/assets/js/menubar.js",
+      $urlPrefix . "/node_modules/js-sha256/build/sha256.min.js",
+      $urlPrefix . "/node_modules/toastr/build/toastr.min.js",
+      $urlPrefix . "/public/assets/js/script.js",
+      $urlPrefix . "/public/assets/js/response-handler.js",
+      $urlPrefix . "/public/assets/js/menubar.js",
     ];
 
     foreach($scripts as $script) {
@@ -61,4 +61,5 @@ class Config{
   public static function getURLPrefix() {
     return '';
   }
+
 }
